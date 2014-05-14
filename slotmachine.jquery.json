@@ -3,6 +3,15 @@
 	"version": "1.0.0",
 	"title":  "jQuery Slot Machine",
 	"description": "A simple, lightweight jQuery plugin to make slot machine animation effect.",
+	"keywords": [
+        "slots",
+        "gambling",
+        "lists",
+        "fun",
+        "zany",
+        "winning",
+        "machine"
+    ],
 	"author": {
 		"name": "Jose Luis Represa",
 		"url": "https://github.com/josex2r/"
