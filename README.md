@@ -71,3 +71,7 @@ Pass an int as miliseconds to make the machine auto rotate
 ## Authors
 
 [Jose Luis Represa](https://github.com/josex2r)
+
+##License
+
+jQuery-SlotMachine is released under the [MIT License](http://opensource.org/licenses/MIT).
