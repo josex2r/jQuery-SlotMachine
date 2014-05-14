@@ -1,6 +1,7 @@
 (function($) {
 			
-	//Set styles and mask
+	//Set required styles, filters and masks
+	
 	//Fast blur
 	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
 		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
@@ -9,6 +10,7 @@
 							'</filter>'+
 						'</svg>');
 	}
+	
 	//Medium blur
 	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
 		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
@@ -17,6 +19,7 @@
 							'</filter>'+
 						'</svg>');
 	}
+	
 	//Slow blur
 	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
 		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
@@ -25,6 +28,7 @@
 							'</filter>'+
 						'</svg>');
 	}
+	
 	//Fade mask
 	if( $("mask#easySlotMachineFadeSVG").length<=0 ){
 		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
@@ -40,6 +44,7 @@
 						'</svg>');
 	}
 	
+	//CSS classes
 	$("body").append("<style>"+
 							".easySlotMachineBlurFast{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url(#easySlotMachineBlurFilterFast);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='5')}"+
 							".easySlotMachineBlurMedium{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url(#easySlotMachineBlurFilterMedium);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')}"+
@@ -50,33 +55,55 @@
 							"}"+
 						"</style>");
 	
-	/** 
-	  * @desc makes Slot Machine animation effect
+	//Required easing functions
+	if( typeof $.easing.easeOutBounce!=="function" ){
+		//From jQuery easing, extend jQuery animations functions
+		$.extend( jQuery.easing, {
+			easeOutBounce: function (x, t, b, c, d) {
+				if ((t/=d) < (1/2.75)) {
+					return c*(7.5625*t*t) + b;
+				} else if (t < (2/2.75)) {
+					return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+				} else if (t < (2.5/2.75)) {
+					return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+				} else {
+					return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+				}
+			},
+		});
+	}
+	
+	/**
+	  * @desc PUBLIC - Makes Slot Machine animation effect
 	  * @param object settings - Plugin configuration params
-	  * @return jQuery node - Return jQuery selector with some new functions (shuffle, stop, next, auto)
-	*/  
+	  * @return jQuery node - Returns jQuery selector with some new functions (shuffle, stop, next, auto, active)
+	*/
 	$.fn.easySlotMachine = function(settings){
 		
 		var defaults = {
-				active	: 0, //Active element
-				delay	: 200, //Animation time
-				repeat	: false //Repeat each 2000ms
+				active	: 0, //Active element [int]
+				delay	: 200, //Animation time [int]
+				repeat	: false //Repeat delay [false||int]
 			},
-			settings = $.extend(defaults, settings),
-			$slot = $(this),
-			$titles = $slot.children(),
-			$container,
-			maxTop,
-			_timer = null,
-			_currentAnim = null,
-			_forceStop = false,
-			_active = {
+			settings = $.extend(defaults, settings), //Plugin settings
+			$slot = $(this), //jQuery selector
+			$titles = $slot.children(), //Slot Machine elements
+			$container, //Container to wrap $titles
+			maxTop, //Max marginTop offset
+			_timer = null, //Timeout recursive function to handle auto (settings.repeat)
+			_currentAnim = null, //Current playing jQuery animation
+			_forceStop = false, //Force execution for some functions
+			_active = { //Current active element
 				index : settings.active,
 				el	  : $titles.get( settings.active )
 			};
 		
-		//Get element offset top
-		function _getOffset(index){
+		/**
+		  * @desc PRIVATE - Get element offset top
+		  * @param int index - Element position
+		  * @return int - Negative offset in px
+		*/
+		function _getOffset( index ){
 			var offset = 0;
 			for(var i=0; i<index; i++){
 				offset += $( $titles.get(i) ).height();
@@ -84,7 +111,10 @@
 			return -offset;
 		}
 		
-		//Get random element
+		/**
+		  * @desc PRIVATE - Get random element different than last shown
+		  * @return object - Element index and HTML node
+		*/
 		function _getRandom(){
 			var rnd;
 			do{
@@ -99,12 +129,19 @@
 			return choosen;
 		}
 		
-		function _setActive(elWithIndex){
+		/**
+		  * @desc PRIVATE - Set currently showing element and makes active
+		  * @param object elWithIndex - Element index and HTML node
+		*/
+		function _setActive( elWithIndex ){
 			//Update last choosen element index
 			_active = elWithIndex;
 		}
 		
-		//Get next element
+		/**
+		  * @desc PRIVATE - Get the next element
+		  * @return int - Element index and HTML node
+		*/ 
 		function _getNext(){
 			var nextIndex = _active.index+1<$titles.length ? _active.index+1 : 0
 			var nextObj = {
@@ -114,21 +151,11 @@
 			return nextObj;
 		};
 		
-		//From jQuery easing
-		jQuery.extend( jQuery.easing, {
-			easeOutBounce: function (x, t, b, c, d) {
-				if ((t/=d) < (1/2.75)) {
-					return c*(7.5625*t*t) + b;
-				} else if (t < (2/2.75)) {
-					return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-				} else if (t < (2.5/2.75)) {
-					return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-				} else {
-					return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
-				}
-			},
-		});
-		
+		/**
+		  * @desc PRIVATE - Set CSS classes to make speed effect
+		  * @param string speed - Element speed [fast||medium||slow]
+		  * @param string||boolean fade - Set fade gradient effect
+		*/
 		function _setAnimationFX(speed, fade){
 			$container.add( $titles ).removeClass("easySlotMachineBlurFast easySlotMachineBlurMedium easySlotMachineBlurSlow");
 			switch( speed ){
@@ -150,12 +177,17 @@
 			}
 		}
 		
+		/**
+		  * @desc PRIVATE - Reset active element position
+		*/
 		function _resetPosition(){
-			//Reset top position
 			$container.css("margin-top", _getOffset(_active.index));
 		}
 		
-		//Rock the machine!
+		/**
+		  * @desc PRIVATE - Starts shuffling the elements
+		  * @param int count - Number of shuffles (undefined to make infinite animation
+		*/
 		function _shuffle( count ){
 			
 			//Infinite animation
@@ -265,6 +297,10 @@
 			
 		}
 		
+		/**
+		  * @desc PRIVATE - Stop shuffling the elements
+		  * @param int||boolean nowOrRepeations - Number of repeations to stop (true to stop NOW)
+		*/
 		function _stop( nowOrRepeations ){
 			
 			//Stop animation
@@ -328,6 +364,10 @@
 			
 		}
 		
+		/**
+		  * @desc PRIVATE - Checks if the machine is on the screen
+		  * @return int - Returns true if machine is on the screen
+		*/
 		function _isVisible(){
 			//Stop animation if element is [above||below] screen, best for performance
 			var above = $slot.offset().top > $(window).scrollTop() + $(window).height(),
@@ -336,6 +376,9 @@
 			return !above && !below;
 		}
 		
+		/**
+		  * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
+		*/
 		function _auto(){
 			
 			if( _forceStop===false ){
@@ -375,9 +418,14 @@
 			
 		}
 		
+		
 		//Public methods
 		
-		//Starts shuffling animation
+		
+		/**
+		  * @desc PUBLIC - Starts shuffling the elements
+		  * @param int count - Number of shuffles (undefined to make infinite animation
+		*/
 		$slot.shuffle = function( count ){
 			
 			_forceStop = false;
@@ -386,6 +434,10 @@
 			
 		};
 		
+		/**
+		  * @desc PUBLIC - Stop shuffling the elements
+		  * @param int||boolean nowOrRepeations - Number of repeations to stop (true to stop NOW)
+		*/
 		$slot.stop = function( nowOrRepeations ){
 			
 			if( settings.repeat!==false && _timer!==null ){
@@ -400,15 +452,30 @@
 			
 		};
 		
+		/**
+		  * @desc PUBLIC - SELECT next element relative to the current active element
+		*/
 		$slot.next = function(){
 			
 			$slot.stop(true);
 			
 		}
 		
+		/**
+		  * @desc PUBLIC - Get selected element
+		  * @return object - Element index and HTML node
+		*/
+		$slot.active = function(){
+			return _getActive();
+		}
+		
+		/**
+		  * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
+		*/
 		$slot.auto = _auto;
 		
 		return $slot;
 		
 	};
+	
 })(jQuery);
