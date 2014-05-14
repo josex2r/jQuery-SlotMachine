@@ -1,0 +1,216 @@
+ @charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Pathway+Gothic+One);
+
+a{
+	color: #ccd500;
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+	color: #a9b119;
+}
+.clear {
+    clear: both;
+}
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin: 0 0 80px; /* bottom = footer height */
+}
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 80px;
+    width: 100%;
+    background: black;
+}
+b{
+	font-weight: 600;
+}
+/* General ID
+-------------------------------------------------------------------------*/
+.wrapper{
+	width: 960px;
+	margin: 120px auto 0;
+}
+.wrapper_inner{
+	width: 960px;
+	margin: 0 auto 0;
+}
+.wrapper.margin1{
+	width: 960px;
+	margin: 70px auto 0;
+}
+.wrapper.foot{
+	width: 960px;
+	margin: 0 auto 0;
+}
+#header{
+	width: 100%;
+	height: 109px;
+	/*
+	background: #052c57;
+	border-bottom: 1px solid white;
+	*/
+	background: #ffffff;
+	border-bottom: 1px solid #e8e8e8;
+	border-top: 3px solid #052C57;
+}
+.content{
+	padding: 0 30px;
+	float: left;
+	width: 900px;
+	margin-bottom:80px;
+}
+.content.foot{
+	padding: 0 30px;
+	float: inherit;
+	margin:0 auto 0;
+	width: 900px;
+	margin-bottom:0;
+}
+
+#top_home{
+	overflow: hidden;
+	position: relative;
+}
+
+
+/* Titulos
+-------------------------------------------------------------------------*/
+h1{
+	float: left;
+	width: 288px;
+	height: 73px;
+}
+h1 a{
+	float: left;
+	width: 288px;
+	height: 73px;
+	background: url(../img/logo_menu.jpg) no-repeat 0 0;
+}
+h1 a span{
+	display: none;
+}
+h2{
+	color: #000000;
+    display: table-cell;
+    float: left;
+    font-size: 45px;
+    line-height: 40px;
+    margin: 0 0 50px;
+    text-align: center;
+    width: 100%;
+    font-weight: 300;
+}
+h2 span{
+	font-weight: 400;
+}
+h3{
+	float: left;
+	width: 100%;
+	margin: 0 0 20px 0;
+	color: white;
+	font-size:40px;
+	font-family: 'Lato', 'sans-serif';
+	font-weight: 300;
+}
+h4{
+	color: #ffffff;
+    display: table-cell;
+    float: left;
+    font-size: 35px;
+    line-height: 31px;
+    margin: 0 0 0;
+    text-align: center;
+    width: 100%;
+    font-weight: 400;
+}
+
+.grey {	color:#444;}
+
+}
+/* INICIO
+-------------------------------------------------------------------------*/
+#inicio{
+	margin: 0 auto 0;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	width:100%
+}
+#inicio table.table_inicio{
+	height: 100%;
+	width: 100%;
+}
+#inicio table.table_inicio td{
+	vertical-align: middle;
+}
+#inicio .textinicio{
+	color: #FFFFFF;
+    float: left;
+    font-size: 50px;
+    font-weight: 300;
+    line-height: 42px;
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}
+#inicio .textinicio2{
+	font-family: 'Pathway Gothic One';
+	color: #000000;
+    float: left;
+    font-size: 70px;
+    font-weight: 300;
+    line-height: 80px;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    border-top: 5px solid #fff;
+    border-bottom: 5px solid #fff;
+    padding: 30px 0px;
+}
+#inicio .textinicio2 > div{
+	display: inline-block;
+}
+#slotMachine{
+	width:520px;
+	height: 67px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
+}
+#slotMachine > *{
+	padding: 0px 0px;
+}
+.social{
+	width: 80px;
+	margin: 0 auto;
+}
+.social .ico{
+	float: left;
+	width: 20px;
+	height: 20px;
+}
+.social .ico.tw{
+	background: url(../img/social_tw.png) no-repeat 0 0;
+}
+.social .ico.fb{
+	background: url(../img/social_fb.png) no-repeat 0 0;
+	margin: 0 10px;
+}
+.social .ico.g{
+	background: url(../img/social_g.png) no-repeat 0 0;
+}
+section{
+	clear:both;
+}
+section#music{
+	height: 260px;
+}

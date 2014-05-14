@@ -2,58 +2,62 @@
 			
 	//Set required styles, filters and masks
 	
-	//Fast blur
-	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
-		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
-							'<filter id="easySlotMachineBlurFilterFast">'+
-								'<feGaussianBlur stdDeviation="5" />'+
-							'</filter>'+
-						'</svg>');
-	}
-	
-	//Medium blur
-	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
-		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
-							'<filter id="easySlotMachineBlurFilterMedium">'+
-								'<feGaussianBlur stdDeviation="3" />'+
-							'</filter>'+
-						'</svg>');
-	}
-	
-	//Slow blur
-	if( $("filter#easySlotMachineBlurSVG").length<=0 ){
-		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
-							'<filter id="easySlotMachineBlurFilterSlow">'+
-								'<feGaussianBlur stdDeviation="1" />'+
-							'</filter>'+
-						'</svg>');
-	}
-	
-	//Fade mask
-	if( $("mask#easySlotMachineFadeSVG").length<=0 ){
-		$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
-							'<mask id="easySlotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
-								'<linearGradient id="easySlotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
-									'<stop stop-color="white" stop-opacity="0" offset="0"></stop>'+
-									'<stop stop-color="white" stop-opacity="1" offset="0.25"></stop>'+
-									'<stop stop-color="white" stop-opacity="1" offset="0.75"></stop>'+
-									'<stop stop-color="white" stop-opacity="0" offset="1"></stop>'+
-								'</linearGradient>'+
-								'<rect x="0" y="-1" width="1" height="1" transform="rotate(90)" fill="url(#easySlotMachineFadeGradient)"></rect>'+
-							'</mask>'+
-						'</svg>');
-	}
-	
-	//CSS classes
-	$("body").append("<style>"+
-							".easySlotMachineBlurFast{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url(#easySlotMachineBlurFilterFast);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='5')}"+
-							".easySlotMachineBlurMedium{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url(#easySlotMachineBlurFilterMedium);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')}"+
-							".easySlotMachineBlurSlow{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url(#easySlotMachineBlurFilterSlow);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='1')}"+
-							".easySlotMachineGradient{"+
-								"-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );"+
-								"mask: url(#easySlotMachineFadeMask);"+
-							"}"+
-						"</style>");
+	$(document).ready(function(){
+		
+		//Fast blur
+		if( $("filter#easySlotMachineBlurSVG").length<=0 ){
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+								'<filter id="easySlotMachineBlurFilterFast">'+
+									'<feGaussianBlur stdDeviation="5" />'+
+								'</filter>'+
+							'</svg>');
+		}
+		
+		//Medium blur
+		if( $("filter#easySlotMachineBlurSVG").length<=0 ){
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+								'<filter id="easySlotMachineBlurFilterMedium">'+
+									'<feGaussianBlur stdDeviation="3" />'+
+								'</filter>'+
+							'</svg>');
+		}
+		
+		//Slow blur
+		if( $("filter#easySlotMachineBlurSVG").length<=0 ){
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+								'<filter id="easySlotMachineBlurFilterSlow">'+
+									'<feGaussianBlur stdDeviation="1" />'+
+								'</filter>'+
+							'</svg>');
+		}
+		
+		//Fade mask
+		if( $("mask#easySlotMachineFadeSVG").length<=0 ){
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+								'<mask id="easySlotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
+									'<linearGradient id="easySlotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
+										'<stop stop-color="white" stop-opacity="0" offset="0"></stop>'+
+										'<stop stop-color="white" stop-opacity="1" offset="0.25"></stop>'+
+										'<stop stop-color="white" stop-opacity="1" offset="0.75"></stop>'+
+										'<stop stop-color="white" stop-opacity="0" offset="1"></stop>'+
+									'</linearGradient>'+
+									'<rect x="0" y="-1" width="1" height="1" transform="rotate(90)" fill="url(#easySlotMachineFadeGradient)"></rect>'+
+								'</mask>'+
+							'</svg>');
+		}
+		
+		//CSS classes
+		$("body").append("<style>"+
+								".easySlotMachineBlurFast{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url(#easySlotMachineBlurFilterFast);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='5')}"+
+								".easySlotMachineBlurMedium{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url(#easySlotMachineBlurFilterMedium);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')}"+
+								".easySlotMachineBlurSlow{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url(#easySlotMachineBlurFilterSlow);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='1')}"+
+								".easySlotMachineGradient{"+
+									"-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );"+
+									"mask: url(#easySlotMachineFadeMask);"+
+								"}"+
+							"</style>");
+		
+	});
 	
 	//Required easing functions
 	if( typeof $.easing.easeOutBounce!=="function" ){
@@ -157,16 +161,16 @@
 		  * @param string||boolean fade - Set fade gradient effect
 		*/
 		function _setAnimationFX(speed, fade){
-			$container.add( $titles ).removeClass("easySlotMachineBlurFast easySlotMachineBlurMedium easySlotMachineBlurSlow");
+			$titles.removeClass("easySlotMachineBlurFast easySlotMachineBlurMedium easySlotMachineBlurSlow");
 			switch( speed ){
 				case 'fast':
-					$container.add( $titles ).addClass("easySlotMachineBlurFast");
+					$titles.addClass("easySlotMachineBlurFast");
 					break;
 				case 'medium':
-					$container.add( $titles ).addClass("easySlotMachineBlurMedium");
+					$titles.addClass("easySlotMachineBlurMedium");
 					break;
 				case 'slow':
-					$container.add( $titles ).addClass("easySlotMachineBlurSlow");
+					$titles.addClass("easySlotMachineBlurSlow");
 					break;
 			}
 			
@@ -379,9 +383,11 @@
 		/**
 		  * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
 		*/
-		function _auto(){
+		function _auto( delay ){
 			
 			if( _forceStop===false ){
+				
+				delay = delay===undefined ? 1 : settings.repeat + 1000;
 				
 				_timer = setTimeout(function(){
 					
@@ -391,9 +397,9 @@
 						
 					}
 					
-					_timer = _auto();
+					_timer = _auto( delay );
 					
-				}, settings.repeat + 1000);
+				}, delay);
 				
 			}
 			
