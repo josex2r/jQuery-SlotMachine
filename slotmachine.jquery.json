@@ -1,0 +1,29 @@
+{
+	"name": "slotmachine",
+	"version": "1.0.0",
+	"title":  "jQuery Slot Machine",
+	"description": "A simple, lightweight jQuery plugin to make slot machine animation effect.",
+	"author": {
+		"name": "Jose Luis Represa",
+		"url": "https://github.com/josex2r/"
+	},
+	"maintainers": [
+		{
+			"name": "Jose Luis Represa",
+			"url": "https://github.com/josex2r/"
+		}
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://raw.githubusercontent.com/josex2r/jQuery-SlotMachine/master/MIT-LICENSE.txt"
+		}
+	],
+	"dependencies": {
+		"jquery": ">=1.7"
+	},
+	"download": "https://github.com/josex2r/jQuery-SlotMachine",
+	"homepage": "https://github.com/josex2r/jQuery-SlotMachine",
+	"demo": "http://josex2r.github.io/jQuery-SlotMachine/",
+	"docs": "hhttps://github.com/josex2r/jQuery-SlotMachine#readme"
+}
