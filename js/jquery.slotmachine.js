@@ -97,6 +97,8 @@
 			_timer = null, //Timeout recursive function to handle auto (settings.repeat)
 			_currentAnim = null, //Current playing jQuery animation
 			_forceStop = false, //Force execution for some functions
+			_oncompleteShuffling = null, //Callback function
+			_isRunning = false, //Machine is running?
 			_active = { //Current active element
 				index : settings.active,
 				el	  : $titles.get( settings.active )
@@ -110,7 +112,7 @@
 		function _getOffset( index ){
 			var offset = 0;
 			for(var i=0; i<index; i++){
-				offset += $( $titles.get(i) ).height();
+				offset += $( $titles.get(i) ).outerHeight();
 			}
 			return -offset;
 		}
@@ -134,6 +136,15 @@
 		}
 		
 		/**
+		  * @desc PRIVATE - Get currently active element
+		  * @return object elWithIndex - Element index and HTML node
+		*/
+		function _getActive(){
+			//Update last choosen element index
+			return _active;
+		}
+		
+		/**
 		  * @desc PRIVATE - Set currently showing element and makes active
 		  * @param object elWithIndex - Element index and HTML node
 		*/
@@ -141,6 +152,19 @@
 			//Update last choosen element index
 			_active = elWithIndex;
 		}
+		
+		/**
+		  * @desc PRIVATE - Get the previous element
+		  * @return int - Element index and HTML node
+		*/ 
+		function _getPrev(){
+			var prevIndex = _active.index-1<0 ? $titles.length-1 : _active.index-1
+			var prevObj = {
+				index : prevIndex,
+				el	  : $titles.get(prevIndex)
+			}
+			return prevObj;
+		};
 		
 		/**
 		  * @desc PRIVATE - Get the next element
@@ -161,7 +185,7 @@
 		  * @param string||boolean fade - Set fade gradient effect
 		*/
 		function _setAnimationFX(speed, fade){
-			$titles.removeClass("easySlotMachineBlurFast easySlotMachineBlurMedium easySlotMachineBlurSlow");
+			$slot.add($titles).removeClass("easySlotMachineBlurFast easySlotMachineBlurMedium easySlotMachineBlurSlow");
 			switch( speed ){
 				case 'fast':
 					$titles.addClass("easySlotMachineBlurFast");
@@ -175,9 +199,9 @@
 			}
 			
 			if( fade!==true || speed==="stop" ){
-				$slot.removeClass("easySlotMachineGradient");
+				$slot.add($titles).removeClass("easySlotMachineGradient");
 			}else{
-				$slot.addClass("easySlotMachineGradient");
+				$slot.add($titles).addClass("easySlotMachineGradient");
 			}
 		}
 		
@@ -193,6 +217,8 @@
 		  * @param int count - Number of shuffles (undefined to make infinite animation
 		*/
 		function _shuffle( count ){
+			
+			_isRunning = true;
 			
 			//Infinite animation
 			if( count===undefined ){
@@ -302,10 +328,25 @@
 		}
 		
 		/**
+		  * @desc PRIVATE - Perform Shuffling calback
+		*/
+		function completeCallback(){
+			
+			if( typeof _oncompleteShuffling==="function" ){
+						
+				_oncompleteShuffling($slot, _active);
+				
+				_oncompleteShuffling = null;
+				
+			}
+			
+		}
+		
+		/**
 		  * @desc PRIVATE - Stop shuffling the elements
 		  * @param int||boolean nowOrRepeations - Number of repeations to stop (true to stop NOW)
 		*/
-		function _stop( nowOrRepeations ){
+		function _stop( nowOrRepeations, getElementFn ){
 			
 			//Stop animation
 			if( _currentAnim!==null ){
@@ -314,10 +355,16 @@
 			
 			//Get element
 			var rnd;
-			if( settings.repeat ){
-				rnd = _getNext();
+			if( typeof getElementFn==="function" ){
+				
+				rnd = getElementFn();
+				
 			}else{
-				rnd = _getRandom();
+				if( settings.repeat ){
+					rnd = _getNext();
+				}else{
+					rnd = _getRandom();
+				}
 			}
 								
 			//Stop animation NOW!!!!!!!
@@ -342,7 +389,7 @@
 					//Perform animation
 					$container.animate({
 						marginTop : offset
-					}, delay, "easeOutBounce");
+					}, delay, "easeOutBounce", completeCallback);
 					
 				}else{
 					
@@ -356,6 +403,8 @@
 				setTimeout(function(){
 					
 					_setAnimationFX("stop");
+					
+					_isRunning = false;
 					
 				}, delay + 25);
 			
@@ -432,9 +481,11 @@
 		  * @desc PUBLIC - Starts shuffling the elements
 		  * @param int count - Number of shuffles (undefined to make infinite animation
 		*/
-		$slot.shuffle = function( count ){
+		$slot.shuffle = function( count, oncomplete ){
 			
 			_forceStop = false;
+			
+			_oncompleteShuffling = oncomplete;
 			
 			_shuffle(count);
 			
@@ -446,9 +497,9 @@
 		*/
 		$slot.stop = function( nowOrRepeations ){
 			
+			_forceStop = true;
+			
 			if( settings.repeat!==false && _timer!==null ){
-				
-				_forceStop = true;
 				
 				clearTimeout(_timer);
 				
@@ -459,11 +510,20 @@
 		};
 		
 		/**
+		  * @desc PUBLIC - SELECT previous element relative to the current active element
+		*/
+		$slot.prev = function(){
+			
+			_stop(true, _getPrev);
+			
+		}
+		
+		/**
 		  * @desc PUBLIC - SELECT next element relative to the current active element
 		*/
 		$slot.next = function(){
 			
-			$slot.stop(true);
+			_stop(true, _getNext);
 			
 		}
 		
@@ -474,6 +534,14 @@
 		$slot.active = function(){
 			return _getActive();
 		}
+		
+		/**
+		  * @desc PUBLIC - Check if the machine is doing stuff
+		  * @return boolean - Machine is shuffling
+		*/
+		$slot.isRunning = function(){
+			return _isRunning;
+		};
 		
 		/**
 		  * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively

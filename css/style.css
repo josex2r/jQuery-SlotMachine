@@ -19,7 +19,6 @@ html {
     min-height: 100%;
 }
 body {
-    margin: 0 0 80px; /* bottom = footer height */
 }
 footer {
     position: absolute;
@@ -32,6 +31,7 @@ footer {
 b{
 	font-weight: 600;
 }
+
 /* General ID
 -------------------------------------------------------------------------*/
 .wrapper{
@@ -50,22 +50,10 @@ b{
 	width: 960px;
 	margin: 0 auto 0;
 }
-#header{
-	width: 100%;
-	height: 109px;
-	/*
-	background: #052c57;
-	border-bottom: 1px solid white;
-	*/
-	background: #ffffff;
-	border-bottom: 1px solid #e8e8e8;
-	border-top: 3px solid #052C57;
-}
 .content{
-	padding: 0 30px;
-	float: left;
+	padding: 30px;
 	width: 900px;
-	margin-bottom:80px;
+	margin: 0 auto;
 }
 .content.foot{
 	padding: 0 30px;
@@ -73,11 +61,6 @@ b{
 	margin:0 auto 0;
 	width: 900px;
 	margin-bottom:0;
-}
-
-#top_home{
-	overflow: hidden;
-	position: relative;
 }
 
 
@@ -132,26 +115,40 @@ h4{
     font-weight: 400;
 }
 
+p.title{
+	color: #000000;
+    display: table-cell;
+    float: left;
+    font-size: 45px;
+    line-height: 40px;
+    margin: 0 0 50px;
+    text-align: center;
+    width: 100%;
+    font-weight: 300;
+}
+
 .grey {	color:#444;}
 
-}
 /* INICIO
 -------------------------------------------------------------------------*/
-#inicio{
+#header{
 	margin: 0 auto 0;
-	height: 100%;
+	width: 100%;
 	position: absolute;
 	top: 0px;
-	width:100%
+	background-color: #6C5726;
+	overflow: hidden;
+	position: relative;
+	padding: 50px 0px;
 }
-#inicio table.table_inicio{
+#header table, #footer table{
 	height: 100%;
 	width: 100%;
 }
-#inicio table.table_inicio td{
+#header table td, #footer table td{
 	vertical-align: middle;
 }
-#inicio .textinicio{
+#header .content{
 	color: #FFFFFF;
     float: left;
     font-size: 50px;
@@ -159,11 +156,13 @@ h4{
     line-height: 42px;
     margin-top: 30px;
     text-align: center;
+    border-top: 10px solid #A48E4E;
+    border-bottom: 10px solid #A48E4E;
     width: 100%;
 }
-#inicio .textinicio2{
+#header .content, #footer .content{
 	font-family: 'Pathway Gothic One';
-	color: #000000;
+	color: #ffffff;
     float: left;
     font-size: 70px;
     font-weight: 300;
@@ -172,45 +171,121 @@ h4{
     margin-bottom: 20px;
     text-align: center;
     width: 100%;
-    border-top: 5px solid #fff;
-    border-bottom: 5px solid #fff;
     padding: 30px 0px;
 }
-#inicio .textinicio2 > div{
+#header .content > div, #footer .content > div{
 	display: inline-block;
 }
-#slotMachine{
+
+#footer{
+	width:100%;
+	background-color: #6C5726;
+	border-top: 20px dotted #A48E4E;
+	height: 200px;
+}
+
+
+.line{
+	background-color: #DCD293;
+	padding: 75px 0px;
+	width:100%;
+	border-top: 20px dotted #A48E4E;
+}
+
+
+
+
+#textMachine, #textMachine2{
 	width:520px;
 	height: 67px;
 	overflow: hidden;
 	display: inline-block;
 	text-align: center;
 }
-#slotMachine > *{
+#textMachine > *, #textMachine2 > *{
 	padding: 0px 0px;
 }
-.social{
-	width: 80px;
-	margin: 0 auto;
+
+
+
+
+.slotMachineButton{
+	width:100px;
+	height: 100px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
 }
-.social .ico{
-	float: left;
-	width: 20px;
-	height: 20px;
+.slotMachineButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+	box-shadow:inset 0px 1px 0px 0px #fce2c1;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25) );
+	background:-moz-linear-gradient( center top, #ffc477 5%, #fb9e25 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
+	background-color:#ffc477;
+	border-radius: 75px;
+	text-indent:0px;
+	border:6px solid #eeb44f;
+	display:inline-block;
+	color:#ffffff;
+	font-size:50px;
+	font-weight:bold;
+	font-style:normal;
+	height:100px;
+	line-height:100px;
+	width:100px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #cc9f52;
+	margin-left: 50px;
+	cursor:pointer;
 }
-.social .ico.tw{
-	background: url(../img/social_tw.png) no-repeat 0 0;
+.slotMachineButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
+	background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
+	background-color:#fb9e25;
+}.slotMachineButton:active {
+	position:relative;
+	top:1px;
 }
-.social .ico.fb{
-	background: url(../img/social_fb.png) no-repeat 0 0;
-	margin: 0 10px;
+
+
+
+.slotMachine{
+	width:100px;
+	height: 100px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
+	border: 5px solid #000;
+	background-color: #ffffff;
 }
-.social .ico.g{
-	background: url(../img/social_g.png) no-repeat 0 0;
+.noBorder{
+	border:none !important;
+	background: transparent !important;
 }
-section{
-	clear:both;
+.slotMachine .slot{
+	width:100px;
+	height:100px;
 }
-section#music{
-	height: 260px;
+.slot1{
+	background-image: url("../img/slot1.png");
 }
+.slot2{
+	background-image: url("../img/slot2.png");
+}
+.slot3{
+	background-image: url("../img/slot3.png");
+}
+.slot4{
+	background-image: url("../img/slot4.png");
+}
+.slot5{
+	background-image: url("../img/slot5.png");
+}
+.slot6{
+	background-image: url("../img/slot6.png");
+}
+
