@@ -1,4 +1,4 @@
-#jQuery-SlotMachine
+#jQuery-SlotMachine [![Build Status](https://travis-ci.org/josex2r/jQuery-SlotMachine.svg?branch=master)](https://travis-ci.org/josex2r/jQuery-SlotMachine)
 
 A simple, lightweight jQuery plugin to make slot machine animation effect.
 
