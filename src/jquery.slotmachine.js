@@ -13,7 +13,7 @@
 		
 		//Fast blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
 								'<filter id="slotMachineBlurFilterFast">'+
 									'<feGaussianBlur stdDeviation="5" />'+
 								'</filter>'+
@@ -22,7 +22,7 @@
 		
 		//Medium blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
 								'<filter id="slotMachineBlurFilterMedium">'+
 									'<feGaussianBlur stdDeviation="3" />'+
 								'</filter>'+
@@ -31,7 +31,7 @@
 		
 		//Slow blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
 								'<filter id="slotMachineBlurFilterSlow">'+
 									'<feGaussianBlur stdDeviation="1" />'+
 								'</filter>'+
@@ -40,7 +40,7 @@
 		
 		//Fade mask
 		if( $("mask#slotMachineFadeSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
 								'<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
 									'<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
 										'<stop stop-color="white" stop-opacity="0" offset="0"></stop>'+
