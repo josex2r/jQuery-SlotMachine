@@ -445,7 +445,7 @@
 			
 			if( _forceStop===false ){
 				
-				delay = delay===undefined ? 1 : settings.repeat + 1000;
+				delay = delay===undefined ? 1 : settings.repeat + 1725;
 				
 				_timer = setTimeout(function(){
 					
