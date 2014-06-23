@@ -67,6 +67,22 @@ Set spin animation time
 Pass an int as miliseconds to make the machine auto rotate
 
     repeat: false
+
+### randomize
+
+Pass a function to select your own random element. This function must return an integer between 0 (first element) and max number of elements.
+
+    randomize: function(activeElementIndex){} //activeElementIndex = current selected index
+    
+Example (this machine always shows first element):
+
+```javascript
+$('#foo').slotMachine({
+	randomize : function(activeElementIndex){
+		return 0;
+	}
+});
+```
     
 ## Authors
 

@@ -1,10 +1,6 @@
-/*
-  * jQuery Slot Machine v1.0.0
-  * https://github.com/josex2r/jQuery-SlotMachine
-  *
-  * Copyright 2014 Jose Luis Represa
-  * Released under the MIT license
-*/
+/*! SlotMachine - v1.0.0 - 2014-06-23
+* https://github.com/josex2r/jQuery-SlotMachine
+* Copyright (c) 2014 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
 			
 	//Set required styles, filters and masks

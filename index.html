@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript" src="src/jquery.slotmachine.js"></script>
+		<script type="text/javascript" src="dist/jquery.slotmachine.min.js"></script>
 
 	</head>
 
@@ -145,6 +145,81 @@
 				
 			</div>
 		</div>
+		
+		
+		<div class="line">
+			
+			<div class="content" style="text-align: center">
+				
+				<div style="clear:both;">
+					<p class="title">Trick your results: </p>
+				</div>
+				
+				<div style="clear:both;">
+					<div id="machineFake1" class="slotMachine">
+						<div class="slot slot1"></div>
+						<div class="slot slot2"></div>
+						<div class="slot slot3"></div>
+						<div class="slot slot4"></div>
+						<div class="slot slot5"></div>
+						<div class="slot slot6"></div>
+					</div>
+					
+					<div id="slotMachineButtonFake" class="slotMachineButton" style="margin-right: 40px">GO!</div>
+					
+					
+					<div id="machineFake2" class="slotMachine">
+						<div class="slot slot1"></div>
+						<div class="slot slot2"></div>
+						<div class="slot slot3"></div>
+						<div class="slot slot4"></div>
+						<div class="slot slot5"></div>
+						<div class="slot slot6"></div>
+					</div>
+					
+					<script>
+						$(document).ready(function(){
+							
+							//Fake machine 1
+							var machine1 = $("#machineFake1").slotMachine({
+								randomize : function(activeElementIndex){
+									//This slot machine always shows the element in position '1'
+									return 1;
+								}
+							});
+							
+							function onComplete($el, active){
+								$("#machineFakeResult").text("Index: "+active.index);
+							}
+							
+							$("#slotMachineButtonFake").click(function(){
+								
+								machine1.shuffle(3, onComplete);
+								
+							});
+							
+							//Fake machine 2 - auto
+							
+							var machine2 = $("#machineFake2").slotMachine({
+								active	: 1,
+								delay	: 500,
+								repeat	: 1500,
+								randomize : function(activeElementIndex){
+									return 1;
+								}
+							});
+						});
+					</script>
+				</div>
+				
+				<div style="clear:both;">
+					<div id="machineFakeResult" class="slotMachine noBorder" style="margin-left: -210px">Index: 0</div>
+					<div class="slotMachine noBorder"></div>
+				</div>
+				
+			</div>
+		</div>
+		
 		
 		<div class="line" style="padding-top:50px;">
 			
