@@ -6,14 +6,22 @@
   * Released under the MIT license
 */
 ;(function($, window, document, undefined){
+	
+	var pluginName = "slotMachine",
+        defaults = {
+			active	: 0, //Active element [int]
+			delay	: 200, //Animation time [int]
+			auto	: false, //Repeat delay [false||int]
+			randomize : null, //Randomize function, must return an integer with the selected position
+			stopHidden : true
+		};
 			
 	//Set required styles, filters and masks
-	
 	$(document).ready(function(){
 		
 		//Fast blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterFast">'+
 									'<feGaussianBlur stdDeviation="5" />'+
 								'</filter>'+
@@ -22,7 +30,7 @@
 		
 		//Medium blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterMedium">'+
 									'<feGaussianBlur stdDeviation="3" />'+
 								'</filter>'+
@@ -31,7 +39,7 @@
 		
 		//Slow blur
 		if( $("filter#slotMachineBlurSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterSlow">'+
 									'<feGaussianBlur stdDeviation="1" />'+
 								'</filter>'+
@@ -40,7 +48,7 @@
 		
 		//Fade mask
 		if( $("mask#slotMachineFadeSVG").length<=0 ){
-			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg">'+
+			$("body").append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
 									'<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
 										'<stop stop-color="white" stop-opacity="0" offset="0"></stop>'+
@@ -89,29 +97,27 @@
 	  * @param object settings - Plugin configuration params
 	  * @return jQuery node - Returns jQuery selector with some new functions (shuffle, stop, next, auto, active)
 	*/
-	$.fn.slotMachine = function(settings){
+	function Plugin(element, options){
+		this.element = element;
+		this.settings = $.extend( {}, defaults, options);
+		this._defaults = defaults;
+		this._name = pluginName;
 		
-		var defaults = {
-			active	: 0, //Active element [int]
-			delay	: 200, //Animation time [int]
-			repeat	: false, //Repeat delay [false||int]
-			randomize : null //Randomize function, must return an integer with the selected position
-		};
-		
-		settings = $.extend(defaults, settings); //Plugin settings
-		
-		var	$slot = $(this), //jQuery selector
+		var	self = this,
+			$slot = $(element), //jQuery selector
 			$titles = $slot.children(), //Slot Machine elements
 			$container, //Container to wrap $titles
+			_minTop, //Min marginTop offset
 			_maxTop, //Max marginTop offset
-			_timer = null, //Timeout recursive function to handle auto (settings.repeat)
-			_currentAnim = null, //Current playing jQuery animation
-			_forceStop = false, //Force execution for some functions
+			_$fakeFirstTitle, //First element (the last of the html container)
+			_$fakeLastTitle, //Last element (the first of the html container)
+			_timer = null, //Timeout recursive function to handle auto (settings.auto)
+			_forceStop = false, //Force execution stop for some functions
 			_oncompleteShuffling = null, //Callback function
 			_isRunning = false, //Machine is running?
 			_active = { //Current active element
-				index	: settings.active,
-				el		: $titles.get( settings.active )
+				index	: this.settings.active,
+				el		: $titles.get( this.settings.active )
 			};
 		
 		/**
@@ -124,35 +130,44 @@
 			for(var i=0; i<index; i++){
 				offset += $( $titles.get(i) ).outerHeight();
 			}
-			return -offset;
+			return -offset + _minTop;
+		}
+		
+		/**
+		  * @desc PRIVATE - Get current element index
+		  * @return int - $titles element index
+		*/
+		function _getIndexFromOffset(){
+			return Math.abs( Math.round( parseInt( $container.css('margin-top').replace(/px/, ''), 10) / $titles.first().height() ) ) -1;
 		}
 		
 		/**
 		  * @desc PRIVATE - Get random element different than last shown
+		  * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
 		  * @return object - Element index and HTML node
 		*/
-		function _getRandom(){
-			var rnd;
+		function _getRandom(cantBeTheCurrent){
+			var rnd,
+				removePrevious = cantBeTheCurrent || false;
 			do{
 				rnd = Math.floor( Math.random() * $titles.length );
-			}while( rnd===_active.index && rnd>=0 );
+			}while( (removePrevious && rnd===_active.index) && rnd>=0 );
 			
 			//Choose element
-			var choosen = {
-					index : rnd,
-					el : $titles.get( rnd )
-				};
-			return choosen;
+			return {
+				index : rnd,
+				el : $titles.get( rnd )
+			};
 		}
 		
 		/**
-		  * @desc PRIVATE - Get the randomize setting function element
-		  * @return int - Element index and HTML node
+		  * @desc PRIVATE - Get random element based on the custom randomize function
+		  * @return object - Element index and HTML node
 		*/ 
 		function _getCustom(){
-			var choosen = {};
-			if( settings.randomize!==null && typeof settings.randomize==='function' ){
-				var index = settings.randomize(_active.index);
+			var choosen;
+			if( self.settings.randomize!==null && typeof self.settings.randomize==='function' ){
+				var index = self.settings.randomize(_active.index);
 				if( index<0 || index>=$titles.length ){
 					index = 0;
 				}
@@ -172,11 +187,11 @@
 		*/ 
 		function _getPrev(){
 			var prevIndex = _active.index-1<0 ? $titles.length-1 : _active.index-1;
-			var prevObj = {
+			
+			return {
 				index	: prevIndex,
 				el		: $titles.get(prevIndex)
 			};
-			return prevObj;
 		}
 		
 		/**
@@ -185,29 +200,11 @@
 		*/ 
 		function _getNext(){
 			var nextIndex = _active.index+1<$titles.length ? _active.index+1 : 0;
-			var nextObj = {
+			
+			return {
 				index	: nextIndex,
 				el		: $titles.get(nextIndex)
 			};
-			return nextObj;
-		}
-		
-		/**
-		  * @desc PRIVATE - Get currently active element
-		  * @return object elWithIndex - Element index and HTML node
-		*/
-		function _getActive(){
-			//Update last choosen element index
-			return _active;
-		}
-		
-		/**
-		  * @desc PRIVATE - Set currently showing element and makes active
-		  * @param object elWithIndex - Element index and HTML node
-		*/
-		function _setActive( elWithIndex ){
-			//Update last choosen element index
-			_active = elWithIndex;
 		}
 		
 		/**
@@ -216,7 +213,7 @@
 		  * @param string||boolean fade - Set fade gradient effect
 		*/
 		function _setAnimationFX(speed, fade){
-			$slot.add($titles).removeClass("slotMachineBlurFast slotMachineBlurMedium slotMachineBlurSlow");
+			$titles.removeClass("slotMachineBlurFast slotMachineBlurMedium slotMachineBlurSlow");
 			switch( speed ){
 				case 'fast':
 					$titles.addClass("slotMachineBlurFast");
@@ -245,209 +242,165 @@
 		
 		/**
 		  * @desc PRIVATE - Starts shuffling the elements
-		  * @param int count - Number of shuffles (undefined to make infinite animation
+		  * @param int repeations - Number of shuffles (undefined to make infinite animation
 		*/
-		function _shuffle( count ){
+		function _shuffle( repeations ){
+			
+			if( !_isVisible() ){
+				
+				_setAnimationFX("stop");
+				
+				_resetPosition();
+				
+				setTimeout(function(){
+					_stop();
+				}, self.settings.delay);
+				return;
+			}
 			
 			_isRunning = true;
 			
-			var delay = settings.delay;
+			var delay = self.settings.delay;
 			
 			//Infinite animation
-			if( count===undefined ){
+			if( typeof repeations!=='number' ){
 				
 				//Set animation effects
 				_setAnimationFX("fast", true);
 				
 				delay /= 2;
 				
-				if( _isVisible() ){
-					
-					//Perform animation
-					_currentAnim = $container.animate({
-						marginTop : _maxTop
-					}, delay, function(){
-						
-						//Remove animation var
-						_currentAnim = null;
-						
+				//Perform animation
+				$container.animate({
+					marginTop : _maxTop
+				}, delay, 'linear', function(){
+					//Oncomplete animation
+					if( _forceStop===false ){
 						//Reset top position
 						$container.css("margin-top", 0);
-						
-					});
-				
-				}else{
-						
-					_setAnimationFX("stop");
-					
-					_resetPosition();
-					
-				}
-					
-				//Oncomplete animation
-				setTimeout(function(){
-					
-					if( _forceStop===false ){
-						
 						//Repeat animation
 						_shuffle();
-						
 					}
-					
-				}, delay + 25);
+				});
 			
-			//Stop animation after {count} repeats
-			}else{
+			//Stop animation after {repeations} repeats
+			}else if( typeof repeations==='number' && repeations>0 ){
 				
-				//Perform fast animation
-				if( count>=1 ){
-					
-					if( count>1 ){
-						
-						//Set animation effects
-						_setAnimationFX("fast", true);
-					
-						delay /= 2;
-						
-					}else{
-						
-						//Set animation effects
+				//Change delay and speed
+				switch( repeations ){
+					case 1:
+					case 2:
+						_setAnimationFX("slow", true);
+						break;
+					case 3:
+					case 4:
 						_setAnimationFX("medium", true);
-						
-					}
-					
-					if( _isVisible() ){
-						
-						//Perform animation
-						_currentAnim = $container.animate({
-							marginTop : _maxTop
-						}, delay, function(){
-							
-							//Remove animation var
-							_currentAnim = null;
-							
-							//Reset top position
-							$container.css("margin-top", 0);
-							
-						});
-						
-					}else{
-						
-						_setAnimationFX("stop");
-						
-						_resetPosition();
-						
-					}
-					
-					//Oncomplete animation
-					setTimeout(function(){
-						
-						//Repeat animation
-						_shuffle( count-1 );
-						
-					}, delay + 25);
-					
-				}else{
-					
-					//Stop NOW!
-					_stop(true);
-					
+						delay /= 1.5;
+						break;
+					default:
+						_setAnimationFX("fast", true);
+						delay /= 2;
 				}
+					
+				//Perform animation
+				$container.animate({
+					marginTop : _maxTop
+				}, delay, 'linear', function(){
+					if( _forceStop===false ){
+						//Reset top position
+						$container.css("margin-top", 0);
+						//Repeat animation on complete
+						_shuffle( repeations-1 );
+					}
+				});
 				
-			}
-			
-		}
-		
-		/**
-		  * @desc PRIVATE - Perform Shuffling calback
-		*/
-		function completeCallback(){
-			
-			if( typeof _oncompleteShuffling==="function" ){
-						
-				_oncompleteShuffling($slot, _active);
-				
-				_oncompleteShuffling = null;
-				
+			}else{
+				_stop();
 			}
 			
 		}
 		
 		/**
 		  * @desc PRIVATE - Stop shuffling the elements
-		  * @param int||boolean nowOrRepeations - Number of repeations to stop (true to stop NOW)
+		  * @param int repeations - Number of repeations to stop (true to stop NOW)
 		*/
-		function _stop( nowOrRepeations, getElementFn ){
+		function _stop( getElementFn ){
+			//Stop animation NOW!!!!!!!
+			$container.clearQueue().stop(true, false);
+			_setAnimationFX("slow", true);
+			_isRunning = true;
 			
-			//Stop animation
-			if( _currentAnim!==null ){
-				_currentAnim.stop();
+			if( !_isVisible() ){
+				if( typeof _oncompleteShuffling==='function' ){
+					_oncompleteShuffling(false, false);
+				}
+				_setAnimationFX("stop", false);
+				_resetPosition();
+				_isRunning = false;
+				return;
 			}
 			
-			//Get element
-			var rnd;
+			//Get random or custom element
+			var rnd = _getRandom();
 			if( typeof getElementFn==="function" ){
 				
 				rnd = getElementFn();
 				
 			}else{
-				if( settings.randomize!==null && typeof settings.randomize==='function' ){
+				if( self.settings.randomize!==null && typeof self.settings.randomize==='function' ){
 					rnd = _getCustom();
-				}else if( settings.repeat ){
+				}else if( self.settings.auto ){
 					rnd = _getNext();
-				}else{
-					rnd = _getRandom();
 				}
-				
 			}
-								
-			//Stop animation NOW!!!!!!!
-			if( nowOrRepeations===true || nowOrRepeations<=1 ){
-				
-				_setAnimationFX("slow", true);
-				
-				//get random element offset
-				var offset = _getOffset(rnd.index);
-				
-				//Exception: first element
-				if( rnd.index===0 ){
-					$container.css("margin-top", -$( rnd.el ).height() / 2 );
-				}
-				
-				var delay = 75 * $titles.length - rnd.index;
-				
-				if( _isVisible() ){
-					
-					_setActive( rnd );
-					
-					//Perform animation
-					$container.animate({
-						marginTop : offset
-					}, delay, "easeOutBounce", completeCallback);
-					
-				}else{
-					
-					_setAnimationFX("stop");
-					
-					_resetPosition();
-					
-				}
-				
-				//Oncomplete animation
-				setTimeout(function(){
-					
-					_setAnimationFX("stop");
-					
-					_isRunning = false;
-					
-				}, delay + 25);
 			
-			//Stop animation sloooooooowly
+			//Set current active element
+			_active.index = _getIndexFromOffset();
+			_active.el = $titles.get(_active.index);
+			
+			//Get random element offset and delay
+			var offset = _getOffset(rnd.index),
+				delay = self.settings.delay * 3; //self.settings.delay * (rnd.index/5 + 1);
+			
+			//Check direction to prevent jumping
+			if( rnd.index>_active.index ){
+				//We are moving to the prev (first to last)
+				if( _active.index===0 && rnd.index===$titles.length-1 ){
+					$container.css("margin-top", _getOffset($titles.length) );
+				}
 			}else{
-				
-				_shuffle(nowOrRepeations || 3);
-				
+				//We are moving to the next (last to first)
+				if( _active.index===$titles.length-1 && rnd.index===0 ){
+					$container.css("margin-top", 0 );
+				}
 			}
+			
+			//Update last choosen element index
+			_active = rnd;
+			
+			//Perform animation
+			$container.animate({
+				marginTop : offset
+			}, delay, "easeOutBounce", function (){
+				
+				_setAnimationFX("stop");
+			
+				_isRunning = false;
+				
+				if( typeof _oncompleteShuffling==="function" ){
+							
+					_oncompleteShuffling($slot, _active);
+					
+					_oncompleteShuffling = null;
+					
+				}
+				
+			});
+			
+			//Change blur
+			setTimeout(function(){
+				_setAnimationFX("false", false);
+			}, delay/2);
 			
 		}
 		
@@ -456,6 +409,9 @@
 		  * @return int - Returns true if machine is on the screen
 		*/
 		function _isVisible(){
+			if( self.settings.stopHidden===false ){
+				return false;
+			}
 			//Stop animation if element is [above||below] screen, best for performance
 			var above = $slot.offset().top > $(window).scrollTop() + $(window).height(),
 				below = $(window).scrollTop() > $slot.height() + $slot.offset().top;
@@ -466,23 +422,17 @@
 		/**
 		  * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
 		*/
-		function _auto( delay ){
+		function _auto(){
 			
 			if( _forceStop===false ){
 				
-				delay = delay===undefined ? 1 : settings.repeat + 1000;
-				
 				_timer = setTimeout(function(){
 					
-					if( _forceStop===false ){
-						
-						_shuffle(3);
-						
-					}
+					_oncompleteShuffling = _auto;
+					_forceStop = false;
+					_shuffle(5);
 					
-					_timer = _auto( delay );
-					
-				}, delay);
+				}, self.settings.auto);
 				
 			}
 			
@@ -495,95 +445,135 @@
 		$container = $slot.find(".slotMachineContainer");
 		
 		//Set max top offset
-		_maxTop = - $container.height();
+		_maxTop = -$container.height();
+		
+		//Add the last element behind the first to prevent the jump effect
+		_$fakeFirstTitle = $titles.last().clone();
+		_$fakeLastTitle = $titles.first().clone();
+		
+		$container.prepend( _$fakeFirstTitle );
+		$container.append( _$fakeLastTitle );
+		
+		//Set min top offset
+		_minTop = -_$fakeFirstTitle.outerHeight();
 		
 		//Show active element
-		$container.css("margin-top", _getOffset(settings.active) );
+		$container.css("margin-top", _getOffset(self.settings.active) );
 		
 		//Start auto animation
-		if( settings.repeat!==false ){
+		if( self.settings.auto!==false ){
 			
-			_auto();
-			
+			if( self.settings.auto===true ){
+				_shuffle();
+			}else{
+				_auto();
+			}
 		}
 		
-		
-		//Public methods
-		
-		
-		/**
-		  * @desc PUBLIC - Starts shuffling the elements
-		  * @param int count - Number of shuffles (undefined to make infinite animation
-		*/
-		$slot.shuffle = function( count, oncomplete ){
+		/*
+		 * Return public functions and attrs
+		 */
+		return {
+			/**
+			  * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
+			*/
+			auto: _auto,
 			
-			_forceStop = false;
+			/**
+			  * @desc PUBLIC - Starts shuffling the elements
+			  * @param int repeations - Number of shuffles (undefined to make infinite animation
+			*/
+			shuffle : function( repeations, oncomplete ){
+				_forceStop = false;
+				_oncompleteShuffling = oncomplete;
+				if( typeof repeations==='number' ){
+					_shuffle(repeations);
+				}else{
+					_shuffle( repeations!==undefined ? 5 : undefined );
+				}
+			},
 			
-			_oncompleteShuffling = oncomplete;
-			
-			_shuffle(count);
-			
-		};
-		
-		/**
-		  * @desc PUBLIC - Stop shuffling the elements
-		  * @param int||boolean nowOrRepeations - Number of repeations to stop (true to stop NOW)
-		*/
-		$slot.stop = function( nowOrRepeations ){
-			
-			_forceStop = true;
-			
-			if( settings.repeat!==false && _timer!==null ){
+			/**
+			  * @desc PUBLIC - Stop shuffling the elements
+			  * @param int repeations - Number of repeations before stop
+			*/
+			stop : function( repeations ){
 				
-				clearTimeout(_timer);
+				if( self.settings.auto!==false && _timer!==null ){
+					clearTimeout(_timer);
+				}
 				
+				
+				
+				if( typeof repeations==='number' && repeations>0 ){
+					$container.clearQueue().stop(true, false);
+					_forceStop = false;
+					_shuffle(repeations);
+				}else{
+					_forceStop = true;
+					_stop();
+				}
+			},
+			
+			/**
+			  * @desc PUBLIC - SELECT previous element relative to the current active element
+			*/
+			prev : function(){
+				_stop(_getPrev);
+			},
+			
+			/**
+			  * @desc PUBLIC - SELECT next element relative to the current active element
+			*/
+			next : function(){
+				_stop(_getNext);
+			},
+			
+			/**
+			  * @desc PUBLIC - Get selected element
+			  * @return object - Element index and HTML node
+			*/
+			active : function(){
+				return _active;
+			},
+			
+			/**
+			  * @desc PUBLIC - Check if the machine is doing stuff
+			  * @return boolean - Machine is shuffling
+			*/
+			isRunning : function(){
+				return _isRunning;
 			}
-			
-			_stop(nowOrRepeations);
-			
 		};
-		
-		/**
-		  * @desc PUBLIC - SELECT previous element relative to the current active element
-		*/
-		$slot.prev = function(){
-			
-			_stop(true, _getPrev);
-			
-		};
-		
-		/**
-		  * @desc PUBLIC - SELECT next element relative to the current active element
-		*/
-		$slot.next = function(){
-			
-			_stop(true, _getNext);
-			
-		};
-		
-		/**
-		  * @desc PUBLIC - Get selected element
-		  * @return object - Element index and HTML node
-		*/
-		$slot.active = function(){
-			return _getActive();
-		};
-		
-		/**
-		  * @desc PUBLIC - Check if the machine is doing stuff
-		  * @return boolean - Machine is shuffling
-		*/
-		$slot.isRunning = function(){
-			return _isRunning;
-		};
-		
-		/**
-		  * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
-		*/
-		$slot.auto = _auto;
-		
-		return $slot;
-		
-	};
+    }
+    
+    /*
+     * Create new plugin instance if needed and return it
+     */
+	function _getInstance(element, options){
+		var machine;
+		if ( !$.data(element, 'plugin_' + pluginName) ){
+			machine = new Plugin(element, options);
+			$.data(element, 'plugin_' + pluginName, machine);
+		}else{
+			machine = $.data(element, 'plugin_' + pluginName);
+		}
+		return machine;
+	}
 	
+	/*
+	 * Chainable instance
+	 */
+	$.fn[pluginName] = function(options){
+		if( this.length===1 ){
+			return _getInstance(this, options);
+		}else{
+			return this.each(function(){
+				if( !$.data(this, 'plugin_' + pluginName) ){
+					_getInstance(this, options);
+				}
+			});
+		}
+	};
+
 })( jQuery, window, document );

@@ -38,7 +38,7 @@
 									$("#textMachine").slotMachine({
 										active	: 1,
 										delay	: 450,
-										repeat	: 1500
+										auto	: 1500
 									});
 								});
 							</script>
@@ -121,14 +121,14 @@
 							
 							$("#slotMachineButton1").click(function(){
 								
-								machine1.shuffle(3, onComplete);
+								machine1.shuffle(5, onComplete);
 								
 								setTimeout(function(){
-									machine2.shuffle(3, onComplete);
+									machine2.shuffle(5, onComplete);
 								}, 500);
 								
 								setTimeout(function(){
-									machine3.shuffle(3, onComplete);
+									machine3.shuffle(5, onComplete);
 								}, 1000);
 								
 							})
@@ -182,6 +182,7 @@
 							
 							//Fake machine 1
 							var machine1 = $("#machineFake1").slotMachine({
+								active: 1,
 								randomize : function(activeElementIndex){
 									//This slot machine always shows the element in position '1'
 									return 1;
@@ -203,7 +204,7 @@
 							var machine2 = $("#machineFake2").slotMachine({
 								active	: 1,
 								delay	: 500,
-								repeat	: 1500,
+								auto	: 1500,
 								randomize : function(activeElementIndex){
 									return 1;
 								}
@@ -289,19 +290,19 @@
 								if( machine4.isRunning() ){
 									
 									//True to stop now
-									machine4.stop(true);
+									machine4.stop(1);
 									
 								}else{
 									
 									if( machine5.isRunning() ){
 										
-										machine5.stop(true);
+										machine5.stop(3);
 										
 									}else{
 										
 										if( machine6.isRunning() ){
 											
-											machine6.stop(true);
+											machine6.stop(5);
 											
 										}
 										
@@ -385,7 +386,7 @@
 						$("#textMachine2").slotMachine({
 							active	: 1,
 							delay	: 450,
-							repeat	: 1500
+							auto	: 1500
 						});
 					});
 				</script>

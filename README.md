@@ -62,11 +62,17 @@ Set spin animation time
 
     delay: 200
     
-### repeat
+### auto
 
 Pass an int as miliseconds to make the machine auto rotate
 
     repeat: false
+
+### stopHidden
+
+Stop animation if the element is above or below the screen
+
+    stopHidden: true
 
 ### randomize
 
