@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 
-		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="dist/jquery.slotmachine.min.js"></script>
 
 	</head>
@@ -181,10 +181,9 @@
 						$(document).ready(function(){
 							
 							//Fake machine 1
-							var machine1 = $("#machineFake1").slotMachine({
+							window.machine1 = $("#machineFake1").slotMachine({
 								active: 1,
 								randomize : function(activeElementIndex){
-									//This slot machine always shows the element in position '1'
 									return 1;
 								}
 							});

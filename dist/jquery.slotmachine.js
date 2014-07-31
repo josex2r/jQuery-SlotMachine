@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.1 - 2014-07-09
+/*! SlotMachine - v2.0.1 - 2014-07-31
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2014 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
@@ -154,6 +154,21 @@
 				index : rnd,
 				el : $titles.get( rnd )
 			};
+		}
+		
+		/**
+		  * @desc PUBLIC - Changes randomize function
+		  * @param function|int - Set new randomize function
+		*/
+		function _setRandomize(rnd){
+			if( typeof rnd==='number' ){
+				var _fn = function(){
+					return rnd;
+				};
+				self.settings.randomize = _fn;
+			}else{
+				self.settings.randomize = rnd;
+			}
 		}
 		
 		/**
@@ -539,7 +554,13 @@
 			*/
 			isRunning : function(){
 				return _isRunning;
-			}
+			},
+			
+			/**
+			  * @desc PUBLIC - Changes randomize function
+			  * @param function|int - Set new randomize function
+			*/
+			setRandomize : _setRandomize
 		};
     }
     

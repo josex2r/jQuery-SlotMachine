@@ -1,6 +1,6 @@
 {
   "name": "jquery-slotmachine",
-  "version": "2.0.1-ignored",
+  "version": "2.0.2-ignored",
   "engines": {
     "node": ">= 0.8.0"
   },

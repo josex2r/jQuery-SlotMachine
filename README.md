@@ -46,6 +46,12 @@ Check if the machine is running:
 machine.isRunning(); //Returns boolean
 ```
 
+Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
+
+```javascript
+machine.setRandomize(foo); //foo must be a function (should return int) or an int
+```
+
 ## Params
 
 Params must be an object, optionally containing the next parammeters:

@@ -161,6 +161,21 @@
 		}
 		
 		/**
+		  * @desc PUBLIC - Changes randomize function
+		  * @param function|int - Set new randomize function
+		*/
+		function _setRandomize(rnd){
+			if( typeof rnd==='number' ){
+				var _fn = function(){
+					return rnd;
+				};
+				self.settings.randomize = _fn;
+			}else{
+				self.settings.randomize = rnd;
+			}
+		}
+		
+		/**
 		  * @desc PRIVATE - Get random element based on the custom randomize function
 		  * @return object - Element index and HTML node
 		*/ 
@@ -543,7 +558,13 @@
 			*/
 			isRunning : function(){
 				return _isRunning;
-			}
+			},
+			
+			/**
+			  * @desc PUBLIC - Changes randomize function
+			  * @param function|int - Set new randomize function
+			*/
+			setRandomize : _setRandomize
 		};
     }
     
