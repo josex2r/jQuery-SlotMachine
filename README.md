@@ -6,10 +6,16 @@ A simple, lightweight jQuery plugin to make slot machine animation effect.
 
 ## Installation
 
-Include the script *after* the jQuery library:
+Install the component using [Bower](http://bower.io/):
+
+```sh
+$ bower install jquery-slotmachine --save
+```
+
+Include the script located in *dist* folder *after* the jQuery library:
 
 ```html
-<script src="/path/to/jquery.slotmachine.js"></script>
+<script src="/path/to/jquery.slotmachine.min.js"></script>
 ```
 
 ## Usage
