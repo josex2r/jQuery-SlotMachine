@@ -11,7 +11,7 @@
         "winning",
         "machine"
     ],
-  "version": "2.0.2",
+  "version": "2.0.3",
   "download": "https://github.com/josex2r/jQuery-SlotMachine",
   "homepage": "https://github.com/josex2r/jQuery-SlotMachine",
   "demo": "http://josex2r.github.io/jQuery-SlotMachine/",
@@ -34,6 +34,5 @@
   ],
   "dependencies": {
     "jquery": ">=1.7"
-  },
-  "keywords": []
+  }
 }
