@@ -422,7 +422,7 @@
 		*/
 		function _isVisible(){
 			if(self.settings.stopHidden === false){
-				return false;
+				return true;
 			}
 			//Stop animation if element is [above||below] screen, best for performance
 			var above = $slot.offset().top > $(window).scrollTop() + $(window).height(),
