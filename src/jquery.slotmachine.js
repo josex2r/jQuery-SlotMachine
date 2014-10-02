@@ -13,7 +13,8 @@
 			delay	: 200, //Animation time [int]
 			auto	: false, //Repeat delay [false||int]
 			randomize : null, //Randomize function, must return an integer with the selected position
-			stopHidden : true //Stops animations if the element isn´t on the screen
+			complete : null, //Callback function(result)
+			stopHidden : true //Stops animations if the element isn´t visible on the screen
 		};
 	
 	var FX_FAST = 'slotMachineBlurFast',
@@ -81,7 +82,7 @@
 	});
 	
 	//Required easing functions
-	if( typeof $.easing.easeOutBounce!=="function" ){
+	if(typeof $.easing.easeOutBounce !== 'function'){
 		//From jQuery easing, extend jQuery animations functions
 		$.extend( $.easing, {
 			easeOutBounce: function (x, t, b, c, d) {
@@ -98,476 +99,439 @@
 		});
 	}
 	
+	
+	function Timer(fn, delay){
+		var startTime,
+			self = this,
+			timer,
+			_fn = fn,
+			_args = arguments,
+			_delay = delay;
+		
+		this.running = false;
+		
+		this.onpause	= function(){};
+		this.onresume	= function(){};
+		
+		this.cancel = function(){
+			this.running = false;
+	        clearTimeout(timer);
+	   };
+	
+	    this.pause = function(){
+			if( this.running ){
+				delay -= new Date().getTime() - startTime;
+				this.cancel();
+				this.onpause();
+			}
+		};
+	
+	    this.resume = function(){
+			if( !this.running ){
+				this.running = true;
+				startTime = new Date().getTime();
+				
+				timer = setTimeout(function(){
+					_fn.apply(self, Array.prototype.slice.call(_args, 2, _args.length)); //Execute function with initial arguments, removing (fn & delay)
+				}, delay);
+				
+				this.onresume();
+			}
+	    };
+	    
+	    this.reset = function(){
+			this.cancel();
+			this.running = true;
+			delay = _delay;
+			timer = setTimeout(function(){
+				_fn.apply(self, Array.prototype.slice.call(_args, 2, _args.length)); //Execute function with initial arguments, removing (fn & delay)
+			}, _delay);
+	    };
+	    
+	    this.add = function(extraDelay){
+			this.pause();
+			delay += extraDelay;
+			this.resume();
+	    };
+	    
+	    this.resume();
+	}
+	
+	
 	/**
 	  * @desc PUBLIC - Makes Slot Machine animation effect
+	  * @param DOM element - Html element
 	  * @param object settings - Plugin configuration params
 	  * @return jQuery node - Returns jQuery selector with some new functions (shuffle, stop, next, auto, active)
 	*/
 	function SlotMachine(element, options){
 		this.element = element;
 		this.settings = $.extend( {}, defaults, options);
-		this._defaults = defaults;
-		this._name = pluginName;
+		this.defaults = defaults;
+		this.name = pluginName;
 		
-		var	self = this,
-			$slot = $(element), //jQuery selector
-			$tiles = $slot.children(), //Slot Machine elements
-			$container, //Container to wrap $tiles
-			_minTop, //Min marginTop offset
-			_maxTop, //Max marginTop offset
-			_$fakeFirstTile, //First element (the last of the html container)
-			_$fakeLastTile, //Last element (the first of the html container)
-			_timer = null, //Timeout recursive function to handle auto (settings.auto)
-			_forceStop = false, //Force execution stop for some functions
-			_oncompleteShuffling = null, //Callback function
-			_isRunning = false, //Machine is running?
-			_active = { //Current active element
-				index	: this.settings.active,
-				el		: $tiles.get( this.settings.active )
-			};
+		var	self = this;
+		//jQuery selector
+		this.$slot = $(element);
+		//Slot Machine elements
+		this.$tiles = this.$slot.children();
+		//Container to wrap $tiles
+		this.$container;
+		 //Min marginTop offset
+		this._minTop;
+		//Max marginTop offset
+		this._maxTop;
+		//First element (the last of the html container)
+		this._$fakeFirstTile;
+		//Last element (the first of the html container)
+		this._$fakeLastTile;
+		//Timeout recursive function to handle auto (settings.auto)
+		this._timer;
+		 //Callback function
+		this._oncompleteStack = [ this.settings.complete ];
+		//Number of spins left before stop
+		this._spinsLeft;
+		 //Number of spins left before stop
+		this._futureResult = null;
+		//Machine is running?
+		this.isRunning = false;
+		//Current active element
+		this.active = this.settings.active;
 		
-		/**
-		  * @desc PRIVATE - Get element offset top
-		  * @param int index - Element position
-		  * @return int - Negative offset in px
-		*/
-		function _getOffset( index ){
-			var offset = 0;
-			for(var i=0; i<index; i++){
-				offset += $( $tiles.get(i) ).outerHeight();
-			}
-			return -offset + _minTop;
-		}
-		
-		/**
-		  * @desc PRIVATE - Get current element index
-		  * @return int - $tiles element index
-		*/
-		function _getIndexFromOffset(){
-			return Math.abs( Math.round( parseInt( $container.css('margin-top').replace(/px/, ''), 10) / $tiles.first().height() ) ) -1;
-		}
-		
-		/**
-		  * @desc PRIVATE - Get random element different than last shown
-		  * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
-		  * @return object - Element index and HTML node
-		*/
-		function _getRandom(cantBeTheCurrent){
-			var rnd,
-				removePrevious = cantBeTheCurrent || false;
-			do{
-				rnd = Math.floor( Math.random() * $tiles.length );
-			}while( (removePrevious && rnd===_active.index) && rnd>=0 );
-			
-			//Choose element
-			return {
-				index : rnd,
-				el : $tiles.get( rnd )
-			};
-		}
-		
-		/**
-		  * @desc PUBLIC - Changes randomize function
-		  * @param function|int - Set new randomize function
-		*/
-		function _setRandomize(rnd){
-			if( typeof rnd==='number' ){
-				var _fn = function(){
-					return rnd;
-				};
-				self.settings.randomize = _fn;
-			}else{
-				self.settings.randomize = rnd;
-			}
-		}
-		
-		/**
-		  * @desc PRIVATE - Get random element based on the custom randomize function
-		  * @return object - Element index and HTML node
-		*/ 
-		function _getCustom(){
-			var choosen;
-			if( self.settings.randomize!==null && typeof self.settings.randomize==='function' ){
-				var index = self.settings.randomize(_active.index);
-				if( index<0 || index>=$tiles.length ){
-					index = 0;
-				}
-				choosen = {
-					index : index,
-					el : $tiles.get( index )
-				};
-			}else{
-				choosen = _getRandom();
-			}
-			return choosen;
-		}
-		
-		/**
-		  * @desc PRIVATE - Get the previous element
-		  * @return int - Element index and HTML node
-		*/ 
-		function _getPrev(){
-			var prevIndex = _active.index-1<0 ? $tiles.length-1 : _active.index-1;
-			
-			return {
-				index	: prevIndex,
-				el		: $tiles.get(prevIndex)
-			};
-		}
-		
-		/**
-		  * @desc PRIVATE - Get the next element
-		  * @return int - Element index and HTML node
-		*/ 
-		function _getNext(){
-			var nextIndex = _active.index+1<$tiles.length ? _active.index+1 : 0;
-			
-			return {
-				index	: nextIndex,
-				el		: $tiles.get(nextIndex)
-			};
-		}
-		
-		/**
-		  * @desc PRIVATE - Set CSS classes to make speed effect
-		  * @param string FX_SPEED - Element speed [FX_FAST_BLUR||FX_NORMAL_BLUR||FX_SLOW_BLUR||FX_STOP]
-		  * @param string||boolean fade - Set fade gradient effect
-		*/
-		function _setAnimationFX(FX_SPEED, fade){
-			$tiles.removeClass(FX_FAST).removeClass(FX_NORMAL).removeClass(FX_SLOW).addClass(FX_SPEED);
-			
-			if(fade !== true || FX_SPEED === FX_STOP){
-				$slot.add($tiles).removeClass(FX_GRADIENT);
-			}else{
-				$slot.add($tiles).addClass(FX_GRADIENT);
-			}
-		}
-		
-		/**
-		  * @desc PRIVATE - Reset active element position
-		*/
-		function _resetPosition(){
-			$container.css("margin-top", _getOffset(_active.index));
-		}
-		
-		/**
-		  * @desc PRIVATE - Starts shuffling the elements
-		  * @param int repeations - Number of shuffles (undefined to make infinite animation
-		*/
-		function _shuffle( repeations ){
-			
-			if(!_isVisible()){
-				
-				_setAnimationFX(FX_STOP);
-				
-				_resetPosition();
-				
-				setTimeout(function(){
-					_stop();
-				}, self.settings.delay);
-				
-				return;
-			}
-			
-			_isRunning = true;
-			
-			var delay = self.settings.delay;
-			
-			//Infinite animation
-			if(typeof repeations !== 'number'){
-				
-				//Set animation effects
-				_setAnimationFX(FX_FAST, true);
-				
-				delay /= 2;
-				
-				//Perform animation
-				$container.animate({
-					marginTop : _maxTop
-				}, delay, 'linear', function(){
-					//Oncomplete animation
-					if(_forceStop === false){
-						//Reset top position
-						$container.css('margin-top', 0);
-						//Repeat animation
-						_shuffle();
-					}
-				});
-			
-			//Stop animation after {repeations} repeats
-			}else if(typeof repeations === 'number' && repeations > 0){
-				
-				//Change delay and speed
-				switch( repeations ){
-					case 1:
-						_setAnimationFX(FX_SLOW, true);
-						break;
-					case 2:
-					case 3:
-					_setAnimationFX(FX_NORMAL, true);
-						delay /= 1.5;
-						break;
-					default:
-						_setAnimationFX(FX_FAST, true);
-						delay /= 2;
-				}
-					
-				//Perform animation
-				$container.animate({
-					marginTop : _maxTop
-				}, delay, 'linear', function(){
-					if( _forceStop===false ){
-						//Reset top position
-						$container.css('margin-top', 0);
-						//Repeat animation on complete
-						_shuffle( repeations-1 );
-					}
-				});
-				
-			}else{
-				_stop();
-			}
-			
-		}
-		
-		/**
-		  * @desc PRIVATE - Stop shuffling the elements
-		  * @param int repeations - Number of repeations to stop (true to stop NOW)
-		*/
-		function _stop( getElementFn ){
-			//Stop animation NOW!!!!!!!
-			$container.clearQueue().stop();
-			
-			_setAnimationFX(FX_SLOW, true);
-			
-			_isRunning = true;
-			
-			if(!_isVisible()){
-				if(typeof _oncompleteShuffling === 'function'){
-					_oncompleteShuffling(false, false);
-				}
-				_setAnimationFX(FX_STOP, false);
-				_resetPosition();
-				_isRunning = false;
-				return;
-			}
-			
-			//Get random or custom element
-			var rnd = _getRandom();
-			if(typeof getElementFn === 'function'){
-				
-				rnd = getElementFn();
-				
-			}else{
-				if(self.settings.randomize !== null && typeof self.settings.randomize === 'function'){
-					rnd = _getCustom();
-				}else if( self.settings.auto ){
-					rnd = _getNext();
-				}
-			}
-			
-			//Set current active element
-			_active.index = _getIndexFromOffset();
-			_active.el = $tiles.get(_active.index);
-			
-			//Get random element offset and delay
-			var offset = _getOffset(rnd.index),
-				delay = self.settings.delay * 3; //self.settings.delay * (rnd.index/5 + 1);
-			
-			//Check direction to prevent jumping
-			if( rnd.index>_active.index ){
-				//We are moving to the prev (first to last)
-				if(_active.index === 0 && rnd.index === $tiles.length-1){
-					$container.css('margin-top', _getOffset($tiles.length) );
-				}
-			}else{
-				//We are moving to the next (last to first)
-				if( _active.index===$tiles.length-1 && rnd.index===0 ){
-					$container.css('margin-top', 0);
-				}
-			}
-			
-			//Update last choosen element index
-			_active = rnd;
-			
-			//Perform animation
-			$container.animate({
-				marginTop : offset
-			}, delay, 'easeOutBounce', function (){
-				
-				_setAnimationFX(FX_STOP);
-			
-				_isRunning = false;
-				
-				if(typeof _oncompleteShuffling === 'function'){
-							
-					_oncompleteShuffling($slot, _active);
-					
-					_oncompleteShuffling = null;
-					
-				}
-				
-			});
-			
-			//Change blur
-			setTimeout(function(){
-				_setAnimationFX('false', false);
-			}, delay/2);
-			
-		}
-		
-		/**
-		  * @desc PRIVATE - Checks if the machine is on the screen
-		  * @return int - Returns true if machine is on the screen
-		*/
-		function _isVisible(){
-			if(self.settings.stopHidden === false){
-				return true;
-			}
-			//Stop animation if element is [above||below] screen, best for performance
-			var above = $slot.offset().top > $(window).scrollTop() + $(window).height(),
-				below = $(window).scrollTop() > $slot.height() + $slot.offset().top;
-			
-			return !above && !below;
-		}
-		
-		/**
-		  * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
-		*/
-		function _auto(){
-			
-			if(_forceStop === false){
-				
-				_timer = setTimeout(function(){
-					
-					_oncompleteShuffling = _auto;
-					_forceStop = false;
-					_shuffle(5);
-					
-				}, self.settings.auto);
-				
-			}
-			
-		}
-		
-		$slot.css("overflow", "hidden");
+		this.$slot.css("overflow", "hidden");
 		
 		//Validate active index
-		if(this.settings.active < 0 || this.settings.active >= $tiles.length ){
+		if(this.settings.active < 0 || this.settings.active >= this.$tiles.length ){
 			this.settings.active = 0;
-			_active.index = 0;
-			_active.el = $tiles.get(0);
+			this.active = 0;
 		}
 		
 		//Wrap elements inside $container
-		$tiles.wrapAll("<div class='slotMachineContainer' />");
-		$container = $slot.find(".slotMachineContainer");
+		this.$tiles.wrapAll("<div class='slotMachineContainer' />");
+		this.$container = this.$slot.find(".slotMachineContainer");
 		
 		//Set max top offset
-		_maxTop = - $container.height();
+		this._maxTop = - this.$container.height();
 		
 		//Add the last element behind the first to prevent the jump effect
-		_$fakeFirstTile = $tiles.last().clone();
-		_$fakeLastTile = $tiles.first().clone();
+		this._$fakeFirstTile = this.$tiles.last().clone();
+		this._$fakeLastTile = this.$tiles.first().clone();
 		
-		$container.prepend( _$fakeFirstTile );
-		$container.append( _$fakeLastTile );
+		this.$container.prepend( this._$fakeFirstTile );
+		this.$container.append( this._$fakeLastTile );
 		
 		//Set min top offset
-		_minTop = -_$fakeFirstTile.outerHeight();
+		this._minTop = - this._$fakeFirstTile.outerHeight();
 		
 		//Show active element
-		$container.css('margin-top', _getOffset(self.settings.active));
+		this.$container.css('margin-top', this.getTileOffset(this.active));
 		
 		//Start auto animation
-		if(self.settings.auto !== false){
-			if(self.settings.auto === true){
-				_shuffle();
+		if(this.settings.auto !== false){
+			if(this.settings.auto === true){
+				this.shuffle();
 			}else{
-				_auto();
+				this.auto();
+			}
+		}
+	}
+	/**
+	  * @desc PRIVATE - Get element offset top
+	  * @param int index - Element position
+	  * @return int - Negative offset in px
+	*/
+	SlotMachine.prototype.getTileOffset = function(index){
+		var offset = 0;
+		for(var i=0; i<index; i++){
+			offset += $( this.$tiles.get(i) ).outerHeight();
+		}
+		return - offset + this._minTop;
+	};
+	/**
+	  * @desc PRIVATE - Get current showing element index
+	  * @return int - Element index
+	*/
+	SlotMachine.prototype.getVisibleTile = function(){
+		var firstTileHeight = this.$tiles.first().height(),
+			containerMarginTop = parseInt( this.$container.css('margin-top').replace(/px/, ''), 10);
+		
+		return Math.abs( Math.round( containerMarginTop / firstTileHeight ) ) - 1;
+	}
+	/**
+	  * @desc PUBLIC - Changes randomize function
+	  * @param function|int - Set new randomize function
+	*/
+	SlotMachine.prototype.setRandomize = function(rnd){
+		if(typeof rnd === 'number'){
+			var _fn = function(){
+				return rnd;
+			};
+			this.settings.randomize = _fn;
+		}else{
+			this.settings.randomize = rnd;
+		}
+	}
+	/**
+	  * @desc PRIVATE - Get random element different than last shown
+	  * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
+	  * @return int - Element index
+	*/
+	 SlotMachine.prototype.getRandom = function(cantBeTheCurrent){
+		var rnd,
+			removePrevious = cantBeTheCurrent || false;
+		do{
+			rnd = Math.floor( Math.random() * this.$tiles.length);
+		}while((removePrevious && rnd === this.active) && rnd >= 0);
+		
+		return rnd;
+	}
+	/**
+	  * @desc PRIVATE - Get random element based on the custom randomize function
+	  * @return int - Element index
+	*/ 
+	SlotMachine.prototype.getCustom = function(){
+		var choosen;
+		if(this.settings.randomize !== null && typeof this.settings.randomize === 'function'){
+			var index = this.settings.randomize(this.active);
+			if(index < 0 || index >= this.$tiles.length){
+				index = 0;
+			}
+			choosen = index;
+		}else{
+			choosen = this.getRandom();
+		}
+		return choosen;
+	}/**
+	  * @desc PRIVATE - Get the previous element
+	  * @return int - Element index
+	*/ 
+	SlotMachine.prototype.getPrev = function(){
+		var prevIndex = (this.active-1 < 0) ? (this.$tiles.length - 1) : (this.active - 1);
+		return prevIndex;
+	}
+	/**
+	  * @desc PRIVATE - Get the next element
+	  * @return int - Element index
+	*/ 
+	SlotMachine.prototype.getNext = function(){
+		var nextIndex = (this.active + 1 < this.$tiles.length) ? (this.active + 1) : 0;
+		return nextIndex;
+	}
+	/**
+	  * @desc PRIVATE - Set CSS classes to make speed effect
+	  * @param string FX_SPEED - Element speed [FX_FAST_BLUR||FX_NORMAL_BLUR||FX_SLOW_BLUR||FX_STOP]
+	  * @param string||boolean fade - Set fade gradient effect
+	*/
+	SlotMachine.prototype._setAnimationFX = function(FX_SPEED, fade){
+		var self = this;
+		
+		setTimeout(function(){
+			self.$tiles.removeClass(FX_FAST).removeClass(FX_NORMAL).removeClass(FX_SLOW).addClass(FX_SPEED);
+			
+			if(fade !== true || FX_SPEED === FX_STOP){
+				self.$slot.add(self.$tiles).removeClass(FX_GRADIENT);
+			}else{
+				self.$slot.add(self.$tiles).addClass(FX_GRADIENT);
+			}
+		}, this.settings.delay / 4);
+	}
+	/**
+	  * @desc PRIVATE - Reset active element position
+	*/
+	SlotMachine.prototype._resetPosition = function(){
+		this.$container.css("margin-top", this.getTileOffset(this.active));
+	}
+	/**
+	  * @desc PRIVATE - Checks if the machine is on the screen
+	  * @return int - Returns true if machine is on the screen
+	*/
+	SlotMachine.prototype.isVisible = function(){
+		//Stop animation if element is [above||below] screen, best for performance
+		var above = this.$slot.offset().top > $(window).scrollTop() + $(window).height(),
+			below = $(window).scrollTop() > this.$slot.height() + this.$slot.offset().top;
+		
+		return !above && !below;
+	}
+	/**
+	  * @desc PUBLIC - SELECT previous element relative to the current active element
+	  * @return int - Returns result index
+	*/
+	SlotMachine.prototype.prev = function(){
+		this._futureResult = this.getPrev();
+		this.isRunning = true;
+		this.stop(false);
+		return this._futureResult;
+	};	
+	/**
+	  * @desc PUBLIC - SELECT next element relative to the current active element
+	  * @return int - Returns result index
+	*/
+	SlotMachine.prototype.next = function(){
+		this._futureResult = this.getNext();
+		this.isRunning = true;
+		this.stop(false);
+		return this._futureResult;
+	};
+	/**
+	  * @desc PRIVATE - Starts shuffling the elements
+	  * @param int repeations - Number of shuffles (undefined to make infinite animation
+	  * @return int - Returns result index
+	*/
+	SlotMachine.prototype.shuffle = function( spins, onComplete ){		
+		var self = this;
+		
+		if(!this.isVisible() && this.settings.stopHidden === true){
+			return this.stop();
+		}
+		
+		if(onComplete !== undefined){
+			//this._oncompleteStack.push(onComplete);
+			this._oncompleteStack[1] = onComplete;
+		}
+		
+		this.isRunning = true;
+		var delay = this.settings.delay;
+		
+		if(this._futureResult === null){
+			//Get random or custom element
+			var rnd = this.getCustom();
+			this._futureResult = rnd;
+		}
+		
+		//Decreasing spin
+		if(typeof spins === 'number'){
+			//Change delay and speed
+			switch( spins){
+				case 1:
+				case 2:
+					this._setAnimationFX(FX_SLOW, true);
+					break;
+				case 3:
+				case 4:
+					this._setAnimationFX(FX_NORMAL, true);
+					delay /= 1.5;
+					break;
+				default:
+					this._setAnimationFX(FX_FAST, true);
+					delay /= 2;
+			}
+		//Infinite spin
+		}else{
+			//Set animation effects
+			this._setAnimationFX(FX_FAST, true);
+			delay /= 2;
+		}
+		
+		//Perform animation
+		this.$container.animate({
+			marginTop : this._maxTop
+		}, delay, 'linear', function(){
+			//Reset top position
+			self.$container.css('margin-top', 0);
+			
+			if(spins - 1 <= 0){
+				self.stop();
+			}else{
+				//Repeat animation
+				self.shuffle(spins - 1);
+			}
+		});
+		
+		return this._futureResult;
+	}
+	/**
+	  * @desc PRIVATE - Stop shuffling the elements
+	  * @return int - Returns result index
+	*/
+	SlotMachine.prototype.stop = function( showGradient ){
+		if(!this.isRunning)
+			return;
+		
+		var self = this;
+		
+		//Stop animation NOW!!!!!!!
+		this.$container.clearQueue().stop(true, false);
+		
+		this._setAnimationFX(FX_SLOW, showGradient === undefined ? true : showGradient);
+		
+		this.isRunning = true;
+		
+		//Set current active element
+		this.active = this.getVisibleTile();
+		
+		//Check direction to prevent jumping
+		if(this._futureResult > this.active){
+			//We are moving to the prev (first to last)
+			if(this.active === 0 && this._futureResult === this.$tiles.length-1){
+				this.$container.css('margin-top', this.getTileOffset(this.$tiles.length) );
+			}
+		}else{
+			//We are moving to the next (last to first)
+			if(this.active === this.$tiles.length - 1 && this._futureResult === 0){
+				this.$container.css('margin-top', 0);
 			}
 		}
 		
-		/*
-		 * Return public functions and attrs
-		 */
-		return {
-			/**
-			  * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
-			*/
-			auto: _auto,
+		//Update last choosen element index
+		this.active = this._futureResult;
+		this._futureResult = null;
+		
+		//Get delay
+		var delay = this.settings.delay * 3;
+		
+		//Perform animation
+		this.$container.animate({
+			marginTop :  this.getTileOffset(this.active)
+		}, delay, 'easeOutBounce', function (){
+		
+			self.isRunning = false;
 			
-			/**
-			  * @desc PUBLIC - Starts shuffling the elements
-			  * @param int repeations - Number of shuffles (undefined to make infinite animation
-			*/
-			shuffle : function( repeations, oncomplete ){
-				_forceStop = false;
-				_oncompleteShuffling = oncomplete;
-				if( typeof repeations==='number' ){
-					_shuffle(repeations);
-				}else{
-					_shuffle( repeations!==undefined ? 5 : undefined );
+			//Filter callbacks
+			/*
+			self._oncompleteStack = Array.prototype.filter.call(self._oncompleteStack, function(fn){
+				return typeof fn === 'function';
+			});
+			//Ececute callbacks
+			Array.prototype.map.call(self._oncompleteStack, function(fn, index){
+				if(typeof fn === 'function'){
+					fn.apply(self, [self.active]);
+					self._oncompleteStack[index] = null;
 				}
-			},
-			
-			/**
-			  * @desc PUBLIC - Stop shuffling the elements
-			  * @param int repeations - Number of repeations before stop
+			});
 			*/
-			stop : function( repeations ){
-				
-				if( self.settings.auto!==false && _timer!==null ){
-					clearTimeout(_timer);
-				}
-				
-				if( typeof repeations==='number' && repeations>0 ){
-					$container.clearQueue().stop(true, false);
-					_forceStop = false;
-					_shuffle(repeations);
-				}else{
-					_forceStop = true;
-					_stop();
-				}
-			},
+			if(typeof self._oncompleteStack[0] === 'function'){
+				self._oncompleteStack[0].apply(self, [self.active]);
+			}
+			if(typeof self._oncompleteStack[1] === 'function'){
+				self._oncompleteStack[1].apply(self, [self.active]);
+			}
+		});
+		
+		//Disable blur
+		setTimeout(function(){
+			self._setAnimationFX(FX_STOP, false);
+		}, delay / 1.75);
+		
+		return this.active;
+	};
+	/**
+	  * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
+	*/
+	SlotMachine.prototype.auto = function(){
+		var self = this;
+		
+		this._timer = new Timer(function(){
 			
-			/**
-			  * @desc PUBLIC - SELECT previous element relative to the current active element
-			*/
-			prev : function(){
-				_stop(_getPrev);
-			},
+			self._futureResult = self.getNext();
+			self.isRunning = true;
+			self.shuffle(5, function(){
+				self._timer.reset();
+			});
 			
-			/**
-			  * @desc PUBLIC - SELECT next element relative to the current active element
-			*/
-			next : function(){
-				_stop(_getNext);
-			},
-			
-			/**
-			  * @desc PUBLIC - Get selected element
-			  * @return object - Element index and HTML node
-			*/
-			active : function(){
-				return _active;
-			},
-			
-			/**
-			  * @desc PUBLIC - Check if the machine is doing stuff
-			  * @return boolean - Machine is shuffling
-			*/
-			isRunning : function(){
-				return _isRunning;
-			},
-			
-			/**
-			  * @desc PUBLIC - Changes randomize function
-			  * @param function|int - Set new randomize function
-			*/
-			setRandomize : _setRandomize
-		};
-    }
+		}, this.settings.auto);		
+	};
+	
+	
     
     /*
      * Create new plugin instance if needed and return it
@@ -576,7 +540,13 @@
 		var machine;
 		if ( !$.data(element, 'plugin_' + pluginName) ){
 			machine = new SlotMachine(element, options);
-			$.data(element, 'plugin_' + pluginName, machine);
+			var publicObject = {};
+			for(var name in machine){
+				if(!name.match(/^_.+$/)){
+					publicObject[name] = machine[name];
+				}
+			}
+			$.data(element, 'plugin_' + pluginName, publicObject);
 		}else{
 			machine = $.data(element, 'plugin_' + pluginName);
 		}

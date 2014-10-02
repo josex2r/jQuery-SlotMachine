@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 
 		<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript" src="src/jquery.slotmachine.min.js"></script>
+		<script type="text/javascript" src="src/jquery.slotmachine.js"></script>
 
 	</head>
 
@@ -105,16 +105,16 @@
 								delay	: 500
 							});
 							
-							function onComplete($el, active){
-								switch($el[0].id){
+							function onComplete(active){
+								switch(this.element[0].id){
 									case 'machine1':
-										$("#machine1Result").text("Index: "+active.index);
+										$("#machine1Result").text("Index: "+this.active);
 										break;
 									case 'machine2':
-										$("#machine2Result").text("Index: "+active.index);
+										$("#machine2Result").text("Index: "+this.active);
 										break;
 									case 'machine3':
-										$("#machine3Result").text("Index: "+active.index);
+										$("#machine3Result").text("Index: "+this.active);
 										break;
 								}
 							}
@@ -188,8 +188,8 @@
 								}
 							});
 							
-							function onComplete($el, active){
-								$("#machineFakeResult").text("Index: "+active.index);
+							function onComplete(active){
+								$("#machineFakeResult").text("Index: " + this.active);
 							}
 							
 							$("#slotMachineButtonFake").click(function(){
@@ -286,22 +286,22 @@
 							
 							$("#slotMachineButtonStop").click(function(){
 								
-								if( machine4.isRunning() ){
+								if( machine4.isRunning ){
 									
 									//True to stop now
-									machine4.stop(1);
+									machine4.stop();
 									
 								}else{
 									
-									if( machine5.isRunning() ){
+									if( machine5.isRunning ){
 										
-										machine5.stop(3);
+										machine5.stop();
 										
 									}else{
 										
-										if( machine6.isRunning() ){
+										if( machine6.isRunning ){
 											
-											machine6.stop(5);
+											machine6.stop();
 											
 										}
 										
