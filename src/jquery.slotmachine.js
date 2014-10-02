@@ -170,27 +170,26 @@
 		this.defaults = defaults;
 		this.name = pluginName;
 		
-		var	self = this;
 		//jQuery selector
 		this.$slot = $(element);
 		//Slot Machine elements
 		this.$tiles = this.$slot.children();
 		//Container to wrap $tiles
-		this.$container;
+		this.$container = null;
 		 //Min marginTop offset
-		this._minTop;
+		this._minTop = null;
 		//Max marginTop offset
-		this._maxTop;
+		this._maxTop = null;
 		//First element (the last of the html container)
-		this._$fakeFirstTile;
+		this._$fakeFirstTile = null;
 		//Last element (the first of the html container)
-		this._$fakeLastTile;
+		this._$fakeLastTile = null;
 		//Timeout recursive function to handle auto (settings.auto)
-		this._timer;
+		this._timer = null;
 		 //Callback function
 		this._oncompleteStack = [ this.settings.complete ];
 		//Number of spins left before stop
-		this._spinsLeft;
+		this._spinsLeft = null;
 		 //Number of spins left before stop
 		this._futureResult = null;
 		//Machine is running?
@@ -256,7 +255,7 @@
 			containerMarginTop = parseInt( this.$container.css('margin-top').replace(/px/, ''), 10);
 		
 		return Math.abs( Math.round( containerMarginTop / firstTileHeight ) ) - 1;
-	}
+	};
 	/**
 	  * @desc PUBLIC - Changes randomize function
 	  * @param function|int - Set new randomize function
@@ -270,7 +269,7 @@
 		}else{
 			this.settings.randomize = rnd;
 		}
-	}
+	};
 	/**
 	  * @desc PRIVATE - Get random element different than last shown
 	  * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
@@ -284,7 +283,7 @@
 		}while((removePrevious && rnd === this.active) && rnd >= 0);
 		
 		return rnd;
-	}
+	};
 	/**
 	  * @desc PRIVATE - Get random element based on the custom randomize function
 	  * @return int - Element index
@@ -301,14 +300,15 @@
 			choosen = this.getRandom();
 		}
 		return choosen;
-	}/**
+	};
+	/**
 	  * @desc PRIVATE - Get the previous element
 	  * @return int - Element index
 	*/ 
 	SlotMachine.prototype.getPrev = function(){
 		var prevIndex = (this.active-1 < 0) ? (this.$tiles.length - 1) : (this.active - 1);
 		return prevIndex;
-	}
+	};
 	/**
 	  * @desc PRIVATE - Get the next element
 	  * @return int - Element index
@@ -316,7 +316,7 @@
 	SlotMachine.prototype.getNext = function(){
 		var nextIndex = (this.active + 1 < this.$tiles.length) ? (this.active + 1) : 0;
 		return nextIndex;
-	}
+	};
 	/**
 	  * @desc PRIVATE - Set CSS classes to make speed effect
 	  * @param string FX_SPEED - Element speed [FX_FAST_BLUR||FX_NORMAL_BLUR||FX_SLOW_BLUR||FX_STOP]
@@ -334,13 +334,13 @@
 				self.$slot.add(self.$tiles).addClass(FX_GRADIENT);
 			}
 		}, this.settings.delay / 4);
-	}
+	};
 	/**
 	  * @desc PRIVATE - Reset active element position
 	*/
 	SlotMachine.prototype._resetPosition = function(){
 		this.$container.css("margin-top", this.getTileOffset(this.active));
-	}
+	};
 	/**
 	  * @desc PRIVATE - Checks if the machine is on the screen
 	  * @return int - Returns true if machine is on the screen
@@ -351,7 +351,7 @@
 			below = $(window).scrollTop() > this.$slot.height() + this.$slot.offset().top;
 		
 		return !above && !below;
-	}
+	};
 	/**
 	  * @desc PUBLIC - SELECT previous element relative to the current active element
 	  * @return int - Returns result index
@@ -438,15 +438,15 @@
 		});
 		
 		return this._futureResult;
-	}
+	};
 	/**
 	  * @desc PRIVATE - Stop shuffling the elements
 	  * @return int - Returns result index
 	*/
 	SlotMachine.prototype.stop = function( showGradient ){
-		if(!this.isRunning)
+		if(!this.isRunning){
 			return;
-		
+		}
 		var self = this;
 		
 		//Stop animation NOW!!!!!!!
