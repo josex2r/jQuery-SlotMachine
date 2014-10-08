@@ -6,141 +6,137 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2.0">
 
-		<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-
+		
 		<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="src/jquery.slotmachine.js"></script>
 
 	</head>
 
 	<body>
 
-		<div id="header">
+		<div id="header" class="container">
 			
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<td align="center">
+			<div class="row content">
+				<div class="col-md-6 col-md-offset-3 text-center">
+					<div style="display: inline-block;">THIS PLUGIN: </div>
 						
-						<div class="content">
-
-							<div>THIS PLUGIN: </div>
-							
-							<div id="textMachine">
-								<div>IS AWESOME</div>
-								<div>ROCKS!</div>
-								<div>IS EASY TO USE</div>
-								<div>IS PRODUCT OF BOREDOM</div>
-								<div>WORKS WELL</div>
-							</div>
-							<script>
-								$(document).ready(function(){
-									$("#textMachine").slotMachine({
-										active	: 1,
-										delay	: 450,
-										auto	: 1500
-									});
-								});
-							</script>
-
-						</div>
-					</td>
-				</tr>
-			</table>
+					<div id="textMachine">
+						<div>IS AWESOME!</div>
+						<div>ROCKS!</div>
+						<div>IS EASY TO USE</div>
+						<div>IS PRODUCT OF BOREDOM</div>
+					</div>
+					<script>
+						$(document).ready(function(){
+							$("#textMachine").slotMachine({
+								active	: 1,
+								delay	: 450,
+								auto	: 1500
+							});
+						});
+					</script>
+				</div>
+			</div>
 			
 		</div>
 		
 		<div class="line">
 			
-			<div class="content" style="text-align: center">
+			<div class="content container" style="text-align: center">
 				
-				<div style="clear:both;">
-					<p class="title">Randomize your machines: </p>
-				</div>
+				<h1>Randomize your machines:</h1>
 				
-				<div style="clear:both;">
-					<div id="machine1" class="slotMachine">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
-					</div>
-					
-					<div id="machine2" class="slotMachine">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
-					</div>
-					
-					<div id="machine3" class="slotMachine">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
-					</div>
-					
-					<div id="slotMachineButton1" class="slotMachineButton">GO!</div>
-					
-					<script>
-						$(document).ready(function(){
-							var machine1 = $("#machine1").slotMachine({
-								active	: 0,
-								delay	: 500
-							});
-							
-							var machine2 = $("#machine2").slotMachine({
-								active	: 1,
-								delay	: 500
-							});
-							
-							var machine3 = $("#machine3").slotMachine({
-								active	: 2,
-								delay	: 500
-							});
-							
-							function onComplete(active){
-								switch(this.element[0].id){
-									case 'machine1':
-										$("#machine1Result").text("Index: "+this.active);
-										break;
-									case 'machine2':
-										$("#machine2Result").text("Index: "+this.active);
-										break;
-									case 'machine3':
-										$("#machine3Result").text("Index: "+this.active);
-										break;
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4 machineContainer">
+						<div id="machine1" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
+						
+						<div id="machine2" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
+						
+						<div id="machine3" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
+						
+						<script>
+							$(document).ready(function(){
+								var machine1 = $("#machine1").slotMachine({
+									active	: 0,
+									delay	: 500
+								});
+								
+								var machine2 = $("#machine2").slotMachine({
+									active	: 1,
+									delay	: 500
+								});
+								
+								var machine3 = $("#machine3").slotMachine({
+									active	: 2,
+									delay	: 500
+								});
+								
+								function onComplete(active){
+									switch(this.element[0].id){
+										case 'machine1':
+											$("#machine1Result").text("Index: "+this.active);
+											break;
+										case 'machine2':
+											$("#machine2Result").text("Index: "+this.active);
+											break;
+										case 'machine3':
+											$("#machine3Result").text("Index: "+this.active);
+											break;
+									}
 								}
-							}
-							
-							$("#slotMachineButton1").click(function(){
 								
-								machine1.shuffle(5, onComplete);
-								
-								setTimeout(function(){
-									machine2.shuffle(5, onComplete);
-								}, 500);
-								
-								setTimeout(function(){
-									machine3.shuffle(5, onComplete);
-								}, 1000);
-								
-							})
-						});
-					</script>
+								$("#slotMachineButton1").click(function(){
+									
+									machine1.shuffle(5, onComplete);
+									
+									setTimeout(function(){
+										machine2.shuffle(5, onComplete);
+									}, 500);
+									
+									setTimeout(function(){
+										machine3.shuffle(5, onComplete);
+									}, 1000);
+									
+								})
+							});
+						</script>
+					</div>
+					
+					<div class="col-md-2">
+						<div id="slotMachineButton1" class="slotMachineButton">GO!</div>
+					</div>
+					
 				</div>
 				
-				<div style="clear:both;">
+				
+				<div class="col-md-4 col-md-offset-4" style="clear:both;">
 					<div id="machine1Result" class="slotMachine noBorder" style="text-align:left">Index: 0</div>
 					<div id="machine2Result" class="slotMachine noBorder" style="text-align:left">Index: 1</div>
 					<div id="machine3Result" class="slotMachine noBorder" style="text-align:left">Index: 2</div>
-					<div class="slotMachine noBorder"></div>
 				</div>
 				
 			</div>
@@ -151,73 +147,69 @@
 			
 			<div class="content" style="text-align: center">
 				
-				<div style="clear:both;">
-					<p class="title">Trick your results: </p>
-				</div>
+				<h1>Trick your results:</h1>
 				
-				<div style="clear:both;">
-					<div id="machineFake1" class="slotMachine">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
+				<div class="row">
+					<div class="col-md-1 col-md-offset-5 machineContainer">
+						<div id="machineFake1" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
 					</div>
 					
-					<div id="slotMachineButtonFake" class="slotMachineButton" style="margin-right: 40px">GO!</div>
-					
-					
-					<div id="machineFake2" class="slotMachine">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
+					<div class="col-md-1">
+						<div id="slotMachineButtonFake" class="slotMachineButton" style="margin-right: 40px">GO!</div>
 					</div>
-					
-					<script>
-						$(document).ready(function(){
-							
-							//Fake machine 1
-							window.machine1 = $("#machineFake1").slotMachine({
-								active: 1,
-								randomize : function(activeElementIndex){
-									return 1;
-								}
-							});
-							
-							function onComplete(active){
-								$("#machineFakeResult").text("Index: " + this.active);
+						
+					<div class="col-md-1 machineContainer">
+						<div id="machineFake2" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
+					</div>
+				</div>	
+				<script>
+					$(document).ready(function(){
+						//Fake machine 1
+						window.machine1 = $("#machineFake1").slotMachine({
+							active: 1,
+							randomize : function(activeElementIndex){
+								return 1;
 							}
-							
-							$("#slotMachineButtonFake").click(function(){
-								
-								machine1.shuffle(3, onComplete);
-								
-							});
-							
-							//Fake machine 2 - auto
-							
-							var machine2 = $("#machineFake2").slotMachine({
-								active	: 1,
-								delay	: 500,
-								auto	: 1500,
-								randomize : function(activeElementIndex){
-									return 1;
-								}
+						});
+						
+						$("#slotMachineButtonFake").click(function(){
+							machine1.shuffle(3, function(){
+								$("#machineFakeResult").text("Index: " + this.active);
 							});
 						});
-					</script>
-				</div>
+						
+						//Fake machine 2 - auto
+						var machine2 = $("#machineFake2").slotMachine({
+							active	: 1,
+							delay	: 500,
+							auto	: 1500,
+							randomize : function(){
+								return 1;
+							}
+						});
+					});
+				</script>
 				
-				<div style="clear:both;">
+				<div class="col-md-4 col-md-offset-4" style="clear:both;">
 					<div id="machineFakeResult" class="slotMachine noBorder" style="margin-left: -210px">Index: 0</div>
-					<div class="slotMachine noBorder"></div>
 				</div>
 				
 			</div>
+			<div class="clearfix"></div>
 		</div>
 		
 		
@@ -225,11 +217,9 @@
 			
 			<div class="content" style="text-align: center; background: url('./img/machine.png') no-repeat 50% 120px; height: 500px;">
 				
-				<div style="clear:both">
-					<p class="title">Feel free to build your ouw casino! </p>
-				</div>
+				<h1>Feel free to build your oun casino!</h1>
 				
-				<div style="clear:both; margin-top: 250px;">
+				<div style="clear:both; padding-top: 200px;">
 					<div id="machine4" class="slotMachine" style="margin-left: -65px;">
 						<div class="slot slot1"></div>
 						<div class="slot slot2"></div>
@@ -275,40 +265,24 @@
 							});
 							
 							$("#slotMachineButtonShuffle").click(function(){
-								
 								machine4.shuffle();
-								
 								machine5.shuffle();
-								
 								machine6.shuffle();
-								
 							});
 							
 							$("#slotMachineButtonStop").click(function(){
-								
 								if( machine4.isRunning ){
-									
 									//True to stop now
 									machine4.stop();
-									
 								}else{
-									
 									if( machine5.isRunning ){
-										
 										machine5.stop();
-										
 									}else{
-										
 										if( machine6.isRunning ){
-											
 											machine6.stop();
-											
 										}
-										
 									}
-									
 								}
-								
 							});
 						});
 					</script>
@@ -316,10 +290,11 @@
 				
 			</div>
 			
-			<div class="content" style="padding-left:500px; margin-top:-60px">
+			<div class="content text-center">
 				<div id="slotMachineButtonShuffle" class="slotMachineButton" style="font-size: 25px">Shuffle!</div>
 				<div id="slotMachineButtonStop" class="slotMachineButton" style="font-size: 25px">Stop!</div>
 			</div>
+			<div class="clearfix"></div>
 			
 		</div>
 		
@@ -328,24 +303,29 @@
 			
 			<div class="content" style="text-align: center">
 				
-				<div style="clear:both;">
-					<p class="title">Or simply use it like a slide: </p>
-				</div>
+				<h1>Or simply use it like a slide:</h1>
 				
-				<div style="clear:both;">
+				<div class="row">
 					
-					<div id="slotMachineButtonPrev" class="slotMachineButton" style="font-size: 30px; margin-left: 0px">PREV</div>
-					
-					<div id="machine7" class="slotMachine" style="margin-left:50px">
-						<div class="slot slot1"></div>
-						<div class="slot slot2"></div>
-						<div class="slot slot3"></div>
-						<div class="slot slot4"></div>
-						<div class="slot slot5"></div>
-						<div class="slot slot6"></div>
+					<div class="col-md-1 col-md-offset-4">
+						<div id="slotMachineButtonPrev" class="slotMachineButton" style="font-size: 30px; margin-left: 0px">PREV</div>
 					</div>
 					
-					<div id="slotMachineButtonNext" class="slotMachineButton" style="font-size: 30px">NEXT</div>
+					<div class="col-md-1 machineContainer">
+						<div id="machine7" class="slotMachine">
+							<div class="slot slot1"></div>
+							<div class="slot slot2"></div>
+							<div class="slot slot3"></div>
+							<div class="slot slot4"></div>
+							<div class="slot slot5"></div>
+							<div class="slot slot6"></div>
+						</div>
+					</div>
+					
+					<div class="col-md-1">
+						<div id="slotMachineButtonNext" class="slotMachineButton" style="font-size: 30px">NEXT</div>
+					</div>
+				</div>
 					
 					<script>
 						$(document).ready(function(){
@@ -376,8 +356,8 @@
 		<div id="footer">
 			<div class="content">
 				<div id="textMachine2">
-					<div>FORK</div>
-					<div>SHARE</div>
+					<div>FORK!</div>
+					<div>SHARE!</div>
 					<div>USE IT!</div>
 				</div>
 				<script>

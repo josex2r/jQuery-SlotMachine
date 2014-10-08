@@ -291,7 +291,7 @@
 	SlotMachine.prototype.getCustom = function(){
 		var choosen;
 		if(this.settings.randomize !== null && typeof this.settings.randomize === 'function'){
-			var index = this.settings.randomize(this.active);
+			var index = this.settings.randomize.apply(this, [this.active]);
 			if(index < 0 || index >= this.$tiles.length){
 				index = 0;
 			}
@@ -521,8 +521,9 @@
 		var self = this;
 		
 		this._timer = new Timer(function(){
-			
-			self._futureResult = self.getNext();
+			if(typeof self.settings.randomize !== 'function'){
+				self._futureResult = self.getNext();
+			}
 			self.isRunning = true;
 			self.shuffle(5, function(){
 				self._timer.reset();
