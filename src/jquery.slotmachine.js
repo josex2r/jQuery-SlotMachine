@@ -27,7 +27,7 @@
 	$(document).ready(function(){
 		
 		//Fast blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterFast').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterFast">'+
 									'<feGaussianBlur stdDeviation="5" />'+
@@ -36,7 +36,7 @@
 		}
 		
 		//Medium blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterMedium').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterMedium">'+
 									'<feGaussianBlur stdDeviation="3" />'+
@@ -45,7 +45,7 @@
 		}
 		
 		//Slow blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterSlow').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterSlow">'+
 									'<feGaussianBlur stdDeviation="1" />'+
@@ -54,7 +54,7 @@
 		}
 		
 		//Fade mask
-		if( $('mask#slotMachineFadeSVG').length<=0 ){
+		if( $('mask#slotMachineFadeMask').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
 									'<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+

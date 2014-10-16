@@ -264,24 +264,26 @@
 								delay	: 500
 							});
 							
+							var started = 0;
+							
 							$("#slotMachineButtonShuffle").click(function(){
+								started = 3;
 								machine4.shuffle();
 								machine5.shuffle();
 								machine6.shuffle();
 							});
 							
 							$("#slotMachineButtonStop").click(function(){
-								if( machine4.isRunning ){
-									//True to stop now
-									machine4.stop();
-								}else{
-									if( machine5.isRunning ){
+								switch(started){
+									case 3:
+										machine4.stop();
+										break;
+									case 2:
 										machine5.stop();
-									}else{
-										if( machine6.isRunning ){
-											machine6.stop();
-										}
-									}
+										break;
+									case 1:
+										machine6.stop();
+										break;
 								}
 							});
 						});
