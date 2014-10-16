@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.3 - 2014-10-08
+/*! SlotMachine - v2.0.5 - 2014-10-16
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2014 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
@@ -10,7 +10,7 @@
 			auto	: false, //Repeat delay [false||int]
 			randomize : null, //Randomize function, must return an integer with the selected position
 			complete : null, //Callback function(result)
-			stopHidden : true //Stops animations if the element isn´t visible on the screen
+			//stopHidden : true //Stops animations if the element isn´t visible on the screen
 		};
 	
 	var FX_FAST = 'slotMachineBlurFast',
@@ -23,7 +23,7 @@
 	$(document).ready(function(){
 		
 		//Fast blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterFast').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterFast">'+
 									'<feGaussianBlur stdDeviation="5" />'+
@@ -32,7 +32,7 @@
 		}
 		
 		//Medium blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterMedium').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterMedium">'+
 									'<feGaussianBlur stdDeviation="3" />'+
@@ -41,7 +41,7 @@
 		}
 		
 		//Slow blur
-		if( $('filter#slotMachineBlurSVG').length<=0 ){
+		if( $('filter#slotMachineBlurFilterSlow').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterSlow">'+
 									'<feGaussianBlur stdDeviation="1" />'+
@@ -50,7 +50,7 @@
 		}
 		
 		//Fade mask
-		if( $('mask#slotMachineFadeSVG').length<=0 ){
+		if( $('mask#slotMachineFadeMask').length<=0 ){
 			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
 									'<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
@@ -187,7 +187,7 @@
 		//Number of spins left before stop
 		this._spinsLeft = null;
 		 //Number of spins left before stop
-		this._futureResult = null;
+		this.futureActive = null;
 		//Machine is running?
 		this.isRunning = false;
 		//Current active element
@@ -353,20 +353,20 @@
 	  * @return int - Returns result index
 	*/
 	SlotMachine.prototype.prev = function(){
-		this._futureResult = this.getPrev();
+		this.futureActive = this.getPrev();
 		this.isRunning = true;
 		this.stop(false);
-		return this._futureResult;
+		return this.futureActive;
 	};	
 	/**
 	  * @desc PUBLIC - SELECT next element relative to the current active element
 	  * @return int - Returns result index
 	*/
 	SlotMachine.prototype.next = function(){
-		this._futureResult = this.getNext();
+		this.futureActive = this.getNext();
 		this.isRunning = true;
 		this.stop(false);
-		return this._futureResult;
+		return this.futureActive;
 	};
 	/**
 	  * @desc PRIVATE - Starts shuffling the elements
@@ -375,11 +375,11 @@
 	*/
 	SlotMachine.prototype.shuffle = function( spins, onComplete ){		
 		var self = this;
-		
+		/*
 		if(!this.isVisible() && this.settings.stopHidden === true){
 			return this.stop();
 		}
-		
+		*/
 		if(onComplete !== undefined){
 			//this._oncompleteStack.push(onComplete);
 			this._oncompleteStack[1] = onComplete;
@@ -388,10 +388,10 @@
 		this.isRunning = true;
 		var delay = this.settings.delay;
 		
-		if(this._futureResult === null){
+		if(this.futureActive === null){
 			//Get random or custom element
 			var rnd = this.getCustom();
-			this._futureResult = rnd;
+			this.futureActive = rnd;
 		}
 		
 		//Decreasing spin
@@ -433,7 +433,7 @@
 			}
 		});
 		
-		return this._futureResult;
+		return this.futureActive;
 	};
 	/**
 	  * @desc PRIVATE - Stop shuffling the elements
@@ -456,21 +456,21 @@
 		this.active = this.getVisibleTile();
 		
 		//Check direction to prevent jumping
-		if(this._futureResult > this.active){
+		if(this.futureActive > this.active){
 			//We are moving to the prev (first to last)
-			if(this.active === 0 && this._futureResult === this.$tiles.length-1){
+			if(this.active === 0 && this.futureActive === this.$tiles.length-1){
 				this.$container.css('margin-top', this.getTileOffset(this.$tiles.length) );
 			}
 		}else{
 			//We are moving to the next (last to first)
-			if(this.active === this.$tiles.length - 1 && this._futureResult === 0){
+			if(this.active === this.$tiles.length - 1 && this.futureActive === 0){
 				this.$container.css('margin-top', 0);
 			}
 		}
 		
 		//Update last choosen element index
-		this.active = this._futureResult;
-		this._futureResult = null;
+		this.active = this.futureActive;
+		this.futureActive = null;
 		
 		//Get delay
 		var delay = this.settings.delay * 3;
@@ -518,7 +518,7 @@
 		
 		this._timer = new Timer(function(){
 			if(typeof self.settings.randomize !== 'function'){
-				self._futureResult = self.getNext();
+				self.futureActive = self.getNext();
 			}
 			self.isRunning = true;
 			self.shuffle(5, function(){
