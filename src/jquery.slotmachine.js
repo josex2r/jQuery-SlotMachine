@@ -14,7 +14,7 @@
 			auto	: false, //Repeat delay [false||int]
 			randomize : null, //Randomize function, must return an integer with the selected position
 			complete : null, //Callback function(result)
-			stopHidden : true //Stops animations if the element isn´t visible on the screen
+			//stopHidden : true //Stops animations if the element isn´t visible on the screen
 		};
 	
 	var FX_FAST = 'slotMachineBlurFast',
@@ -191,7 +191,7 @@
 		//Number of spins left before stop
 		this._spinsLeft = null;
 		 //Number of spins left before stop
-		this._futureResult = null;
+		this.futureActive = null;
 		//Machine is running?
 		this.isRunning = false;
 		//Current active element
@@ -357,20 +357,20 @@
 	  * @return int - Returns result index
 	*/
 	SlotMachine.prototype.prev = function(){
-		this._futureResult = this.getPrev();
+		this.futureActive = this.getPrev();
 		this.isRunning = true;
 		this.stop(false);
-		return this._futureResult;
+		return this.futureActive;
 	};	
 	/**
 	  * @desc PUBLIC - SELECT next element relative to the current active element
 	  * @return int - Returns result index
 	*/
 	SlotMachine.prototype.next = function(){
-		this._futureResult = this.getNext();
+		this.futureActive = this.getNext();
 		this.isRunning = true;
 		this.stop(false);
-		return this._futureResult;
+		return this.futureActive;
 	};
 	/**
 	  * @desc PRIVATE - Starts shuffling the elements
@@ -379,11 +379,11 @@
 	*/
 	SlotMachine.prototype.shuffle = function( spins, onComplete ){		
 		var self = this;
-		
+		/*
 		if(!this.isVisible() && this.settings.stopHidden === true){
 			return this.stop();
 		}
-		
+		*/
 		if(onComplete !== undefined){
 			//this._oncompleteStack.push(onComplete);
 			this._oncompleteStack[1] = onComplete;
@@ -392,10 +392,10 @@
 		this.isRunning = true;
 		var delay = this.settings.delay;
 		
-		if(this._futureResult === null){
+		if(this.futureActive === null){
 			//Get random or custom element
 			var rnd = this.getCustom();
-			this._futureResult = rnd;
+			this.futureActive = rnd;
 		}
 		
 		//Decreasing spin
@@ -437,7 +437,7 @@
 			}
 		});
 		
-		return this._futureResult;
+		return this.futureActive;
 	};
 	/**
 	  * @desc PRIVATE - Stop shuffling the elements
@@ -460,21 +460,21 @@
 		this.active = this.getVisibleTile();
 		
 		//Check direction to prevent jumping
-		if(this._futureResult > this.active){
+		if(this.futureActive > this.active){
 			//We are moving to the prev (first to last)
-			if(this.active === 0 && this._futureResult === this.$tiles.length-1){
+			if(this.active === 0 && this.futureActive === this.$tiles.length-1){
 				this.$container.css('margin-top', this.getTileOffset(this.$tiles.length) );
 			}
 		}else{
 			//We are moving to the next (last to first)
-			if(this.active === this.$tiles.length - 1 && this._futureResult === 0){
+			if(this.active === this.$tiles.length - 1 && this.futureActive === 0){
 				this.$container.css('margin-top', 0);
 			}
 		}
 		
 		//Update last choosen element index
-		this.active = this._futureResult;
-		this._futureResult = null;
+		this.active = this.futureActive;
+		this.futureActive = null;
 		
 		//Get delay
 		var delay = this.settings.delay * 3;
@@ -522,7 +522,7 @@
 		
 		this._timer = new Timer(function(){
 			if(typeof self.settings.randomize !== 'function'){
-				self._futureResult = self.getNext();
+				self.futureActive = self.getNext();
 			}
 			self.isRunning = true;
 			self.shuffle(5, function(){

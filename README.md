@@ -43,13 +43,19 @@ machine.next(); //Next element
 Get selected element:
 
 ```javascript
-machine.active(); //Returns element index inside an object
+machine.active; //Current element index
+```
+
+Get the next selected element:
+
+```javascript
+machine.futureActive; //Future active element index
 ```
 
 Check if the machine is running:
 
 ```javascript
-machine.isRunning(); //Returns boolean
+machine.isRunning; //Returns boolean
 ```
 
 Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
@@ -80,7 +86,7 @@ Pass an int as miliseconds to make the machine auto rotate
 
     repeat: false
 
-### stopHidden
+### stopHidden (currently disabled)
 
 Stop animation if the element is above or below the screen
 
