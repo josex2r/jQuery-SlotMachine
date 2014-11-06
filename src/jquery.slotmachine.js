@@ -190,7 +190,7 @@
 		this._oncompleteStack = [ this.settings.complete ];
 		//Number of spins left before stop
 		this._spinsLeft = null;
-		 //Number of spins left before stop
+		 //Future result
 		this.futureActive = null;
 		//Machine is running?
 		this.isRunning = false;
@@ -398,6 +398,8 @@
 			this.futureActive = rnd;
 		}
 		
+		/*if(this.$slot.attr("id")==="machine1")
+		console.log(this.futureActive)*/
 		//Decreasing spin
 		if(typeof spins === 'number'){
 			//Change delay and speed
@@ -541,13 +543,7 @@
 		var machine;
 		if ( !$.data(element[0], 'plugin_' + pluginName) ){
 			machine = new SlotMachine(element, options);
-			var publicObject = {};
-			for(var name in machine){
-				if(!name.match(/^_.+$/)){
-					publicObject[name] = machine[name];
-				}
-			}
-			$.data(element[0], 'plugin_' + pluginName, publicObject);
+			$.data(element[0], 'plugin_' + pluginName, machine);
 		}else{
 			machine = $.data(element[0], 'plugin_' + pluginName);
 		}
