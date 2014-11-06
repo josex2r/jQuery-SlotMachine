@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.6 - 2014-10-16
+/*! SlotMachine - v2.0.6 - 2014-11-06
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2014 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
@@ -535,7 +535,7 @@
      */
 	function _getInstance(element, options){
 		var machine;
-		if ( !$.data(element, 'plugin_' + pluginName) ){
+		if ( !$.data(element[0], 'plugin_' + pluginName) ){
 			machine = new SlotMachine(element, options);
 			var publicObject = {};
 			for(var name in machine){
@@ -543,9 +543,9 @@
 					publicObject[name] = machine[name];
 				}
 			}
-			$.data(element, 'plugin_' + pluginName, publicObject);
+			$.data(element[0], 'plugin_' + pluginName, publicObject);
 		}else{
-			machine = $.data(element, 'plugin_' + pluginName);
+			machine = $.data(element[0], 'plugin_' + pluginName);
 		}
 		return machine;
 	}
