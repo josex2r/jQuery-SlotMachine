@@ -26,36 +26,25 @@
 	//Set required styles, filters and masks
 	$(document).ready(function(){
 		
-		//Fast blur
-		if( $('filter#slotMachineBlurFilterFast').length<=0 ){
-			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
+		var slotMachineBlurFilterFastString = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterFast">'+
 									'<feGaussianBlur stdDeviation="5" />'+
 								'</filter>'+
-							'</svg>');
-		}
-		
-		//Medium blur
-		if( $('filter#slotMachineBlurFilterMedium').length<=0 ){
-			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
+							'</svg>#slotMachineBlurFilterFast';
+							
+		var slotMachineBlurFilterMediumString = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterMedium">'+
 									'<feGaussianBlur stdDeviation="3" />'+
 								'</filter>'+
-							'</svg>');
-		}
+							'</svg>#slotMachineBlurFilterMedium';
 		
-		//Slow blur
-		if( $('filter#slotMachineBlurFilterSlow').length<=0 ){
-			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
+		var slotMachineBlurFilterSlowString = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<filter id="slotMachineBlurFilterSlow">'+
 									'<feGaussianBlur stdDeviation="1" />'+
 								'</filter>'+
-							'</svg>');
-		}
-		
-		//Fade mask
-		if( $('mask#slotMachineFadeMask').length<=0 ){
-			$('body').append('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
+							'</svg>#slotMachineBlurFilterSlow';
+							
+		var slotMachineFadeMaskString = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">'+
 								'<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">'+
 									'<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">'+
 										'<stop stop-color="white" stop-opacity="0" offset="0"></stop>'+
@@ -65,17 +54,16 @@
 									'</linearGradient>'+
 									'<rect x="0" y="-1" width="1" height="1" transform="rotate(90)" fill="url(#slotMachineFadeGradient)"></rect>'+
 								'</mask>'+
-							'</svg>');
-		}
+							'</svg>#slotMachineFadeMask';
 		
 		//CSS classes
 		$('body').append('<style>' +
-								'.' + FX_FAST + '{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url(#slotMachineBlurFilterFast);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="5")}' +
-								'.' + FX_NORMAL + '{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url(#slotMachineBlurFilterMedium);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="3")}' +
-								'.' + FX_SLOW + '{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url(#slotMachineBlurFilterSlow);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="1")}' +
+								'.' + FX_FAST + '{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url("data:image/svg+xml;utf8,'+slotMachineBlurFilterFastString+'");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="5")}' +
+								'.' + FX_NORMAL + '{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url("data:image/svg+xml;utf8,'+slotMachineBlurFilterMediumString+'");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="3")}' +
+								'.' + FX_SLOW + '{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url("data:image/svg+xml;utf8,'+slotMachineBlurFilterSlowString+'");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="1")}' +
 								'.' + FX_GRADIENT + '{' +
 									'-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );' +
-									'mask: url(#slotMachineFadeMask);' +
+									'mask: url("data:image/svg+xml;utf8,'+slotMachineFadeMaskString+'");' +
 								'}'+
 							'</style>');
 		
