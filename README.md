@@ -86,7 +86,7 @@ Pass an int as miliseconds to make the machine auto rotate
 
     repeat: false
 
-### stopHidden (currently disabled)
+### stopHidden
 
 Stop animation if the element is above or below the screen
 

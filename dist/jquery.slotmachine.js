@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.8 - 2015-01-28
+/*! SlotMachine - v2.0.9 - 2015-04-21
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2015 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
@@ -10,7 +10,7 @@
 			auto	: false, //Repeat delay [false||int]
 			randomize : null, //Randomize function, must return an integer with the selected position
 			complete : null, //Callback function(result)
-			//stopHidden : true //Stops animations if the element isn´t visible on the screen
+			stopHidden : true //Stops animations if the element isn´t visible on the screen
 		};
 	
 	var FX_FAST = 'slotMachineBlurFast',
@@ -363,11 +363,7 @@
 	*/
 	SlotMachine.prototype.shuffle = function( spins, onComplete ){		
 		var self = this;
-		/*
-		if(!this.isVisible() && this.settings.stopHidden === true){
-			return this.stop();
-		}
-		*/
+		
 		if(onComplete !== undefined){
 			//this._oncompleteStack.push(onComplete);
 			this._oncompleteStack[1] = onComplete;
@@ -409,19 +405,24 @@
 		}
 		
 		//Perform animation
-		this.$container.animate({
-			marginTop : this._maxTop
-		}, delay, 'linear', function(){
-			//Reset top position
-			self.$container.css('margin-top', 0);
-			
-			if(spins - 1 <= 0){
-				self.stop();
-			}else{
-				//Repeat animation
-				self.shuffle(spins - 1);
-			}
-		});
+		if(!this.isVisible() && this.settings.stopHidden === true){
+			spins = 0;
+			self.stop();
+		}else{
+			this.$container.animate({
+				marginTop : this._maxTop
+			}, delay, 'linear', function(){
+				//Reset top position
+				self.$container.css('margin-top', 0);
+				
+				if(spins - 1 <= 0){
+					self.stop();
+				}else{
+					//Repeat animation
+					self.shuffle(spins - 1);
+				}
+			});
+		}
 		
 		return this.futureActive;
 	};
@@ -511,9 +512,15 @@
 				self.futureActive = self.getNext();
 			}
 			self.isRunning = true;
-			self.shuffle(5, function(){
-				self._timer.reset();
-			});
+			if(!self.isVisible() && self.settings.stopHidden === true){
+				setTimeout(function(){
+					self._timer.reset();
+				}, 500);
+			}else{
+				self.shuffle(5, function(){
+					self._timer.reset();
+				});
+			}
 			
 		}, this.settings.auto);		
 	};
