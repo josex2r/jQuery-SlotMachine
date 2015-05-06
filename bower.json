@@ -22,8 +22,8 @@
     "type": "git",
     "url": "git://github.com/josex2r/jQuery-SlotMachine.git"
   },
-  "main": "./dist/jquery.slotmachine.min",
-   "bugs": "https://github.com/josex2r/jQuery-SlotMachine/issues",
+  "main": "./dist/jquery.slotmachine.min.js",
+  "bugs": "https://github.com/josex2r/jQuery-SlotMachine/issues",
   "licenses": [
     {
       "type": "MIT",
