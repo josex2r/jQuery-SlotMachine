@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.9 - 2015-04-21
+/*! SlotMachine - v2.0.10 - 2015-05-28
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2015 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
