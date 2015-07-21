@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.0.10 - 2015-05-28
+/*! SlotMachine - v2.0.11 - 2015-07-21
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2015 Jose Luis Represa; Licensed MIT */
 ;(function($, window, document, undefined){
@@ -178,6 +178,8 @@
 		this.futureActive = null;
 		//Machine is running?
 		this.isRunning = false;
+		//Machine is stopping?
+		this.isStopping = false;
 		//Current active element
 		this.active = this.settings.active;
 		
@@ -433,6 +435,8 @@
 	SlotMachine.prototype.stop = function( showGradient ){
 		if(!this.isRunning){
 			return;
+		} else if (this.isStopping) {
+			return this.futureActive;
 		}
 		var self = this;
 		
@@ -442,6 +446,7 @@
 		this._setAnimationFX(FX_SLOW, showGradient === undefined ? true : showGradient);
 		
 		this.isRunning = true;
+		this.isStopping = true;
 		
 		//Set current active element
 		this.active = this.getVisibleTile();
@@ -461,7 +466,6 @@
 		
 		//Update last choosen element index
 		this.active = this.futureActive;
-		this.futureActive = null;
 		
 		//Get delay
 		var delay = this.settings.delay * 3;
@@ -471,7 +475,9 @@
 			marginTop :  this.getTileOffset(this.active)
 		}, delay, 'easeOutBounce', function (){
 		
+			self.isStopping = false;
 			self.isRunning = false;
+			self.futureActive = null;
 			
 			//Filter callbacks
 			/*

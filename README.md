@@ -58,6 +58,12 @@ Check if the machine is running:
 machine.isRunning; //Returns boolean
 ```
 
+Check if the machine is stopping:
+
+```javascript
+machine.isStopping; //Returns boolean
+```
+
 Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
 
 ```javascript
@@ -73,13 +79,13 @@ Params must be an object, optionally containing the next parammeters:
 Set the first element
 
     active: 0
-    
+
 ### delay
 
 Set spin animation time
 
     delay: 200
-    
+
 ### auto
 
 Pass an int as miliseconds to make the machine auto rotate
@@ -97,7 +103,7 @@ Stop animation if the element is above or below the screen
 Pass a function to select your own random element. This function must return an integer between 0 (first element) and max number of elements.
 
     randomize: function(activeElementIndex){} //activeElementIndex = current selected index
-    
+
 Example (this machine always shows first element):
 
 ```javascript
@@ -107,7 +113,7 @@ $('#foo').slotMachine({
 	}
 });
 ```
-    
+
 ## Authors
 
 [Jose Luis Represa](https://github.com/josex2r)
