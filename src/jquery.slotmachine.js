@@ -556,10 +556,10 @@
     if (this.length === 1) {
       return _getInstance(this, options);
     } else {
-      return this.each(function() {
-        if (!$.data(this, 'plugin_' + pluginName)) {
-          _getInstance(this, options);
-        }
+			var $els = this;
+      return $.map($els, function(el, index) {
+				var $el = $els.eq(index);
+        return _getInstance($el, options);
       });
     }
   };
