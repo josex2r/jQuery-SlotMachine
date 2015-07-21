@@ -26,6 +26,12 @@ Creating the machine:
 var machine = $(foo).slotMachine( params );
 ```
 
+Get machine instance:
+
+```javascript
+var machine = $(foo).slotMachine();
+```
+
 Shuffle:
 
 ```javascript
