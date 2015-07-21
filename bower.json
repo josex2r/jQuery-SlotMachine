@@ -1,7 +1,7 @@
 {
   "name": "jQuery-SlotMachine",
   "description": "A simple jQuery plugin to make slot machine animation effect",
-  "version": "2.0.11",
+  "version": "2.1.0",
   "keywords": [
         "slots",
         "gambling",

@@ -1,5 +1,5 @@
 /*
- * jQuery Slot Machine v2.0.11
+ * jQuery Slot Machine v2.1.0
  * https://github.com/josex2r/jQuery-SlotMachine
  *
  * Copyright 2014 Jose Luis Represa
@@ -15,7 +15,8 @@
 				spins: 5, //Number of spins when auto [int]
 	      randomize: null, //Randomize function, must return an integer with the selected position
 	      complete: null, //Callback function(result)
-	      stopHidden: true //Stops animations if the element isn´t visible on the screen
+	      stopHidden: true, //Stops animations if the element isn´t visible on the screen
+        direction: 'up' //Animation direction ['up'||'down']
 	    };
 
   var FX_FAST = 'slotMachineBlurFast',
@@ -212,8 +213,30 @@
     //Set min top offset
     this._minTop = -this._$fakeFirstTile.outerHeight();
 
+    //Direction parammeters
+    this._direction = {
+      selected: this.settings.direction === 'down' ? 'down' : 'up',
+      up: {
+        initial: this.getTileOffset(this.active),
+        first: 0,
+        last: this.getTileOffset(this.$tiles.length),
+        to: this._maxTop,
+        firstToLast: this.getTileOffset(this.$tiles.length),
+        lastToFirst: 0
+      },
+      down: {
+        initial: this.getTileOffset(this.active),
+        first: this.getTileOffset(this.$tiles.length),
+        last: 0,
+        to: this._minTop,
+        firstToLast: this.getTileOffset(this.$tiles.length),
+        lastToFirst: 0
+      },
+      get: function(param){return this[this.selected][param];}
+    };
+
     //Show active element
-    this.$container.css('margin-top', this.getTileOffset(this.active));
+    this.$container.css('margin-top', this._direction.get('initial'));
 
     //Start auto animation
     if (this.settings.auto !== false) {
@@ -226,7 +249,7 @@
   }
 
   /**
-   * @desc PRIVATE - Get element offset top
+   * @desc PUBLIC - Get element offset top
    * @param int index - Element position
    * @return int - Negative offset in px
    */
@@ -239,7 +262,7 @@
   };
 
   /**
-   * @desc PRIVATE - Get current showing element index
+   * @desc PUBLIC - Get current showing element index
    * @return int - Element index
    */
   SlotMachine.prototype.getVisibleTile = function() {
@@ -264,7 +287,7 @@
   };
 
   /**
-   * @desc PRIVATE - Get random element different than last shown
+   * @desc PUBLIC - Get random element different than last shown
    * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
    * @return int - Element index
    */
@@ -279,7 +302,7 @@
   };
 
   /**
-   * @desc PRIVATE - Get random element based on the custom randomize function
+   * @desc PUBLIC - Get random element based on the custom randomize function
    * @return int - Element index
    */
   SlotMachine.prototype.getCustom = function() {
@@ -297,21 +320,49 @@
   };
 
   /**
-   * @desc PRIVATE - Get the previous element
+   * @desc PRIVATE - Get the previous element (no direction related)
    * @return int - Element index
    */
-  SlotMachine.prototype.getPrev = function() {
+  SlotMachine.prototype._getPrev = function() {
     var prevIndex = (this.active - 1 < 0) ? (this.$tiles.length - 1) : (this.active - 1);
     return prevIndex;
   };
 
   /**
-   * @desc PRIVATE - Get the next element
+   * @desc PRIVATE - Get the next element (no direction related)
+   * @return int - Element index
+   */
+  SlotMachine.prototype._getNext = function() {
+    var nextIndex = (this.active + 1 < this.$tiles.length) ? (this.active + 1) : 0;
+    return nextIndex;
+  };
+
+  /**
+   * @desc PUBLIC - Get the previous element dor selected direction
+   * @return int - Element index
+   */
+  SlotMachine.prototype.getPrev = function() {
+    return this._direction.selected === 'up' ? this._getPrev() : this._getNext();
+  };
+
+  /**
+   * @desc PUBLIC - Get the next element
    * @return int - Element index
    */
   SlotMachine.prototype.getNext = function() {
-    var nextIndex = (this.active + 1 < this.$tiles.length) ? (this.active + 1) : 0;
-    return nextIndex;
+    return this._direction.selected === 'up' ? this._getNext() : this._getPrev();
+  };
+
+  /**
+   * @desc PUBLIC - Set the spin direction
+   * @return Object - Direction data
+   */
+  SlotMachine.prototype.setDirection = function(direction) {
+    if (this.isRunning) {
+      return;
+    }
+    this._direction.selected = direction === 'down' ? 'down' : 'up';
+    return this._direction[this._direction.selected];
   };
 
   /**
@@ -337,7 +388,7 @@
    * @desc PRIVATE - Reset active element position
    */
   SlotMachine.prototype._resetPosition = function() {
-    this.$container.css('margin-top', this.getTileOffset(this.active));
+    this.$container.css('margin-top', this._direction.get('initial'));
   };
 
   /**
@@ -375,7 +426,7 @@
   };
 
   /**
-   * @desc PRIVATE - Starts shuffling the elements
+   * @desc PUBLIC - Starts shuffling the elements
    * @param int repeations - Number of shuffles (undefined to make infinite animation
    * @return int - Returns result index
    */
@@ -425,10 +476,10 @@
       self.stop();
     } else {
       this.$container.animate({
-        marginTop: this._maxTop
+        marginTop: this._direction.get('to')
       }, delay, 'linear', function() {
         //Reset top position
-        self.$container.css('margin-top', 0);
+        self.$container.css('margin-top', self._direction.get('first'));
 
         if (spins - 1 <= 0) {
           self.stop();
@@ -443,7 +494,7 @@
   };
 
   /**
-   * @desc PRIVATE - Stop shuffling the elements
+   * @desc PUBLIC - Stop shuffling the elements
    * @return int - Returns result index
    */
   SlotMachine.prototype.stop = function(showGradient) {
@@ -469,12 +520,12 @@
     if (this.futureActive > this.active) {
       //We are moving to the prev (first to last)
       if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
-        this.$container.css('margin-top', this.getTileOffset(this.$tiles.length));
+        this.$container.css('margin-top', this._direction.get('firstToLast'));
       }
     } else {
       //We are moving to the next (last to first)
       if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
-        this.$container.css('margin-top', 0);
+        this.$container.css('margin-top', this._direction.get('lastToFirst'));
       }
     }
 
@@ -510,7 +561,7 @@
   };
 
   /**
-   * @desc PRIVATE - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
+   * @desc PUBLIC - Start auto shufflings, animation stops each 3 repeations. Then restart animation recursively
    */
   SlotMachine.prototype.auto = function() {
     var self = this;
@@ -532,8 +583,6 @@
 
     }, this.settings.auto);
   };
-
-
 
   /*
    * Create new plugin instance if needed and return it

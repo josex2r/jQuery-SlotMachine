@@ -76,41 +76,47 @@ Change spin result, if the returned value is out of bounds, the element will be 
 machine.setRandomize(foo); //foo must be a function (should return int) or an int
 ```
 
+Change spin direction, machine must not be running:
+
+```javascript
+machine.setDirection(direction); //direction must be a String ('up' || 'down')
+```
+
 ## Params
 
 Params must be an object, optionally containing the next parammeters:
 
-### active
+#### active
 
 Set the first element
 
     active: 0
 
-### delay
+#### delay
 
 Set spin animation time
 
     delay: 200
 
-### auto
+#### auto
 
 Pass an int as miliseconds to make the machine auto rotate
 
     auto: false
 
-### spins
+#### spins
 
 The number of spins when auto is enabled
 
     spins: false
 
-### stopHidden
+#### stopHidden
 
 Stop animation if the element is above or below the screen
 
     stopHidden: true
 
-### randomize
+#### randomize
 
 Pass a function to select your own random element. This function must return an integer between 0 (first element) and max number of elements.
 
@@ -125,6 +131,11 @@ $('#foo').slotMachine({
 	}
 });
 ```
+#### direction
+
+Animation direction ('up' || 'down')
+
+    direction: 'up'
 
 ## Authors
 
