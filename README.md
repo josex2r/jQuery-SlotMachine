@@ -90,7 +90,13 @@ Set spin animation time
 
 Pass an int as miliseconds to make the machine auto rotate
 
-    repeat: false
+    auto: false
+
+### spins
+
+The number of spins when auto is enabled
+
+    spins: false
 
 ### stopHidden
 
