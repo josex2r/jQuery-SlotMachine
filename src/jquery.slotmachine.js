@@ -256,7 +256,7 @@
   SlotMachine.prototype.raf = function(cb, timeout) {
     var _raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
         startTime = new Date().getTime(),
-        _rafHandler = function(timestamp){
+        _rafHandler = function(/*timestamp*/){
           var drawStart = new Date().getTime(),
               diff = drawStart - startTime;
 

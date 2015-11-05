@@ -1,15 +1,15 @@
-/*! SlotMachine - v2.1.0 - 2015-07-21
+/*! SlotMachine - v2.2.0 - 2015-11-05
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2015 Jose Luis Represa; Licensed MIT */
 (function($, window, document, undefined) {
 
   var pluginName = "slotMachine",
 	    defaults = {
-	      active: 0, //Active element [int]
-	      delay: 200, //Animation time [int]
-	      auto: false, //Repeat delay [false||int]
-				spins: 5, //Number of spins when auto [int]
-	      randomize: null, //Randomize function, must return an integer with the selected position
+	      active: 0, //Active element [Number]
+	      delay: 200, //Animation time [Number]
+	      auto: false, //Repeat delay [false||Number]
+				spins: 5, //Number of spins when auto [Number]
+	      randomize: null, //Randomize function, must return a number with the selected position
 	      complete: null, //Callback function(result)
 	      stopHidden: true, //Stops animations if the element isn´t visible on the screen
         direction: 'up' //Animation direction ['up'||'down']
@@ -88,11 +88,11 @@
 
   function Timer(fn, delay) {
     var startTime,
-	      self = this,
-	      timer,
-	      _fn = fn,
-	      _args = arguments,
-	      _delay = delay;
+      self = this,
+      timer,
+      _fn = fn,
+      _args = arguments,
+      _delay = delay;
 
     this.running = false;
 
@@ -245,9 +245,31 @@
   }
 
   /**
+   * @desc PUBLIC - Custom setTimeout using requestAnimationFrame
+   * @param function cb - Callback
+   * @param Number timeout - Timeout delay
+   */
+  SlotMachine.prototype.raf = function(cb, timeout) {
+    var _raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+        startTime = new Date().getTime(),
+        _rafHandler = function(/*timestamp*/){
+          var drawStart = new Date().getTime(),
+              diff = drawStart - startTime;
+
+          if(diff < timeout){
+            _raf(_rafHandler);
+          }else if(typeof cb === 'function'){
+            cb();
+          }
+        };
+
+    _raf(_rafHandler);
+  };
+
+  /**
    * @desc PUBLIC - Get element offset top
-   * @param int index - Element position
-   * @return int - Negative offset in px
+   * @param Number index - Element position
+   * @return Number - Negative offset in px
    */
   SlotMachine.prototype.getTileOffset = function(index) {
     var offset = 0;
@@ -259,7 +281,7 @@
 
   /**
    * @desc PUBLIC - Get current showing element index
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype.getVisibleTile = function() {
     var firstTileHeight = this.$tiles.first().height(),
@@ -270,7 +292,7 @@
 
   /**
    * @desc PUBLIC - Changes randomize function
-   * @param function|int - Set new randomize function
+   * @param function|Number - Set new randomize function
    */
   SlotMachine.prototype.setRandomize = function(rnd) {
     if (typeof rnd === 'number') {
@@ -285,7 +307,7 @@
   /**
    * @desc PUBLIC - Get random element different than last shown
    * @param boolean cantBeTheCurrent - true||undefined if cant be choosen the current element, prevents repeat
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype.getRandom = function(cantBeTheCurrent) {
     var rnd,
@@ -299,7 +321,7 @@
 
   /**
    * @desc PUBLIC - Get random element based on the custom randomize function
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype.getCustom = function() {
     var choosen;
@@ -317,7 +339,7 @@
 
   /**
    * @desc PRIVATE - Get the previous element (no direction related)
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype._getPrev = function() {
     var prevIndex = (this.active - 1 < 0) ? (this.$tiles.length - 1) : (this.active - 1);
@@ -326,7 +348,7 @@
 
   /**
    * @desc PRIVATE - Get the next element (no direction related)
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype._getNext = function() {
     var nextIndex = (this.active + 1 < this.$tiles.length) ? (this.active + 1) : 0;
@@ -335,7 +357,7 @@
 
   /**
    * @desc PUBLIC - Get the previous element dor selected direction
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype.getPrev = function() {
     return this._direction.selected === 'up' ? this._getPrev() : this._getNext();
@@ -343,7 +365,7 @@
 
   /**
    * @desc PUBLIC - Get the next element
-   * @return int - Element index
+   * @return Number - Element index
    */
   SlotMachine.prototype.getNext = function() {
     return this._direction.selected === 'up' ? this._getNext() : this._getPrev();
@@ -367,17 +389,15 @@
    * @param string||boolean fade - Set fade gradient effect
    */
   SlotMachine.prototype._setAnimationFX = function(FX_SPEED, fade) {
-    var self = this;
-
-    setTimeout(function() {
-      self.$tiles.removeClass([FX_FAST, FX_NORMAL, FX_SLOW].join(' ')).addClass(FX_SPEED);
+    this.raf(function() {
+      this.$tiles.removeClass([FX_FAST, FX_NORMAL, FX_SLOW].join(' ')).addClass(FX_SPEED);
 
       if (fade !== true || FX_SPEED === FX_STOP) {
-        self.$slot.add(self.$tiles).removeClass(FX_GRADIENT);
+        this.$slot.add(this.$tiles).removeClass(FX_GRADIENT);
       } else {
-        self.$slot.add(self.$tiles).addClass(FX_GRADIENT);
+        this.$slot.add(this.$tiles).addClass(FX_GRADIENT);
       }
-    }, this.settings.delay / 4);
+    }.bind(this), this.settings.delay / 4);
   };
 
   /**
@@ -389,7 +409,7 @@
 
   /**
    * @desc PRIVATE - Checks if the machine is on the screen
-   * @return int - Returns true if machine is on the screen
+   * @return Number - Returns true if machine is on the screen
    */
   SlotMachine.prototype.isVisible = function() {
     //Stop animation if element is [above||below] screen, best for performance
@@ -401,7 +421,7 @@
 
   /**
    * @desc PUBLIC - SELECT previous element relative to the current active element
-   * @return int - Returns result index
+   * @return Number - Returns result index
    */
   SlotMachine.prototype.prev = function() {
     this.futureActive = this.getPrev();
@@ -412,7 +432,7 @@
 
   /**
    * @desc PUBLIC - SELECT next element relative to the current active element
-   * @return int - Returns result index
+   * @return Number - Returns result index
    */
   SlotMachine.prototype.next = function() {
     this.futureActive = this.getNext();
@@ -423,8 +443,8 @@
 
   /**
    * @desc PUBLIC - Starts shuffling the elements
-   * @param int repeations - Number of shuffles (undefined to make infinite animation
-   * @return int - Returns result index
+   * @param Number repeations - Number of shuffles (undefined to make infinite animation
+   * @return Number - Returns result index
    */
   SlotMachine.prototype.shuffle = function(spins, onComplete) {
     var self = this;
@@ -491,7 +511,7 @@
 
   /**
    * @desc PUBLIC - Stop shuffling the elements
-   * @return int - Returns result index
+   * @return Number - Returns result index
    */
   SlotMachine.prototype.stop = function(showGradient) {
     if (!this.isRunning) {
@@ -549,9 +569,9 @@
     });
 
     //Disable blur
-    setTimeout(function() {
-      self._setAnimationFX(FX_STOP, false);
-    }, delay / 1.75);
+    this.raf(function() {
+      this._setAnimationFX(FX_STOP, false);
+    }.bind(this), delay / 1.75);
 
     return this.active;
   };
@@ -568,7 +588,7 @@
       }
       self.isRunning = true;
       if (!self.isVisible() && self.settings.stopHidden === true) {
-        setTimeout(function() {
+        self.raf(function() {
           self._timer.reset();
         }, 500);
       } else {
