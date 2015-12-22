@@ -13,7 +13,12 @@ module.exports = function(grunt) {
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
     clean: {
-      files: ['dist']
+      dist: {
+        src: 'dist'
+      },
+      tmp: {
+        src: 'tmp'
+      }
     },
     concat: {
       options: {
@@ -21,7 +26,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/jquery.<%= pkg.name %>.js'],
+        src: ['dist/jquery.<%= pkg.name %>.js'],
         dest: 'dist/jquery.<%= pkg.name %>.js'
       },
     },
@@ -37,23 +42,14 @@ module.exports = function(grunt) {
     qunit: {
       files: ['test/**/*.html']
     },
-    jshint: {
+    eslint: {
       gruntfile: {
-        options: {
-          jshintrc: '.jshintrc'
-        },
         src: 'Gruntfile.js'
       },
       src: {
-        options: {
-          jshintrc: 'src/.jshintrc'
-        },
         src: ['src/**/*.js']
       },
       test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
         src: ['test/**/*.js']
       },
     },
@@ -71,6 +67,18 @@ module.exports = function(grunt) {
         tasks: ['jshint:test', 'qunit']
       },
     },
+    babel: {
+      options: {
+        sourceMap: false,
+        presets: ['es2015'],
+        //plugins: ['transform-es2015-modules-amd']
+      },
+      dist: {
+        files: {
+          'dist/jquery.<%= pkg.name %>.js': 'src/jquery.<%= pkg.name %>.js'
+        }
+      }
+    }
   });
 
   // These plugins provide necessary tasks.
@@ -78,13 +86,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-babel');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
-  
+  grunt.registerTask('default', ['eslint', 'clean:dist', 'babel', 'concat', 'qunit', 'uglify']);
+
   // Travis CI task.
-  grunt.registerTask('travis', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+  grunt.registerTask('travis', ['eslint', 'clean:dist', 'babel', 'concat', 'qunit', 'uglify']);
 
 };

@@ -46,13 +46,19 @@ machine.prev(); //Previous element
 machine.next(); //Next element
 ```
 
+Stop the machine:
+
+```javascript
+machine.stop();
+```
+
 Get selected element:
 
 ```javascript
 machine.active; //Current element index
 ```
 
-Get the next selected element:
+Get the selected element if shuffling:
 
 ```javascript
 machine.futureActive; //Future active element index
@@ -61,13 +67,19 @@ machine.futureActive; //Future active element index
 Check if the machine is running:
 
 ```javascript
-machine.isRunning; //Returns boolean
+machine.running; //Returns boolean
 ```
 
 Check if the machine is stopping:
 
 ```javascript
-machine.isStopping; //Returns boolean
+machine.stopping; //Returns boolean
+```
+
+Check if the machine is visible:
+
+```javascript
+machine.visible; //Returns boolean
 ```
 
 Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
@@ -79,7 +91,7 @@ machine.setRandomize(foo); //foo must be a function (should return int) or an in
 Change spin direction, machine must not be running:
 
 ```javascript
-machine.setDirection(direction); //direction must be a String ('up' || 'down')
+machine.direction = direction; //direction must be a String ('up' || 'down')
 ```
 
 ## Params
