@@ -499,12 +499,12 @@ class SlotMachine {
     shuffle (spins, onComplete) {
         let delay = this.settings.delay;
 
+        if (typeof spins === 'function') {
+            onComplete = spins;
+        }
+
         if (onComplete) {
             this._oncompleteStack[1] = onComplete;
-        }
-        if (this.futureActive === null) {
-            // Get random or custom element
-            this.futureActive = this.custom;
         }
         this.running = true;
         this._fade = true;
@@ -576,6 +576,11 @@ class SlotMachine {
         // Set current active element
         this.active = this.visibleTile;
 
+        if (this.futureActive === null) {
+            // Get random or custom element
+            this.futureActive = this.custom;
+        }
+
         // Check direction to prevent jumping
         if (this.futureActive > this.active) {
             // We are moving to the prev (first to last)
@@ -639,6 +644,13 @@ class SlotMachine {
                 }
             }.bind(this), this.settings.auto);
         }
+    }
+
+    destroy () {
+        this._$fakeFirstTile.remove();
+        this._$fakeLastTile.remove();
+        this.$tiles.unwrap();
+        $.data(this.element, 'plugin_' + pluginName, null);
     }
 }
 

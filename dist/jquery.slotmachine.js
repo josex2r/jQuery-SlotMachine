@@ -1,9 +1,9 @@
-/*! SlotMachine - v2.3.0 - 2015-12-22
+/*! SlotMachine - v2.3.0 - 2016-02-01
 * https://github.com/josex2r/jQuery-SlotMachine
-* Copyright (c) 2015 Jose Luis Represa; Licensed MIT */
+* Copyright (c) 2016 Jose Luis Represa; Licensed MIT */
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -66,7 +66,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
     }
 
-    var Timer = (function () {
+    var Timer = function () {
         function Timer(cb, delay) {
             _classCallCheck(this, Timer);
 
@@ -86,9 +86,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(Timer, [{
             key: '_start',
             value: function _start() {
-                this.timer = setTimeout((function cb() {
+                this.timer = setTimeout(function cb() {
                     this.cb.call(this);
-                }).bind(this), this.delay);
+                }.bind(this), this.delay);
             }
         }, {
             key: 'cancel',
@@ -131,7 +131,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }]);
 
         return Timer;
-    })();
+    }();
 
     /**
      * @desc Class - Makes Slot Machine animation effect
@@ -140,7 +140,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
      * @return jQuery node - Returns jQuery selector with some new functions (shuffle, stop, next, auto, active)
      */
 
-    var SlotMachine = (function () {
+    var SlotMachine = function () {
         function SlotMachine(element, options) {
             _classCallCheck(this, SlotMachine);
 
@@ -359,12 +359,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function shuffle(spins, onComplete) {
                 var delay = this.settings.delay;
 
+                if (typeof spins === 'function') {
+                    onComplete = spins;
+                }
+
                 if (onComplete) {
                     this._oncompleteStack[1] = onComplete;
-                }
-                if (this.futureActive === null) {
-                    // Get random or custom element
-                    this.futureActive = this.custom;
                 }
                 this.running = true;
                 this._fade = true;
@@ -399,7 +399,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 } else {
                     this.$container.animate({
                         marginTop: this.direction.to
-                    }, delay, 'linear', (function cb() {
+                    }, delay, 'linear', function cb() {
                         // Reset top position
                         this._marginTop = this.direction.first;
 
@@ -409,7 +409,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             // Repeat animation
                             this.shuffle(spins - 1);
                         }
-                    }).bind(this));
+                    }.bind(this));
                 }
 
                 return this.futureActive;
@@ -439,6 +439,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Set current active element
                 this.active = this.visibleTile;
 
+                if (this.futureActive === null) {
+                    // Get random or custom element
+                    this.futureActive = this.custom;
+                }
+
                 // Check direction to prevent jumping
                 if (this.futureActive > this.active) {
                     // We are moving to the prev (first to last)
@@ -459,7 +464,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Perform animation
                 this.$container.animate({
                     marginTop: this.getTileOffset(this.active)
-                }, delay, 'easeOutBounce', (function cb() {
+                }, delay, 'easeOutBounce', function cb() {
 
                     this.stopping = false;
                     this.running = false;
@@ -471,13 +476,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (typeof this._oncompleteStack[1] === 'function') {
                         this._oncompleteStack[1].apply(this, [this.active]);
                     }
-                }).bind(this));
+                }.bind(this));
 
                 // Disable blur
-                this.raf((function cb() {
+                this.raf(function cb() {
                     this._fade = false;
                     this._animationFX = FX_STOP;
-                }).bind(this), delay / 1.75);
+                }.bind(this), delay / 1.75);
 
                 return this.active;
             }
@@ -490,21 +495,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: 'auto',
             value: function auto() {
                 if (!this.running) {
-                    this._timer = new Timer((function cb() {
+                    this._timer = new Timer(function cb() {
                         if (typeof this.settings.randomize !== 'function') {
                             this.futureActive = this.next;
                         }
                         if (!this.visible && this.settings.stopHidden === true) {
-                            this.raf((function cb2() {
+                            this.raf(function cb2() {
                                 this._timer.reset();
-                            }).bind(this), 500);
+                            }.bind(this), 500);
                         } else {
-                            this.shuffle(this.settings.spins, (function cb2() {
+                            this.shuffle(this.settings.spins, function cb2() {
                                 this._timer.reset();
-                            }).bind(this));
+                            }.bind(this));
                         }
-                    }).bind(this), this.settings.auto);
+                    }.bind(this), this.settings.auto);
                 }
+            }
+        }, {
+            key: 'destroy',
+            value: function destroy() {
+                this._$fakeFirstTile.remove();
+                this._$fakeLastTile.remove();
+                this.$tiles.unwrap();
+                $.data(this.element, 'plugin_' + pluginName, null);
             }
         }, {
             key: 'active',
@@ -683,7 +696,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var delay = this.settings.delay / 4,
                     $elements = this.$slot.add(this.$tiles);
 
-                this.raf((function cb() {
+                this.raf(function cb() {
                     this._fxClass = FX_SPEED;
 
                     if (this.fade !== true || FX_SPEED === FX_STOP) {
@@ -691,7 +704,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     } else {
                         $elements.addClass(FX_GRADIENT);
                     }
-                }).bind(this), delay);
+                }.bind(this), delay);
             }
 
             /**
@@ -707,7 +720,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }]);
 
         return SlotMachine;
-    })();
+    }();
 
     /*
     * Create new plugin instance if needed and return it
