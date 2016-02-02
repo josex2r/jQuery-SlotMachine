@@ -359,6 +359,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function shuffle(spins, onComplete) {
                 var delay = this.settings.delay;
 
+                // Make spins optional
                 if (typeof spins === 'function') {
                     onComplete = spins;
                 }
@@ -511,6 +512,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }.bind(this), this.settings.auto);
                 }
             }
+
+            /**
+             * @desc PUBLIC - Destroy the machine
+             */
+
         }, {
             key: 'destroy',
             value: function destroy() {

@@ -499,6 +499,7 @@ class SlotMachine {
     shuffle (spins, onComplete) {
         let delay = this.settings.delay;
 
+        // Make spins optional
         if (typeof spins === 'function') {
             onComplete = spins;
         }
@@ -646,6 +647,9 @@ class SlotMachine {
         }
     }
 
+    /**
+     * @desc PUBLIC - Destroy the machine
+     */
     destroy () {
         this._$fakeFirstTile.remove();
         this._$fakeLastTile.remove();
