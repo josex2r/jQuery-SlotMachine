@@ -35,7 +35,7 @@ var machine = $(foo).slotMachine();
 Shuffle:
 
 ```javascript
-machine.shuffle( repeat, onStopCallback ); //No args to make rotate infinitely
+machine.shuffle( repeat, onStopCallback ); //No args to make rotate infinitely, `repeat` is optional
 ```
 
 Change the selected element:
@@ -92,6 +92,12 @@ Change spin direction, machine must not be running:
 
 ```javascript
 machine.direction = direction; //direction must be a String ('up' || 'down')
+```
+
+Destroy the machine. It will be useful when you want to reuse DOM:
+
+```javascript
+machine.destroy();
 ```
 
 ## Params
