@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.3.0 - 2016-02-01
+/*! SlotMachine - v2.3.0 - 2016-02-02
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2016 Jose Luis Represa; Licensed MIT */
 'use strict';
@@ -517,7 +517,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 this._$fakeFirstTile.remove();
                 this._$fakeLastTile.remove();
                 this.$tiles.unwrap();
-                $.data(this.element, 'plugin_' + pluginName, null);
+                $.data(this.element[0], 'plugin_' + pluginName, null);
             }
         }, {
             key: 'active',

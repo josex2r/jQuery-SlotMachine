@@ -650,7 +650,7 @@ class SlotMachine {
         this._$fakeFirstTile.remove();
         this._$fakeLastTile.remove();
         this.$tiles.unwrap();
-        $.data(this.element, 'plugin_' + pluginName, null);
+        $.data(this.element[0], 'plugin_' + pluginName, null);
     }
 }
 
