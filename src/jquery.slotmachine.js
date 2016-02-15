@@ -18,6 +18,7 @@ const pluginName = 'slotMachine',
         stopHidden: true, // Stops animations if the element isn´t visible on the screen
         direction: 'up' // Animation direction ['up'||'down']
     },
+    FX_NO_TRANSITION = 'slotMachineNoTransition',
     FX_FAST = 'slotMachineBlurFast',
     FX_NORMAL = 'slotMachineBlurMedium',
     FX_SLOW = 'slotMachineBlurSlow',
@@ -59,6 +60,7 @@ $(document).ready(function documentReady() {
 
     // CSS classes
     $('body').append('<style>' +
+        `.${FX_NO_TRANSITION}{-webkit-transition: none !important;-moz-transition: none !important;-o-transition: none !important;-ms-transition: none !important;transition: none !important;}` +
         `.${FX_FAST}{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterFastString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="5")}` +
         `.${FX_NORMAL}{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterMediumString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="3")}` +
         `.${FX_SLOW}{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterSlowString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="1")}` +
@@ -189,6 +191,7 @@ class SlotMachine {
 
         // Wrap elements inside $container
         this.$container = this.$tiles.wrapAll('<div class="slotMachineContainer" />').parent();
+        this.$container.css('transition', '1s ease-in-out');
 
         // Set max top offset
         this._maxTop = -this.$container.height();
@@ -203,7 +206,7 @@ class SlotMachine {
         this._initDirection();
 
         // Show active element
-        this._marginTop = this.direction.initial;
+        this.resetPosition();
 
         // Start auto animation
         if (this.settings.auto !== false) {
@@ -261,8 +264,9 @@ class SlotMachine {
      */
     get visibleTile () {
         const firstTileHeight = this.$tiles.first().height(),
-            rawContainerMargin = this.$container.css('margin-top'),
-            containerMargin = parseInt(rawContainerMargin.replace(/px/, ''), 10);
+            rawContainerMargin = this.$container.css('transform'),
+            matrixRegExp = /^matrix\(-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?(-?\d+)\)$/,
+            containerMargin = parseInt(rawContainerMargin.replace(matrixRegExp, '$1'), 10);
 
         return Math.abs(Math.round(containerMargin / firstTileHeight)) - 1;
     }
@@ -328,7 +332,7 @@ class SlotMachine {
      * @return {Number} - Element index
      */
     get prevIndex () {
-        return this.direction === 'up' ? this._prevIndex : this._nextIndex;
+        return this.direction === 'up' ? this._nextIndex : this._prevIndex;
     }
 
     /**
@@ -336,7 +340,7 @@ class SlotMachine {
      * @return {Number} - Element index
      */
     get nextIndex () {
-        return this.direction === 'up' ? this._nextIndex : this._prevIndex;
+        return this.direction === 'up' ? this._prevIndex : this._nextIndex;
     }
 
     /**
@@ -405,10 +409,18 @@ class SlotMachine {
 
     /**
      * @desc PRIVATE - Set container margin
+     * @param {Number} - Transition delay in ms
+     */
+    set _transition (delay) {
+        this.$container.css('transition', `${delay / 1000}s ease-in-out`);
+    }
+
+    /**
+     * @desc PRIVATE - Set container margin
      * @param {Number}||String - Active element index
      */
-    set _marginTop (margin) {
-        this.$container.css('margin-top', margin);
+    _animate (margin) {
+        this.$container.css('transform', `matrix(1, 0, 0, 1, 0, ${margin})`);
     }
 
     /**
@@ -451,8 +463,12 @@ class SlotMachine {
     /**
      * @desc PRIVATE - Reset active element position
      */
-    _resetPosition () {
-        this._marginTop = this.direction.initial;
+    resetPosition (margin) {
+        this.$container.toggleClass(FX_NO_TRANSITION);
+        this._animate(margin || this.direction.initial);
+        // Force reflow, flushing the CSS changes
+        this.$container[0].offsetHeight;
+        this.$container.toggleClass(FX_NO_TRANSITION);
     }
 
     /**
@@ -538,11 +554,10 @@ class SlotMachine {
         if (!this.visible && this.settings.stopHidden === true) {
             this.stop();
         } else {
-            this.$container.animate({
-                marginTop: this.direction.to
-            }, delay, 'linear', function cb () {
-                // Reset top position
-                this._marginTop = this.direction.first;
+            this._animate(this.direction.to);
+            this._transition = delay;
+            this.raf(function cb () {
+                this.resetPosition(this.direction.first);
 
                 if (spins - 1 <= 0) {
                     this.stop();
@@ -550,7 +565,7 @@ class SlotMachine {
                     // Repeat animation
                     this.shuffle(spins - 1);
                 }
-            }.bind(this));
+            }.bind(this), delay);
         }
 
         return this.futureActive;
@@ -586,11 +601,11 @@ class SlotMachine {
         if (this.futureActive > this.active) {
             // We are moving to the prev (first to last)
             if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
-                this._marginTop = this.direction.firstToLast;
+                this.resetPosition(this.direction.firstToLast);
             }
         // We are moving to the next (last to first)
         } else if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
-            this._marginTop = this.direction.lastToFirst;
+            this.resetPosition(this.direction.lastToFirst);
         }
 
         // Update last choosen element index
@@ -600,10 +615,9 @@ class SlotMachine {
         const delay = this.settings.delay * 3;
 
         // Perform animation
-        this.$container.animate({
-            marginTop: this.getTileOffset(this.active)
-        }, delay, 'easeOutBounce', function cb () {
-
+        this._transition = delay;
+        this._animate(this.getTileOffset(this.active));
+        this.raf(function cb () {
             this.stopping = false;
             this.running = false;
             this.futureActive = null;
@@ -614,7 +628,7 @@ class SlotMachine {
             if (typeof this._oncompleteStack[1] === 'function') {
                 this._oncompleteStack[1].apply(this, [this.active]);
             }
-        }.bind(this));
+        }.bind(this), delay);
 
         // Disable blur
         this.raf(function cb () {
