@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['dist/jquery.<%= pkg.name %>.js'],
+        src: ['tmp/jquery.<%= pkg.name %>.js'],
         dest: 'dist/jquery.<%= pkg.name %>.js'
       },
     },
@@ -55,16 +55,16 @@ module.exports = function(grunt) {
     },
     watch: {
       gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
+        files: 'Gruntfile.js',
+        tasks: ['eslint']
       },
       src: {
-        files: '<%= jshint.src.src %>',
-        tasks: ['jshint:src', 'qunit']
+        files: 'src/**/*.js',
+        tasks: ['eslint', 'babel', 'concat', 'qunit']
       },
       test: {
-        files: '<%= jshint.test.src %>',
-        tasks: ['jshint:test', 'qunit']
+        files: 'test/**/*.js',
+        tasks: ['eslint', 'qunit']
       },
     },
     babel: {
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/jquery.<%= pkg.name %>.js': 'src/jquery.<%= pkg.name %>.js'
+          'tmp/jquery.<%= pkg.name %>.js': 'src/jquery.<%= pkg.name %>.js'
         }
       }
     }
@@ -91,9 +91,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-babel');
 
   // Default task.
-  grunt.registerTask('default', ['eslint', 'clean:dist', 'babel', 'concat', 'qunit', 'uglify']);
+  grunt.registerTask('default', ['eslint', 'clean', 'babel', 'concat', 'qunit', 'uglify']);
 
   // Travis CI task.
-  grunt.registerTask('travis', ['eslint', 'clean:dist', 'babel', 'concat', 'qunit', 'uglify']);
+  grunt.registerTask('travis', ['eslint', 'clean', 'babel', 'concat', 'qunit', 'uglify']);
 
 };
