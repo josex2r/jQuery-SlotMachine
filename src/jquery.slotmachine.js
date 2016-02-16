@@ -16,7 +16,8 @@ const pluginName = 'slotMachine',
         randomize: null, // Randomize function, must return a number with the selected position
         complete: null, // Callback function(result)
         stopHidden: true, // Stops animations if the element isn´t visible on the screen
-        direction: 'up' // Animation direction ['up'||'down']
+        direction: 'up', // Animation direction ['up'||'down']
+        transition: 'ease-in-out'
     },
     FX_NO_TRANSITION = 'slotMachineNoTransition',
     FX_FAST = 'slotMachineBlurFast',
@@ -384,7 +385,11 @@ class SlotMachine {
     set _fxClass (FX_SPEED) {
         const classes = [FX_FAST, FX_NORMAL, FX_SLOW].join(' ');
 
-        this.$tiles.removeClass(classes).addClass(FX_SPEED);
+        this.$tiles
+            .add(this._$fakeFirstTile)
+            .add(this._$fakeLastTile)
+            .removeClass(classes)
+            .addClass(FX_SPEED);
     }
 
     /**
@@ -394,7 +399,10 @@ class SlotMachine {
      */
     set _animationFX (FX_SPEED) {
         const delay = this.settings.delay / 4,
-            $elements = this.$slot.add(this.$tiles);
+            $elements = this.$slot
+                .add(this.$tiles)
+                .add(this._$fakeFirstTile)
+                .add(this._$fakeLastTile);
 
         this.raf(function cb () {
             this._fxClass = FX_SPEED;
@@ -408,11 +416,32 @@ class SlotMachine {
     }
 
     /**
-     * @desc PRIVATE - Set container margin
+     * @desc PRIVATE - Set css transition delay
      * @param {Number} - Transition delay in ms
      */
-    set _transition (delay) {
-        this.$container.css('transition', `${delay / 1000}s ease-in-out`);
+    set delay (delay) {
+        delay = delay / 1000;
+        this._delay = delay;
+        this._changeTransition();
+    }
+
+    /**
+     * @desc PRIVATE - Set css transition
+     * @param {String} - Transition type
+     */
+    set transition (transition) {
+        transition = transition || 'ease-in-out';
+        this._transition = transition;
+        this._changeTransition();
+    }
+
+    /**
+     * @desc PRIVATE - Set css transition property
+     */
+    _changeTransition () {
+        const delay = this._delay || this.settings.delay,
+            transition = this._transition || this.settings.transition;
+        this.$container.css('transition', `${delay}s ${transition}`);
     }
 
     /**
@@ -490,6 +519,7 @@ class SlotMachine {
     prev () {
         this.futureActive = this.prevIndex;
         this.running = true;
+        this.slide = true;
         this.stop(false);
 
         return this.futureActive;
@@ -502,9 +532,47 @@ class SlotMachine {
     next () {
         this.futureActive = this.nextIndex;
         this.running = true;
-        this.stop(false);
+        this.slide = true;
+        this.stop(false, () => {this.slide = false;});
 
         return this.futureActive;
+    }
+
+    /**
+     * @desc PUBLIC - Starts shuffling the elements
+     * @param {Number} repeations - Number of shuffles (undefined to make infinite animation
+     * @return {Number} - Returns result index
+     */
+    getDelayFromSpins (spins) {
+        let delay = this.settings.delay;
+
+        switch (spins) {
+            case 1:
+                delay /= 0.5;
+                this._transition = 'ease-out';
+                this._animationFX = FX_SLOW;
+                break;
+            case 2:
+                delay /= 0.75;
+                this._transition = 'ease-out';
+                this._animationFX = FX_SLOW;
+                break;
+            case 3:
+                delay /= 1;
+                this._transition = 'linear';
+                this._animationFX = FX_NORMAL;
+                break;
+            case 4:
+                delay /= 1.25;
+                this._animationFX = FX_NORMAL;
+                break;
+            default:
+                delay /= 1.5;
+                this._transition = 'linear';
+                this._animationFX = FX_FAST;
+        }
+
+        return delay;
     }
 
     /**
@@ -526,36 +594,13 @@ class SlotMachine {
         this.running = true;
         this._fade = true;
 
-        // Decreasing spin
-        if (typeof spins === 'number') {
-            // Change delay and speed
-            switch (spins) {
-                case 1:
-                case 2:
-                    this._animationFX = FX_SLOW;
-                    break;
-                case 3:
-                case 4:
-                    this._animationFX = FX_NORMAL;
-                    delay /= 1.5;
-                    break;
-                default:
-                    this._animationFX = FX_FAST;
-                    delay /= 2;
-            }
-        // Infinite spin
-        } else {
-            // Set animation effects
-            this._animationFX = FX_FAST;
-            delay /= 2;
-        }
-
         // Perform animation
         if (!this.visible && this.settings.stopHidden === true) {
             this.stop();
         } else {
+            delay = this.getDelayFromSpins(spins);
+            this.delay = delay;
             this._animate(this.direction.to);
-            this._transition = delay;
             this.raf(function cb () {
                 this.resetPosition(this.direction.first);
 
@@ -598,14 +643,16 @@ class SlotMachine {
         }
 
         // Check direction to prevent jumping
-        if (this.futureActive > this.active) {
-            // We are moving to the prev (first to last)
-            if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
-                this.resetPosition(this.direction.firstToLast);
+        if (this.slide) {
+            if (this.futureActive > this.active) {
+                // We are moving to the prev (first to last)
+                if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
+                    this.resetPosition(this.direction.firstToLast);
+                }
+            // We are moving to the next (last to first)
+            } else if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
+                this.resetPosition(this.direction.lastToFirst);
             }
-        // We are moving to the next (last to first)
-        } else if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
-            this.resetPosition(this.direction.lastToFirst);
         }
 
         // Update last choosen element index
@@ -615,11 +662,12 @@ class SlotMachine {
         const delay = this.settings.delay * 3;
 
         // Perform animation
-        this._transition = delay;
+        this.delay = delay;
         this._animate(this.getTileOffset(this.active));
         this.raf(function cb () {
             this.stopping = false;
             this.running = false;
+            this.slide = false;
             this.futureActive = null;
 
             if (typeof this._oncompleteStack[0] === 'function') {

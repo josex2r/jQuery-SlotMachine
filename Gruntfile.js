@@ -60,7 +60,7 @@ module.exports = function(grunt) {
       },
       src: {
         files: 'src/**/*.js',
-        tasks: ['eslint', 'babel', 'concat', 'qunit']
+        tasks: ['babel', 'concat', 'qunit']
       },
       test: {
         files: 'test/**/*.js',
