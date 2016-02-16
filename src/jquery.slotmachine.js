@@ -453,6 +453,22 @@ class SlotMachine {
     }
 
     /**
+     * @desc PRIVATE - Is moving from the first element to the last
+     * @return {Boolean}
+     */
+    _isGoingBackward () {
+        return this.futureActive > this.active && this.active === 0 && this.futureActive === this.$tiles.length - 1;
+    }
+
+    /**
+     * @desc PRIVATE - Is moving from the last element to the first
+     * @param {Boolean}
+     */
+    _isGoingForward () {
+        return this.futureActive <= this.active && this.active === this.$tiles.length - 1 && this.futureActive === 0;
+    }
+
+    /**
      * @desc PUBLIC - Custom setTimeout using requestAnimationFrame
      * @param function cb - Callback
      * @param {Number} timeout - Timeout delay
@@ -520,7 +536,7 @@ class SlotMachine {
         this.futureActive = this.prevIndex;
         this.running = true;
         this.slide = true;
-        this.stop(false);
+        this.stop();
 
         return this.futureActive;
     }
@@ -533,7 +549,7 @@ class SlotMachine {
         this.futureActive = this.nextIndex;
         this.running = true;
         this.slide = true;
-        this.stop(false, () => {this.slide = false;});
+        this.stop();
 
         return this.futureActive;
     }
@@ -581,34 +597,29 @@ class SlotMachine {
      * @return {Number} - Returns result index
      */
     shuffle (spins, onComplete) {
-        let delay = this.settings.delay;
-
         // Make spins optional
         if (typeof spins === 'function') {
             onComplete = spins;
         }
-
-        if (onComplete) {
-            this._oncompleteStack[1] = onComplete;
-        }
+        this._oncompleteStack.push(onComplete);
         this.running = true;
-        this._fade = true;
-
         // Perform animation
         if (!this.visible && this.settings.stopHidden === true) {
             this.stop();
         } else {
-            delay = this.getDelayFromSpins(spins);
+            const delay = this.getDelayFromSpins(spins);
             this.delay = delay;
             this._animate(this.direction.to);
             this.raf(function cb () {
-                this.resetPosition(this.direction.first);
+                if (!this.stopping) {
+                    this.resetPosition(this.direction.first);
 
-                if (spins - 1 <= 0) {
-                    this.stop();
-                } else {
-                    // Repeat animation
-                    this.shuffle(spins - 1);
+                    if (spins - 1 <= 0) {
+                        this.stop();
+                    } else {
+                        // Repeat animation
+                        this.shuffle(spins - 1);
+                    }
                 }
             }.bind(this), delay);
         }
@@ -620,18 +631,13 @@ class SlotMachine {
     * @desc PUBLIC - Stop shuffling the elements
     * @return {Number} - Returns result index
     */
-    stop (showGradient) {
+    stop () {
         if (!this.running) {
             return;
         } else if (this.stopping) {
             return this.futureActive;
         }
 
-        // Stop animation NOW!!!!!!!
-        this.$container.clearQueue().stop(true, false);
-
-        this._fade = showGradient === undefined ? true : showGradient;
-        this._animationFX = FX_SLOW;
         this.running = true;
         this.stopping = true;
         // Set current active element
@@ -644,13 +650,9 @@ class SlotMachine {
 
         // Check direction to prevent jumping
         if (this.slide) {
-            if (this.futureActive > this.active) {
-                // We are moving to the prev (first to last)
-                if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
-                    this.resetPosition(this.direction.firstToLast);
-                }
-            // We are moving to the next (last to first)
-            } else if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
+            if (this._isGoingBackward()) {
+                this.resetPosition(this.direction.firstToLast);
+            } else if (this._isGoingForward()) {
                 this.resetPosition(this.direction.lastToFirst);
             }
         }
@@ -658,11 +660,10 @@ class SlotMachine {
         // Update last choosen element index
         this.active = this.futureActive;
 
-        // Get delay
-        const delay = this.settings.delay * 3;
-
         // Perform animation
+        const delay = this.getDelayFromSpins(1) * 2;
         this.delay = delay;
+        this._animationFX = FX_STOP;
         this._animate(this.getTileOffset(this.active));
         this.raf(function cb () {
             this.stopping = false;
@@ -670,19 +671,10 @@ class SlotMachine {
             this.slide = false;
             this.futureActive = null;
 
-            if (typeof this._oncompleteStack[0] === 'function') {
-                this._oncompleteStack[0].apply(this, [this.active]);
-            }
-            if (typeof this._oncompleteStack[1] === 'function') {
-                this._oncompleteStack[1].apply(this, [this.active]);
-            }
+            this._oncompleteStack.filter((fn) => typeof fn === 'function').forEach((fn) => {
+                fn.apply(this, [this.active]);
+            });
         }.bind(this), delay);
-
-        // Disable blur
-        this.raf(function cb () {
-            this._fade = false;
-            this._animationFX = FX_STOP;
-        }.bind(this), delay / 1.75);
 
         return this.active;
     }
