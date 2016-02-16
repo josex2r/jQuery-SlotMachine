@@ -465,7 +465,7 @@ class SlotMachine {
      */
     resetPosition (margin) {
         this.$container.toggleClass(FX_NO_TRANSITION);
-        this._animate(margin || this.direction.initial);
+        this._animate(margin === undefined ? this.direction.initial : margin);
         // Force reflow, flushing the CSS changes
         this.$container[0].offsetHeight;
         this.$container.toggleClass(FX_NO_TRANSITION);
