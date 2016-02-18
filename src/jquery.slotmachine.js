@@ -16,36 +16,26 @@ const pluginName = 'slotMachine',
         randomize: null, // Randomize function, must return a number with the selected position
         complete: null, // Callback function(result)
         stopHidden: true, // Stops animations if the element isn´t visible on the screen
-        direction: 'up', // Animation direction ['up'||'down']
-        transition: 'ease-in-out'
+        direction: 'up' // Animation direction ['up'||'down']
     },
     FX_NO_TRANSITION = 'slotMachineNoTransition',
     FX_FAST = 'slotMachineBlurFast',
     FX_NORMAL = 'slotMachineBlurMedium',
     FX_SLOW = 'slotMachineBlurSlow',
+    FX_TURTLE = 'slotMachineBlurTurtle',
     FX_GRADIENT = 'slotMachineGradient',
     FX_STOP = FX_GRADIENT;
 
 // Set required styles, filters and masks
 $(document).ready(function documentReady() {
 
-    const slotMachineBlurFilterFastString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' +
-        '<filter id="slotMachineBlurFilterFast">' +
-        '<feGaussianBlur stdDeviation="5" />' +
-        '</filter>' +
-        '</svg>#slotMachineBlurFilterFast';
+    function getSvgFilter (blur) {
+        return `<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0"><filter id="slotMachineBlurFilter${blur}"><feGaussianBlur stdDeviation="${blur}" /></filter></svg>#slotMachineBlurFilter${blur}`;
+    }
 
-    const slotMachineBlurFilterMediumString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' +
-        '<filter id="slotMachineBlurFilterMedium">' +
-        '<feGaussianBlur stdDeviation="3" />' +
-        '</filter>' +
-        '</svg>#slotMachineBlurFilterMedium';
-
-    const slotMachineBlurFilterSlowString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' +
-        '<filter id="slotMachineBlurFilterSlow">' +
-        '<feGaussianBlur stdDeviation="1" />' +
-        '</filter>' +
-        '</svg>#slotMachineBlurFilterSlow';
+    function getBlurStyle (amount) {
+        return `-webkit-filter: blur(${amount}px);-moz-filter: blur(${amount}px);-o-filter: blur(${amount}px);-ms-filter: blur(${amount}px);filter: blur(${amount}px);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="${amount}");filter: url("data:image/svg+xml;utf8,${getSvgFilter(amount)}");`;
+    }
 
     const slotMachineFadeMaskString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' +
         '<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">' +
@@ -62,9 +52,10 @@ $(document).ready(function documentReady() {
     // CSS classes
     $('body').append('<style>' +
         `.${FX_NO_TRANSITION}{-webkit-transition: none !important;-moz-transition: none !important;-o-transition: none !important;-ms-transition: none !important;transition: none !important;}` +
-        `.${FX_FAST}{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterFastString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="5")}` +
-        `.${FX_NORMAL}{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterMediumString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="3")}` +
-        `.${FX_SLOW}{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url("data:image/svg+xml;utf8,${slotMachineBlurFilterSlowString}");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="1")}` +
+        `.${FX_FAST}{${getBlurStyle(5)}}` +
+        `.${FX_NORMAL}{${getBlurStyle(3)}}` +
+        `.${FX_SLOW}{${getBlurStyle(2)}}` +
+        `.${FX_TURTLE}{${getBlurStyle(1)}}` +
         `.${FX_GRADIENT}{` +
         '-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );' +
         `mask: url("data:image/svg+xml;utf8,${slotMachineFadeMaskString}");` +
@@ -72,24 +63,6 @@ $(document).ready(function documentReady() {
         '</style>');
 
 });
-
-// Required easing functions
-if (typeof $.easing.easeOutBounce !== 'function') {
-    // From jQuery easing, extend jQuery animations functions
-    $.extend($.easing, {
-        easeOutBounce (x, t, b, c, d) {
-            if ((t /= d) < (1 / 2.75)) {
-                return c * (7.5625 * t * t) + b;
-            } else if (t < (2 / 2.75)) {
-                return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
-            } else if (t < (2.5 / 2.75)) {
-                return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
-            } else {
-                return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
-            }
-        }
-    });
-}
 
 class Timer {
     constructor (cb, delay) {
@@ -383,7 +356,7 @@ class SlotMachine {
      * @param string FX_SPEED - Element speed [FX_FAST_BLUR||FX_NORMAL_BLUR||FX_SLOW_BLUR||FX_STOP]
      */
     set _fxClass (FX_SPEED) {
-        const classes = [FX_FAST, FX_NORMAL, FX_SLOW].join(' ');
+        const classes = [FX_FAST, FX_NORMAL, FX_SLOW, FX_TURTLE].join(' ');
 
         this.$tiles
             .add(this._$fakeFirstTile)
@@ -566,7 +539,7 @@ class SlotMachine {
             case 1:
                 delay /= 0.5;
                 this._transition = 'ease-out';
-                this._animationFX = FX_SLOW;
+                this._animationFX = FX_TURTLE;
                 break;
             case 2:
                 delay /= 0.75;
@@ -610,7 +583,7 @@ class SlotMachine {
             const delay = this.getDelayFromSpins(spins);
             this.delay = delay;
             this._animate(this.direction.to);
-            this.raf(function cb () {
+            this.raf(() => {
                 if (!this.stopping && this.running) {
                     this.resetPosition(this.direction.first);
 
@@ -621,7 +594,7 @@ class SlotMachine {
                         this.shuffle(spins - 1);
                     }
                 }
-            }.bind(this), delay);
+            }, delay);
         }
 
         return this.futureActive;
@@ -632,16 +605,12 @@ class SlotMachine {
     * @return {Number} - Returns result index
     */
     stop () {
-        if (!this.running) {
-            return;
-        } else if (this.stopping) {
+        if (!this.running || this.stopping) {
             return this.futureActive;
         }
 
         this.running = true;
         this.stopping = true;
-        // Set current active element
-        this.active = this.visibleTile;
 
         if (this.futureActive === null) {
             // Get random or custom element
@@ -661,11 +630,11 @@ class SlotMachine {
         this.active = this.futureActive;
 
         // Perform animation
-        const delay = this.getDelayFromSpins(1) * this.active / (this.$tiles.length - 1);
+        const delay = this.getDelayFromSpins(1);
         this.delay = delay;
         this._animationFX = FX_STOP;
         this._animate(this.getTileOffset(this.active));
-        this.raf(function cb () {
+        this.raf(() => {
             this.stopping = false;
             this.running = false;
             this.slide = false;
@@ -674,7 +643,7 @@ class SlotMachine {
             this._oncompleteStack.filter((fn) => typeof fn === 'function').forEach((fn) => {
                 fn.apply(this, [this.active]);
             });
-        }.bind(this), delay);
+        }, delay);
 
         return this.active;
     }
@@ -684,20 +653,16 @@ class SlotMachine {
     */
     auto () {
         if (!this.running) {
-            this._timer = new Timer(function cb () {
+            this._timer = new Timer(() => {
                 if (typeof this.settings.randomize !== 'function') {
-                    this.futureActive = this.next;
+                    this.settings.randomize = () => this._nextIndex;
                 }
                 if (!this.visible && this.settings.stopHidden === true) {
-                    this.raf(function cb2 () {
-                        this._timer.reset();
-                    }.bind(this), 500);
+                    this.raf(this._timer.reset.bind(this._timer), 500);
                 } else {
-                    this.shuffle(this.settings.spins, function cb2() {
-                        this._timer.reset();
-                    }.bind(this));
+                    this.shuffle(this.settings.spins, this._timer.reset.bind(this._timer));
                 }
-            }.bind(this), this.settings.auto);
+            }, this.settings.auto);
         }
     }
 
@@ -735,7 +700,7 @@ $.fn[pluginName] = function initPlugin(options) {
         instances = _getInstance(this, options);
     } else {
 		const $els = this;
-        instances = $.map($els, function mapValue(el, index) {
+        instances = $.map($els, (el, index) => {
 			const $el = $els.eq(index);
             return _getInstance($el, options);
         });
