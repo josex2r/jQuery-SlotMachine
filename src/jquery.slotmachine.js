@@ -570,7 +570,7 @@ class SlotMachine {
                 break;
             case 2:
                 delay /= 0.75;
-                this._transition = 'ease-out';
+                this._transition = 'linear';
                 this._animationFX = FX_SLOW;
                 break;
             case 3:
@@ -611,7 +611,7 @@ class SlotMachine {
             this.delay = delay;
             this._animate(this.direction.to);
             this.raf(function cb () {
-                if (!this.stopping) {
+                if (!this.stopping && this.running) {
                     this.resetPosition(this.direction.first);
 
                     if (spins - 1 <= 0) {
@@ -661,7 +661,7 @@ class SlotMachine {
         this.active = this.futureActive;
 
         // Perform animation
-        const delay = this.getDelayFromSpins(1) * 2;
+        const delay = this.getDelayFromSpins(1) * this.active / (this.$tiles.length - 1);
         this.delay = delay;
         this._animationFX = FX_STOP;
         this._animate(this.getTileOffset(this.active));
