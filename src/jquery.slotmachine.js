@@ -508,7 +508,6 @@ class SlotMachine {
     prev () {
         this.futureActive = this.prevIndex;
         this.running = true;
-        this.slide = true;
         this.stop();
 
         return this.futureActive;
@@ -521,7 +520,6 @@ class SlotMachine {
     next () {
         this.futureActive = this.nextIndex;
         this.running = true;
-        this.slide = true;
         this.stop();
 
         return this.futureActive;
@@ -534,6 +532,7 @@ class SlotMachine {
      */
     getDelayFromSpins (spins) {
         let delay = this.settings.delay;
+        this._transition = 'linear';
 
         switch (spins) {
             case 1:
@@ -543,12 +542,10 @@ class SlotMachine {
                 break;
             case 2:
                 delay /= 0.75;
-                this._transition = 'linear';
                 this._animationFX = FX_SLOW;
                 break;
             case 3:
                 delay /= 1;
-                this._transition = 'linear';
                 this._animationFX = FX_NORMAL;
                 break;
             case 4:
@@ -557,7 +554,6 @@ class SlotMachine {
                 break;
             default:
                 delay /= 1.5;
-                this._transition = 'linear';
                 this._animationFX = FX_FAST;
         }
 
@@ -585,13 +581,14 @@ class SlotMachine {
             this._animate(this.direction.to);
             this.raf(() => {
                 if (!this.stopping && this.running) {
-                    this.resetPosition(this.direction.first);
+                    const left = spins - 1;
 
-                    if (spins - 1 <= 0) {
+                    this.resetPosition(this.direction.first);
+                    if (left <= 1) {
                         this.stop();
                     } else {
                         // Repeat animation
-                        this.shuffle(spins - 1);
+                        this.shuffle(left);
                     }
                 }
             }, delay);
@@ -618,12 +615,10 @@ class SlotMachine {
         }
 
         // Check direction to prevent jumping
-        if (this.slide) {
-            if (this._isGoingBackward()) {
-                this.resetPosition(this.direction.firstToLast);
-            } else if (this._isGoingForward()) {
-                this.resetPosition(this.direction.lastToFirst);
-            }
+        if (this._isGoingBackward()) {
+            this.resetPosition(this.direction.firstToLast);
+        } else if (this._isGoingForward()) {
+            this.resetPosition(this.direction.lastToFirst);
         }
 
         // Update last choosen element index
@@ -637,7 +632,6 @@ class SlotMachine {
         this.raf(() => {
             this.stopping = false;
             this.running = false;
-            this.slide = false;
             this.futureActive = null;
 
             this._oncompleteStack.filter((fn) => typeof fn === 'function').forEach((fn) => {
