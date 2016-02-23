@@ -342,7 +342,7 @@ class SlotMachine {
         this.raf(function cb () {
             this._fxClass = FX_SPEED;
 
-            if (this.fade !== true || FX_SPEED === FX_STOP) {
+            if (FX_SPEED === FX_STOP) {
                 $elements.removeClass(FX_GRADIENT);
             } else {
                 $elements.addClass(FX_GRADIENT);
