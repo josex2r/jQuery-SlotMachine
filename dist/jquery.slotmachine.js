@@ -1,4 +1,4 @@
-/*! SlotMachine - v2.3.1 - 2016-02-09
+/*! SlotMachine - v3.0.0 - 2016-02-23
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2016 Jose Luis Represa; Licensed MIT */
 'use strict';
@@ -27,44 +27,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         stopHidden: true, // Stops animations if the element isn´t visible on the screen
         direction: 'up' // Animation direction ['up'||'down']
     },
+        FX_NO_TRANSITION = 'slotMachineNoTransition',
         FX_FAST = 'slotMachineBlurFast',
         FX_NORMAL = 'slotMachineBlurMedium',
         FX_SLOW = 'slotMachineBlurSlow',
+        FX_TURTLE = 'slotMachineBlurTurtle',
         FX_GRADIENT = 'slotMachineGradient',
         FX_STOP = FX_GRADIENT;
-
-    // Set required styles, filters and masks
-    $(document).ready(function documentReady() {
-
-        var slotMachineBlurFilterFastString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' + '<filter id="slotMachineBlurFilterFast">' + '<feGaussianBlur stdDeviation="5" />' + '</filter>' + '</svg>#slotMachineBlurFilterFast';
-
-        var slotMachineBlurFilterMediumString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' + '<filter id="slotMachineBlurFilterMedium">' + '<feGaussianBlur stdDeviation="3" />' + '</filter>' + '</svg>#slotMachineBlurFilterMedium';
-
-        var slotMachineBlurFilterSlowString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' + '<filter id="slotMachineBlurFilterSlow">' + '<feGaussianBlur stdDeviation="1" />' + '</filter>' + '</svg>#slotMachineBlurFilterSlow';
-
-        var slotMachineFadeMaskString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' + '<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">' + '<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">' + '<stop stop-color="white" stop-opacity="0" offset="0"></stop>' + '<stop stop-color="white" stop-opacity="1" offset="0.25"></stop>' + '<stop stop-color="white" stop-opacity="1" offset="0.75"></stop>' + '<stop stop-color="white" stop-opacity="0" offset="1"></stop>' + '</linearGradient>' + '<rect x="0" y="-1" width="1" height="1" transform="rotate(90)" fill="url(#slotMachineFadeGradient)"></rect>' + '</mask>' + '</svg>#slotMachineFadeMask';
-
-        // CSS classes
-        $('body').append('<style>' + ('.' + FX_FAST + '{-webkit-filter: blur(5px);-moz-filter: blur(5px);-o-filter: blur(5px);-ms-filter: blur(5px);filter: blur(5px);filter: url("data:image/svg+xml;utf8,' + slotMachineBlurFilterFastString + '");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="5")}') + ('.' + FX_NORMAL + '{-webkit-filter: blur(3px);-moz-filter: blur(3px);-o-filter: blur(3px);-ms-filter: blur(3px);filter: blur(3px);filter: url("data:image/svg+xml;utf8,' + slotMachineBlurFilterMediumString + '");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="3")}') + ('.' + FX_SLOW + '{-webkit-filter: blur(1px);-moz-filter: blur(1px);-o-filter: blur(1px);-ms-filter: blur(1px);filter: blur(1px);filter: url("data:image/svg+xml;utf8,' + slotMachineBlurFilterSlowString + '");filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="1")}') + ('.' + FX_GRADIENT + '{') + '-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );' + ('mask: url("data:image/svg+xml;utf8,' + slotMachineFadeMaskString + '");') + '}' + '</style>');
-    });
-
-    // Required easing functions
-    if (typeof $.easing.easeOutBounce !== 'function') {
-        // From jQuery easing, extend jQuery animations functions
-        $.extend($.easing, {
-            easeOutBounce: function easeOutBounce(x, t, b, c, d) {
-                if ((t /= d) < 1 / 2.75) {
-                    return c * (7.5625 * t * t) + b;
-                } else if (t < 2 / 2.75) {
-                    return c * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + b;
-                } else if (t < 2.5 / 2.75) {
-                    return c * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + b;
-                } else {
-                    return c * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + b;
-                }
-            }
-        });
-    }
 
     var Timer = (function () {
         function Timer(cb, delay) {
@@ -182,6 +151,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             // Wrap elements inside $container
             this.$container = this.$tiles.wrapAll('<div class="slotMachineContainer" />').parent();
+            this.$container.css('transition', '1s ease-in-out');
 
             // Set max top offset
             this._maxTop = -this.$container.height();
@@ -196,7 +166,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this._initDirection();
 
             // Show active element
-            this._marginTop = this.direction.initial;
+            this.resetPosition();
 
             // Start auto animation
             if (this.settings.auto !== false) {
@@ -249,13 +219,58 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              */
 
         }, {
-            key: 'raf',
+            key: '_changeTransition',
+
+            /**
+             * @desc PRIVATE - Set css transition property
+             */
+            value: function _changeTransition() {
+                var delay = this._delay || this.settings.delay,
+                    transition = this._transition || this.settings.transition;
+                this.$container.css('transition', delay + 's ' + transition);
+            }
+
+            /**
+             * @desc PRIVATE - Set container margin
+             * @param {Number}||String - Active element index
+             */
+
+        }, {
+            key: '_animate',
+            value: function _animate(margin) {
+                this.$container.css('transform', 'matrix(1, 0, 0, 1, 0, ' + margin + ')');
+            }
+
+            /**
+             * @desc PRIVATE - Is moving from the first element to the last
+             * @return {Boolean}
+             */
+
+        }, {
+            key: '_isGoingBackward',
+            value: function _isGoingBackward() {
+                return this.futureActive > this.active && this.active === 0 && this.futureActive === this.$tiles.length - 1;
+            }
+
+            /**
+             * @desc PRIVATE - Is moving from the last element to the first
+             * @param {Boolean}
+             */
+
+        }, {
+            key: '_isGoingForward',
+            value: function _isGoingForward() {
+                return this.futureActive <= this.active && this.active === this.$tiles.length - 1 && this.futureActive === 0;
+            }
 
             /**
              * @desc PUBLIC - Custom setTimeout using requestAnimationFrame
              * @param function cb - Callback
              * @param {Number} timeout - Timeout delay
              */
+
+        }, {
+            key: 'raf',
             value: function raf(cb, timeout) {
                 var _raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
                     startTime = new Date().getTime(),
@@ -296,9 +311,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              */
 
         }, {
-            key: '_resetPosition',
-            value: function _resetPosition() {
-                this._marginTop = this.direction.initial;
+            key: 'resetPosition',
+            value: function resetPosition(margin) {
+                this.$container.toggleClass(FX_NO_TRANSITION);
+                this._animate(margin === undefined ? this.direction.initial : margin);
+                // Force reflow, flushing the CSS changes
+                this.$container[0].offsetHeight;
+                this.$container.toggleClass(FX_NO_TRANSITION);
             }
 
             /**
@@ -328,7 +347,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function prev() {
                 this.futureActive = this.prevIndex;
                 this.running = true;
-                this.stop(false);
+                this.stop();
 
                 return this.futureActive;
             }
@@ -343,7 +362,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function next() {
                 this.futureActive = this.nextIndex;
                 this.running = true;
-                this.stop(false);
+                this.stop();
 
                 return this.futureActive;
             }
@@ -355,62 +374,74 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              */
 
         }, {
+            key: 'getDelayFromSpins',
+            value: function getDelayFromSpins(spins) {
+                var delay = this.settings.delay;
+                this._transition = 'linear';
+
+                switch (spins) {
+                    case 1:
+                        delay /= 0.5;
+                        this._transition = 'ease-out';
+                        this._animationFX = FX_TURTLE;
+                        break;
+                    case 2:
+                        delay /= 0.75;
+                        this._animationFX = FX_SLOW;
+                        break;
+                    case 3:
+                        delay /= 1;
+                        this._animationFX = FX_NORMAL;
+                        break;
+                    case 4:
+                        delay /= 1.25;
+                        this._animationFX = FX_NORMAL;
+                        break;
+                    default:
+                        delay /= 1.5;
+                        this._animationFX = FX_FAST;
+                }
+
+                return delay;
+            }
+
+            /**
+             * @desc PUBLIC - Starts shuffling the elements
+             * @param {Number} repeations - Number of shuffles (undefined to make infinite animation
+             * @return {Number} - Returns result index
+             */
+
+        }, {
             key: 'shuffle',
             value: function shuffle(spins, onComplete) {
-                var delay = this.settings.delay;
+                var _this = this;
 
                 // Make spins optional
                 if (typeof spins === 'function') {
                     onComplete = spins;
                 }
-
-                if (onComplete) {
-                    this._oncompleteStack[1] = onComplete;
-                }
+                this._oncompleteStack.push(onComplete);
                 this.running = true;
-                this._fade = true;
-
-                // Decreasing spin
-                if (typeof spins === 'number') {
-                    // Change delay and speed
-                    switch (spins) {
-                        case 1:
-                        case 2:
-                            this._animationFX = FX_SLOW;
-                            break;
-                        case 3:
-                        case 4:
-                            this._animationFX = FX_NORMAL;
-                            delay /= 1.5;
-                            break;
-                        default:
-                            this._animationFX = FX_FAST;
-                            delay /= 2;
-                    }
-                    // Infinite spin
-                } else {
-                        // Set animation effects
-                        this._animationFX = FX_FAST;
-                        delay /= 2;
-                    }
-
                 // Perform animation
                 if (!this.visible && this.settings.stopHidden === true) {
                     this.stop();
                 } else {
-                    this.$container.animate({
-                        marginTop: this.direction.to
-                    }, delay, 'linear', (function cb() {
-                        // Reset top position
-                        this._marginTop = this.direction.first;
+                    var delay = this.getDelayFromSpins(spins);
+                    this.delay = delay;
+                    this._animate(this.direction.to);
+                    this.raf(function () {
+                        if (!_this.stopping && _this.running) {
+                            var left = spins - 1;
 
-                        if (spins - 1 <= 0) {
-                            this.stop();
-                        } else {
-                            // Repeat animation
-                            this.shuffle(spins - 1);
+                            _this.resetPosition(_this.direction.first);
+                            if (left <= 1) {
+                                _this.stop();
+                            } else {
+                                // Repeat animation
+                                _this.shuffle(left);
+                            }
                         }
-                    }).bind(this));
+                    }, delay);
                 }
 
                 return this.futureActive;
@@ -423,22 +454,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         }, {
             key: 'stop',
-            value: function stop(showGradient) {
-                if (!this.running) {
-                    return;
-                } else if (this.stopping) {
+            value: function stop() {
+                var _this2 = this;
+
+                if (!this.running || this.stopping) {
                     return this.futureActive;
                 }
 
-                // Stop animation NOW!!!!!!!
-                this.$container.clearQueue().stop(true, false);
-
-                this._fade = showGradient === undefined ? true : showGradient;
-                this._animationFX = FX_SLOW;
                 this.running = true;
                 this.stopping = true;
-                // Set current active element
-                this.active = this.visibleTile;
 
                 if (this.futureActive === null) {
                     // Get random or custom element
@@ -446,44 +470,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 // Check direction to prevent jumping
-                if (this.futureActive > this.active) {
-                    // We are moving to the prev (first to last)
-                    if (this.active === 0 && this.futureActive === this.$tiles.length - 1) {
-                        this._marginTop = this.direction.firstToLast;
-                    }
-                    // We are moving to the next (last to first)
-                } else if (this.active === this.$tiles.length - 1 && this.futureActive === 0) {
-                        this._marginTop = this.direction.lastToFirst;
-                    }
+                if (this._isGoingBackward()) {
+                    this.resetPosition(this.direction.firstToLast);
+                } else if (this._isGoingForward()) {
+                    this.resetPosition(this.direction.lastToFirst);
+                }
 
                 // Update last choosen element index
                 this.active = this.futureActive;
 
-                // Get delay
-                var delay = this.settings.delay * 3;
-
                 // Perform animation
-                this.$container.animate({
-                    marginTop: this.getTileOffset(this.active)
-                }, delay, 'easeOutBounce', (function cb() {
+                var delay = this.getDelayFromSpins(1);
+                this.delay = delay;
+                this._animationFX = FX_STOP;
+                this._animate(this.getTileOffset(this.active));
+                this.raf(function () {
+                    _this2.stopping = false;
+                    _this2.running = false;
+                    _this2.futureActive = null;
 
-                    this.stopping = false;
-                    this.running = false;
-                    this.futureActive = null;
-
-                    if (typeof this._oncompleteStack[0] === 'function') {
-                        this._oncompleteStack[0].apply(this, [this.active]);
-                    }
-                    if (typeof this._oncompleteStack[1] === 'function') {
-                        this._oncompleteStack[1].apply(this, [this.active]);
-                    }
-                }).bind(this));
-
-                // Disable blur
-                this.raf((function cb() {
-                    this._fade = false;
-                    this._animationFX = FX_STOP;
-                }).bind(this), delay / 1.75);
+                    _this2._oncompleteStack.filter(function (fn) {
+                        return typeof fn === 'function';
+                    }).forEach(function (fn) {
+                        fn.apply(_this2, [_this2.active]);
+                    });
+                }, delay);
 
                 return this.active;
             }
@@ -495,21 +506,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'auto',
             value: function auto() {
+                var _this3 = this;
+
                 if (!this.running) {
-                    this._timer = new Timer((function cb() {
-                        if (typeof this.settings.randomize !== 'function') {
-                            this.futureActive = this.next;
+                    this._timer = new Timer(function () {
+                        if (typeof _this3.settings.randomize !== 'function') {
+                            _this3.settings.randomize = function () {
+                                return _this3._nextIndex;
+                            };
                         }
-                        if (!this.visible && this.settings.stopHidden === true) {
-                            this.raf((function cb2() {
-                                this._timer.reset();
-                            }).bind(this), 500);
+                        if (!_this3.visible && _this3.settings.stopHidden === true) {
+                            _this3.raf(_this3._timer.reset.bind(_this3._timer), 500);
                         } else {
-                            this.shuffle(this.settings.spins, (function cb2() {
-                                this._timer.reset();
-                            }).bind(this));
+                            _this3.shuffle(_this3.settings.spins, _this3._timer.reset.bind(_this3._timer));
                         }
-                    }).bind(this), this.settings.auto);
+                    }, this.settings.auto);
                 }
             }
 
@@ -556,8 +567,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: 'visibleTile',
             get: function get() {
                 var firstTileHeight = this.$tiles.first().height(),
-                    rawContainerMargin = this.$container.css('margin-top'),
-                    containerMargin = parseInt(rawContainerMargin.replace(/px/, ''), 10);
+                    rawContainerMargin = this.$container.css('transform'),
+                    matrixRegExp = /^matrix\(-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?(-?\d+)\)$/,
+                    containerMargin = parseInt(rawContainerMargin.replace(matrixRegExp, '$1'), 10);
 
                 return Math.abs(Math.round(containerMargin / firstTileHeight)) - 1;
             }
@@ -652,7 +664,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'prevIndex',
             get: function get() {
-                return this.direction === 'up' ? this._prevIndex : this._nextIndex;
+                return this.direction === 'up' ? this._nextIndex : this._prevIndex;
             }
 
             /**
@@ -663,7 +675,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'nextIndex',
             get: function get() {
-                return this.direction === 'up' ? this._nextIndex : this._prevIndex;
+                return this.direction === 'up' ? this._prevIndex : this._nextIndex;
             }
 
             /**
@@ -685,9 +697,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_fxClass',
             set: function set(FX_SPEED) {
-                var classes = [FX_FAST, FX_NORMAL, FX_SLOW].join(' ');
+                var classes = [FX_FAST, FX_NORMAL, FX_SLOW, FX_TURTLE].join(' ');
 
-                this.$tiles.removeClass(classes).addClass(FX_SPEED);
+                this.$tiles.add(this._$fakeFirstTile).add(this._$fakeLastTile).removeClass(classes).addClass(FX_SPEED);
             }
 
             /**
@@ -700,12 +712,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: '_animationFX',
             set: function set(FX_SPEED) {
                 var delay = this.settings.delay / 4,
-                    $elements = this.$slot.add(this.$tiles);
+                    $elements = this.$slot.add(this.$tiles).add(this._$fakeFirstTile).add(this._$fakeLastTile);
 
                 this.raf((function cb() {
                     this._fxClass = FX_SPEED;
 
-                    if (this.fade !== true || FX_SPEED === FX_STOP) {
+                    if (FX_SPEED === FX_STOP) {
                         $elements.removeClass(FX_GRADIENT);
                     } else {
                         $elements.addClass(FX_GRADIENT);
@@ -714,14 +726,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
 
             /**
-             * @desc PRIVATE - Set container margin
-             * @param {Number}||String - Active element index
+             * @desc PRIVATE - Set css transition delay
+             * @param {Number} - Transition delay in ms
              */
 
         }, {
-            key: '_marginTop',
-            set: function set(margin) {
-                this.$container.css('margin-top', margin);
+            key: 'delay',
+            set: function set(delay) {
+                delay = delay / 1000;
+                this._delay = delay;
+                this._changeTransition();
+            }
+
+            /**
+             * @desc PRIVATE - Set css transition
+             * @param {String} - Transition type
+             */
+
+        }, {
+            key: 'transition',
+            set: function set(transition) {
+                transition = transition || 'ease-in-out';
+                this._transition = transition;
+                this._changeTransition();
             }
         }]);
 
@@ -747,15 +774,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     * Chainable instance
     */
     $.fn[pluginName] = function initPlugin(options) {
-        var _this = this;
+        var _this4 = this;
 
         var instances = void 0;
         if (this.length === 1) {
             instances = _getInstance(this, options);
         } else {
             (function () {
-                var $els = _this;
-                instances = $.map($els, function mapValue(el, index) {
+                var $els = _this4;
+                instances = $.map($els, function (el, index) {
                     var $el = $els.eq(index);
                     return _getInstance($el, options);
                 });
