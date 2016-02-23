@@ -26,44 +26,6 @@ const pluginName = 'slotMachine',
     FX_GRADIENT = 'slotMachineGradient',
     FX_STOP = FX_GRADIENT;
 
-// Set required styles, filters and masks
-$(document).ready(function documentReady() {
-
-    function getSvgFilter (blur) {
-        return `<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0"><filter id="slotMachineBlurFilter${blur}"><feGaussianBlur stdDeviation="${blur}" /></filter></svg>#slotMachineBlurFilter${blur}`;
-    }
-
-    function getBlurStyle (amount) {
-        return `-webkit-filter: blur(${amount}px);-moz-filter: blur(${amount}px);-o-filter: blur(${amount}px);-ms-filter: blur(${amount}px);filter: blur(${amount}px);filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius="${amount}");filter: url("data:image/svg+xml;utf8,${getSvgFilter(amount)}");`;
-    }
-
-    const slotMachineFadeMaskString = '<svg version="1.1" xmlns="http:// www.w3.org/2000/svg" width="0" height="0">' +
-        '<mask id="slotMachineFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">' +
-        '<linearGradient id="slotMachineFadeGradient" gradientUnits="objectBoundingBox" x="0" y="0">' +
-        '<stop stop-color="white" stop-opacity="0" offset="0"></stop>' +
-        '<stop stop-color="white" stop-opacity="1" offset="0.25"></stop>' +
-        '<stop stop-color="white" stop-opacity="1" offset="0.75"></stop>' +
-        '<stop stop-color="white" stop-opacity="0" offset="1"></stop>' +
-        '</linearGradient>' +
-        '<rect x="0" y="-1" width="1" height="1" transform="rotate(90)" fill="url(#slotMachineFadeGradient)"></rect>' +
-        '</mask>' +
-        '</svg>#slotMachineFadeMask';
-
-    // CSS classes
-    $('body').append('<style>' +
-        `.${FX_NO_TRANSITION}{-webkit-transition: none !important;-moz-transition: none !important;-o-transition: none !important;-ms-transition: none !important;transition: none !important;}` +
-        `.${FX_FAST}{${getBlurStyle(5)}}` +
-        `.${FX_NORMAL}{${getBlurStyle(3)}}` +
-        `.${FX_SLOW}{${getBlurStyle(2)}}` +
-        `.${FX_TURTLE}{${getBlurStyle(1)}}` +
-        `.${FX_GRADIENT}{` +
-        '-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(25%, rgba(0,0,0,1)), color-stop(75%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)) );' +
-        `mask: url("data:image/svg+xml;utf8,${slotMachineFadeMaskString}");` +
-        '}' +
-        '</style>');
-
-});
-
 class Timer {
     constructor (cb, delay) {
         this.cb = cb;

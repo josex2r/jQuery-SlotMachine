@@ -58,9 +58,13 @@ module.exports = function(grunt) {
         files: 'Gruntfile.js',
         tasks: ['eslint']
       },
-      src: {
+      js: {
         files: 'src/**/*.js',
-        tasks: ['babel', 'concat', 'qunit']
+        tasks: ['babel', 'concat']
+      },
+      css: {
+        files: 'src/**/*.css',
+        tasks: ['autoprefixer', 'cssmin']
       },
       test: {
         files: 'test/**/*.js',
@@ -78,6 +82,23 @@ module.exports = function(grunt) {
           'tmp/jquery.<%= pkg.name %>.js': 'src/jquery.<%= pkg.name %>.js'
         }
       }
+    },
+    autoprefixer: {
+      options: {
+          browsers: ['last 10 versions', 'ie 8', 'ie 9']
+      },
+      dist: {
+        files: {
+          'dist/jquery.<%= pkg.name %>.css': 'src/jquery.<%= pkg.name %>.css'
+        }
+      },
+    },
+    cssmin: {
+      target: {
+        files: {
+          'dist/jquery.<%= pkg.name %>.min.css': 'dist/jquery.<%= pkg.name %>.css'
+        }
+      },
     }
   });
 
@@ -89,11 +110,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-babel');
+  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // Default task.
-  grunt.registerTask('default', ['eslint', 'clean', 'babel', 'concat', 'qunit', 'uglify']);
+  grunt.registerTask('default', ['eslint', 'clean', 'babel', 'concat', 'autoprefixer', 'cssmin', 'qunit', 'uglify']);
 
   // Travis CI task.
-  grunt.registerTask('travis', ['eslint', 'clean', 'babel', 'concat', 'qunit', 'uglify']);
+  grunt.registerTask('travis', ['eslint', 'clean', 'babel', 'concat', 'autoprefixer', 'cssmin', 'qunit', 'uglify']);
 
 };
