@@ -12,11 +12,11 @@
         "machine"
     ],
   "authors": [
-	  {
-	    "name": "Jose Luis Represa",
-	    "email": "codex2r@gmail.com",
-	    "url": "https://github.com/josex2r"
-	  }
+    {
+      "name": "Jose Luis Represa",
+      "email": "codex2r@gmail.com",
+      "url": "https://github.com/josex2r"
+    }
   ],
   "repository": {
     "type": "git",
