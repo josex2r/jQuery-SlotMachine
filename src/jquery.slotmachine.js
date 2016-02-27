@@ -12,7 +12,7 @@ const pluginName = 'slotMachine',
         active: 0, // Active element [Number]
         delay: 200, // Animation time [Number]
         auto: false, // Repeat delay [false||Number]
-		spins: 5, // Number of spins when auto [Number]
+        spins: 5, // Number of spins when auto [Number]
         randomize: null, // Randomize function, must return a number with the selected position
         complete: null, // Callback function(result)
         stopHidden: true, // Stops animations if the element isn´t visible on the screen
@@ -655,9 +655,9 @@ $.fn[pluginName] = function initPlugin(options) {
     if (this.length === 1) {
         instances = _getInstance(this, options);
     } else {
-		const $els = this;
+        const $els = this;
         instances = $.map($els, (el, index) => {
-			const $el = $els.eq(index);
+            const $el = $els.eq(index);
             return _getInstance($el, options);
         });
     }
