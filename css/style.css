@@ -3,6 +3,25 @@
 
 @import url(http://fonts.googleapis.com/css?family=Pathway+Gothic+One);
 
+.well {
+    background-color: rgba(245, 245, 245, 0.5);
+}
+.badge {
+    font-size: 30px;
+    background-color: rgb(0, 175, 225);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 a{
 	color: #ccd500;
 	text-decoration: none;
@@ -20,14 +39,6 @@ html {
 }
 body {
 }
-footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 80px;
-    width: 100%;
-    background: black;
-}
 b{
 	font-weight: 600;
 }
@@ -37,7 +48,6 @@ b{
 -------------------------------------------------------------------------*/
 h1{
 	width: 100%;
-	color: #000000;
 	font-size: 40px;
 	margin-bottom: 25px;
 }
@@ -59,13 +69,11 @@ h3{
 	float: left;
 	width: 100%;
 	margin: 0 0 20px 0;
-	color: white;
 	font-size:40px;
 	font-family: 'Lato', 'sans-serif';
 	font-weight: 300;
 }
 h4{
-	color: #ffffff;
     display: table-cell;
     float: left;
     font-size: 35px;
@@ -90,30 +98,47 @@ p.title{
 
 .grey {	color:#444;}
 
-/* INICIO
--------------------------------------------------------------------------*/
-#header{
-	margin: 0 auto 0;
+.header-line {
+    width: 100%;
+    position: absolute;
+    height: 10px;
+    background-color: #A48E4E;
+    top: 0px;
+}
+
+header {
+    margin-top: 10px;
+	background-color: #DCD293;
+    border-bottom: 10px solid #66D4FF;
+    border-top: 20px dotted #A48E4E;
+    padding: 25px;
+}
+
+header p {
+	color:#333;
+    font-size: 25px;
+    text-align: center;
+}
+
+header a {
+	color: #6C5726;
+    font-weight: 700;
+}
+
+#plane {
 	width: 100%;
-	position: absolute;
-	text-align: center;
-	top: 0px;
-	background-color: #6C5726;
-	overflow: hidden;
 	position: relative;
-	padding: 50px 0px;
-    border-top: 10px solid #A48E4E;
+	padding: 70px 0px;
     border-bottom: 10px solid #A48E4E;
+    border-top: 20px dotted #66D4FF;
+    height: 400px;
+    background-color: rgb(0, 175, 225);
+    background-image: url('../img/plane.png');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
-#header table, #footer table{
-	height: 100%;
-	width: 100%;
-}
-#header table td, #footer table td{
-	vertical-align: middle;
-}
-#header .content{
-	color: #FFFFFF;
+
+#plane .content{
     float: left;
     font-size: 50px;
     font-weight: 300;
@@ -122,28 +147,119 @@ p.title{
     text-align: center;
     width: 100%;
 }
-#header .content, #footer .content{
+
+#plane .content, footer .content{
 	font-family: 'Pathway Gothic One';
-	color: #ffffff;
-    float: left;
     font-size: 70px;
     font-weight: 300;
     line-height: 80px;
-    margin-top: 2px;
-    margin-bottom: 20px;
-    text-align: center;
-    width: 100%;
-    padding: 30px 0px;
-}
-#header .content > div, #footer .content > div{
-	display: inline-block;
 }
 
-#footer{
+#randomize {
+    height: 380px;
+    border-bottom: 10px solid rgb(180, 75, 119);
+}
+
+#casino {
+    border-top: 20px dotted rgb(180, 75, 119);
+    border-bottom: 10px solid rgb(72, 158, 48);
+    background-color: rgb(240, 150, 150);
+}
+
+#casino h1 {
+    margin: 0px;
+}
+
+#casino .content:nth-child(1) {
+    text-align: center;
+    background: url('../img/machine.png') no-repeat 50% 80px;
+    height: 580px;
+}
+
+#casino .content > div {
+    clear:both;
+    padding-top: 200px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.btn-group-casino {
+    margin-top: 150px;
+    margin-left: -32px;
+}
+
+.btn-group-casino .btn {
+    border: none;
+    background-color: rgb(209, 79, 119);
+}
+.btn-group-casino .btn:hover, .btn-group-casino .btn:focus {
+    background-color: rgb(180, 75, 119);
+}
+
+#watch {
+    border-top: 20px dotted rgb(72, 158, 48);
+    border-bottom: 10px solid #195AC8;
+    background-color: #46D265;
+}
+
+#watch h1 {
+    margin: 0px;
+}
+
+#watch .content:nth-child(1) {
+    text-align: center;
+    background: url('../img/watch.png') no-repeat 50% 80px;
+    height: 470px;
+}
+
+#watch .content > div {
+    clear:both;
+    padding-top: 10px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+#watch .content > div.small {
+    padding-top: 190px;
+    width: 60px;
+}
+
+#watch1 > div {
+    color: #fff;
+    height: 55px;
+    width: 55px;
+    font-size: 55px;
+}
+
+.btn-group-watch {
+    margin-top: 120px;
+}
+
+.btn-group-watch .btn {
+    border: none;
+    background-color: rgb(72, 158, 48);
+}
+.btn-group-watch .btn:hover, .btn-group-watch .btn:focus {
+    background-color: rgb(72, 158, 48);
+}
+
+#triky {
+    text-align: center;
+    background: url('../img/triky.jpg') no-repeat right 40px;
+    background-color: #0F99CA;
+    height: 400px;
+	border-bottom: 10px solid #A48E4E;
+	border-top: 20px dotted #195AC8;
+}
+
+footer{
 	width:100%;
 	background-color: #6C5726;
 	border-top: 20px dotted #A48E4E;
-	height: 200px;
+    height: 140px;
+    padding-top: 20px;
+    text-align: center;
+    color: #DCD293;
 }
 
 
@@ -188,25 +304,34 @@ p.title{
 	background-position-x: 55%;
 	background-repeat: no-repeat;
 }
-.slot1{
+
+.slot1 {
 	background-image: url("../img/slot1.png");
 }
-.slot2{
+
+.slot2 {
 	background-image: url("../img/slot2.png");
 }
-.slot3{
+
+.slot3 {
 	background-image: url("../img/slot3.png");
 }
-.slot4{
+
+.slot4 {
 	background-image: url("../img/slot4.png");
 }
-.slot5{
+
+.slot5 {
 	background-image: url("../img/slot5.png");
 }
-.slot6{
+
+.slot6 {
 	background-image: url("../img/slot6.png");
 }
 
+.slotTriky {
+	background-image: url("../img/cookie.jpg");
+}
 
 
 
@@ -228,7 +353,7 @@ p.title{
 
 
 
-#textMachine, #textMachine2{
+#planeMachine, #textMachine2{
 	width:520px;
 	height: 67px;
 	overflow: hidden;
@@ -283,5 +408,3 @@ p.title{
 	position:relative;
 	top:1px;
 }
-
-
