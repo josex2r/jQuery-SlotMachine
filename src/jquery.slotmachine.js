@@ -110,8 +110,6 @@ class SlotMachine {
         this._$fakeLastTile = null;
         // Timeout recursive function to handle auto (settings.auto)
         this._timer = null;
-        // Callback function
-        this._oncompleteStack = [this.settings.complete];
         // Number of spins left before stop
         this._spinsLeft = null;
         // Future result
@@ -532,11 +530,10 @@ class SlotMachine {
         if (typeof spins === 'function') {
             onComplete = spins;
         }
-        this._oncompleteStack.push(onComplete);
         this.running = true;
         // Perform animation
         if (!this.visible && this.settings.stopHidden === true) {
-            this.stop();
+            this.stop(onComplete);
         } else {
             const delay = this.getDelayFromSpins(spins);
             this.delay = delay;
@@ -547,10 +544,10 @@ class SlotMachine {
 
                     this.resetPosition(this.direction.first);
                     if (left <= 1) {
-                        this.stop();
+                        this.stop(onComplete);
                     } else {
                         // Repeat animation
-                        this.shuffle(left);
+                        this.shuffle(left, onComplete);
                     }
                 }
             }, delay);
@@ -563,7 +560,7 @@ class SlotMachine {
     * @desc PUBLIC - Stop shuffling the elements
     * @return {Number} - Returns result index
     */
-    stop () {
+    stop (onStop) {
         if (!this.running || this.stopping) {
             return this.futureActive;
         }
@@ -596,9 +593,13 @@ class SlotMachine {
             this.running = false;
             this.futureActive = null;
 
-            this._oncompleteStack.filter((fn) => typeof fn === 'function').forEach((fn) => {
-                fn.apply(this, [this.active]);
-            });
+            if (typeof this.settings.complete === 'function') {
+                this.settings.complete.apply(this, [this.active]);
+            }
+
+            if (typeof onStop === 'function') {
+                onStop.apply(this, [this.active]);
+            }
         }, delay);
 
         return this.active;
