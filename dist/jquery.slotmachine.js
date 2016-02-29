@@ -1,4 +1,4 @@
-/*! SlotMachine - v3.0.0 - 2016-02-23
+/*! SlotMachine - v3.0.0 - 2016-02-29
 * https://github.com/josex2r/jQuery-SlotMachine
 * Copyright (c) 2016 Jose Luis Represa; Licensed MIT */
 'use strict';
@@ -134,8 +134,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this._$fakeLastTile = null;
             // Timeout recursive function to handle auto (settings.auto)
             this._timer = null;
-            // Callback function
-            this._oncompleteStack = [this.settings.complete];
             // Number of spins left before stop
             this._spinsLeft = null;
             // Future result
@@ -420,11 +418,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (typeof spins === 'function') {
                     onComplete = spins;
                 }
-                this._oncompleteStack.push(onComplete);
                 this.running = true;
                 // Perform animation
                 if (!this.visible && this.settings.stopHidden === true) {
-                    this.stop();
+                    this.stop(onComplete);
                 } else {
                     var delay = this.getDelayFromSpins(spins);
                     this.delay = delay;
@@ -435,10 +432,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                             _this.resetPosition(_this.direction.first);
                             if (left <= 1) {
-                                _this.stop();
+                                _this.stop(onComplete);
                             } else {
                                 // Repeat animation
-                                _this.shuffle(left);
+                                _this.shuffle(left, onComplete);
                             }
                         }
                     }, delay);
@@ -454,7 +451,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         }, {
             key: 'stop',
-            value: function stop() {
+            value: function stop(onStop) {
                 var _this2 = this;
 
                 if (!this.running || this.stopping) {
@@ -489,11 +486,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     _this2.running = false;
                     _this2.futureActive = null;
 
-                    _this2._oncompleteStack.filter(function (fn) {
-                        return typeof fn === 'function';
-                    }).forEach(function (fn) {
-                        fn.apply(_this2, [_this2.active]);
-                    });
+                    if (typeof _this2.settings.complete === 'function') {
+                        _this2.settings.complete.apply(_this2, [_this2.active]);
+                    }
+
+                    if (typeof onStop === 'function') {
+                        onStop.apply(_this2, [_this2.active]);
+                    }
                 }, delay);
 
                 return this.active;
