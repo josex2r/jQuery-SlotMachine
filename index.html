@@ -289,21 +289,23 @@
 				<h1>Triky your results:</h1>
 
 				<div class="row">
-					<div class="col-xs-5 col-xs-offset-1 col-sm-2 col-sm-offset-5 machineContainer">
-						<div id="triky1" class="slotMachine" style="width:100%;">
-							<div class="slot slotTriky"></div>
-							<div class="slot slot1"></div>
-							<div class="slot slot2"></div>
-							<div class="slot slot3"></div>
-							<div class="slot slot4"></div>
-							<div class="slot slot5"></div>
-							<div class="slot slot6"></div>
+					<div class="col-xs-5 col-xs-offset-1 col-sm-2 col-sm-offset-5">
+						<div id="triky1">
+							<div>
+								<img src="img/cookie.png" />
+							</div>
+							<div>
+								<img src="img/food1.jpg" />
+							</div>
+							<div>
+								<img src="img/food2.jpg" />
+							</div>
+							<div>
+								<img src="img/food3.jpg" />
+							</div>
 						</div>
-
-						<div id="machineFakeResult" class="machineResult noBorder">Index: 0</div>
 					</div>
 				</div>
-
 			</div>
 
 			<div class="clearfix"></div>
@@ -312,12 +314,9 @@
 			$(document).ready(function(){
 				//Fake machine 2 - auto
 				var triky = $("#triky1").slotMachine({
-					active	: 0,
+					active	: 2,
 					delay	: 500,
 					auto	: 1500,
-					complete: function(){
-						$("#machineFakeResultStatic").text("Index: " + this.active);
-					},
 					randomize: function(){
 						return 0;
 					}

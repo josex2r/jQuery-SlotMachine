@@ -209,7 +209,7 @@ header a {
 #watch .content:nth-child(1) {
     text-align: center;
     background: url('../img/watch.png') no-repeat 50% 80px;
-    height: 470px;
+    height: 480px;
 }
 
 #watch .content > div {
@@ -247,17 +247,32 @@ header a {
     text-align: center;
     background: url('../img/triky.jpg') no-repeat right 40px;
     background-color: #0F99CA;
-    height: 400px;
+    height: 450px;
 	border-bottom: 10px solid #A48E4E;
 	border-top: 20px dotted #195AC8;
+}
+
+#triky .row > div {
+    background-color: #fff;
+    width: 225px;
+    height: 225px;
+    border-radius: 50%;
+    padding-top: 40px;
+    padding-left: 35px;
+    left: -35px;
+}
+
+#triky1 {
+    width: 150px;
+    height: 150px;
 }
 
 footer{
 	width:100%;
 	background-color: #6C5726;
 	border-top: 20px dotted #A48E4E;
-    height: 140px;
-    padding-top: 20px;
+    height: 180px;
+    padding-top: 40px;
     text-align: center;
     color: #DCD293;
 }
@@ -331,6 +346,18 @@ footer{
 
 .slotTriky {
 	background-image: url("../img/cookie.jpg");
+}
+
+.food1 {
+	background-image: url("../img/food1.jpg");
+}
+
+.food2 {
+	background-image: url("../img/food2.jpg");
+}
+
+.food3 {
+	background-image: url("../img/food3.jpg");
 }
 
 
