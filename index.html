@@ -22,18 +22,20 @@
 		<!-- Badge -->
 		<a href="https://github.com/josex2r/jQuery-SlotMachine"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
 
+
 		<!-- Intro -->
 		<header>
 			<p>Shuffle your 'divs', randomize your results or make an slide, <br/>
 				<a href="https://github.com/josex2r/jQuery-SlotMachine">jQuery-SlotMachine</a> is not a simple animation plugin</p>
 		</header>
 
+
 		<!-- Flight example -->
 		<div id="plane" class="container">
 			<div class="row content">
 				<div class="col-md-12 col-lg-8 col-lg-offset-2">
 					<div class="well">
-						<div>Upcoming discounts: </div>
+						<div>Spin your elements!</div>
 
 						<div id="planeMachine">
 							<div class="text-center">
@@ -64,51 +66,62 @@
 			</div>
 		</div>
 
-		<div id="randomize" class="line">
-			<div class="content container" style="text-align: center">
-				<h1>Randomize your machines:</h1>
+
+		<div id="randomize">
+			<div class="content container" style="text-align: center;max-width: 900px;">
+				<h1>Randomize your stuff!</h1>
 
 				<div class="row">
-					<div class="col-xs-12 col-md-6 col-md-offset-3 machineContainer">
-						<div id="machine1" class="slotMachine">
-							<div class="slot slot1"></div>
-							<div class="slot slot2"></div>
-							<div class="slot slot3"></div>
-							<div class="slot slot4"></div>
-							<div class="slot slot5"></div>
-							<div class="slot slot6"></div>
+					<div class="col-xs-4">
+						<div>
+							<div id="machine1" class="randomizeMachine">
+								<div><img src="img/slot1.png" /></div>
+								<div><img src="img/slot2.png" /></div>
+								<div><img src="img/slot3.png" /></div>
+								<div><img src="img/slot4.png" /></div>
+								<div><img src="img/slot5.png" /></div>
+								<div><img src="img/slot6.png" /></div>
+							</div>
 						</div>
-
-						<div id="machine2" class="slotMachine">
-							<div class="slot slot1"></div>
-							<div class="slot slot2"></div>
-							<div class="slot slot3"></div>
-							<div class="slot slot4"></div>
-							<div class="slot slot5"></div>
-							<div class="slot slot6"></div>
-						</div>
-
-						<div id="machine3" class="slotMachine">
-							<div class="slot slot1"></div>
-							<div class="slot slot2"></div>
-							<div class="slot slot3"></div>
-							<div class="slot slot4"></div>
-							<div class="slot slot5"></div>
-							<div class="slot slot6"></div>
-						</div>
-
-						<div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
-						<div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
-						<div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
 					</div>
 
-					<div class="col-md-2">
-						<div id="slotMachineButton1" class="slotMachineButton">GO!</div>
+					<div class="col-xs-4">
+						<div>
+							<div id="machine2" class="randomizeMachine">
+								<div><img src="img/slot1.png" /></div>
+								<div><img src="img/slot2.png" /></div>
+								<div><img src="img/slot3.png" /></div>
+								<div><img src="img/slot4.png" /></div>
+								<div><img src="img/slot5.png" /></div>
+								<div><img src="img/slot6.png" /></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-4">
+						<div>
+							<div id="machine3" class="randomizeMachine">
+								<div><img src="img/slot1.png" /></div>
+								<div><img src="img/slot2.png" /></div>
+								<div><img src="img/slot3.png" /></div>
+								<div><img src="img/slot4.png" /></div>
+								<div><img src="img/slot5.png" /></div>
+								<div><img src="img/slot6.png" /></div>
+							</div>
+						</div>
+						<!--<div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
+						<div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
+						<div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>-->
+					</div>
+				</div>
+
+				<div>
+					<div class="btn-group btn-group-justified btn-group-randomize" role="group">
+						<div id="ranomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 		<script>
 			$(document).ready(function(){
 				var machine1 = $("#machine1").slotMachine({
@@ -141,7 +154,7 @@
 					}
 				}
 
-				$("#slotMachineButton1").click(function(){
+				$("#ranomizeButton").click(function(){
 
 					machine1.shuffle(5, onComplete);
 
@@ -157,10 +170,98 @@
 			});
 		</script>
 
-		<!-- Slot machine example -->
-		<div id="casino" class="line" style="padding-top:50px;">
+
+		<!-- Watch example -->
+		<div id="watch" style="padding-top:50px;">
 			<div class="content">
-				<h1>Use the API methods to shuffle your elements</h1>
+				<h1>Slide the items</h1>
+
+				<div class="small">
+					<div id="watch1">
+						<div><span class="glyphicon glyphicon-volume-up"></span></div>
+						<div><span class="glyphicon glyphicon-envelope"></span></div>
+						<div><span class="glyphicon glyphicon-off"></span></div>
+						<div><span class="glyphicon glyphicon-music"></span></div>
+						<div><span class="glyphicon glyphicon-map-marker"></span></div>
+					</div>
+				</div>
+
+				<div>
+					<div class="btn-group btn-group-justified btn-group-watch" role="group">
+						<div id="slotMachineButtonPrev" type="button" class="btn btn-primary btn-lg">Prev</div>
+						<div id="slotMachineButtonNext" type="button" class="btn btn-primary btn-lg">Next</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<script>
+			$(document).ready(function(){
+				var watch = $("#watch1").slotMachine();
+
+				$("#slotMachineButtonPrev").click(function(){
+					watch.prev();
+				});
+
+				$("#slotMachineButtonNext").click(function(){
+					watch.next();
+				});
+			});
+		</script>
+
+
+		<div id="triky">
+			<div class="content" style="text-align: center">
+				<h1>Triky your results</h1>
+
+				<div class="row">
+					<div style="margin: auto;">
+						<div id="triky1">
+							<div>
+								<img src="img/cookie.png" />
+							</div>
+							<div>
+								<img src="img/food1.jpg" />
+							</div>
+							<div>
+								<img src="img/food2.jpg" />
+							</div>
+							<div>
+								<img src="img/food3.jpg" />
+							</div>
+						</div>
+						<div>
+							<div class="btn-group btn-group-justified btn-group-triky" role="group">
+								<div id="trikyShuffle" type="button" class="btn btn-primary btn-lg">Gimme cookies!</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+		</div>
+		<script>
+			$(document).ready(function(){
+				//Fake machine 2 - auto
+				var triky = $("#triky1").slotMachine({
+					active	: 2,
+					randomize: function(){
+						return 0;
+					}
+				});
+
+				$("#trikyShuffle").click(function(){
+					triky.shuffle(3);
+				});
+			});
+		</script>
+
+
+		<!-- Slot machine example -->
+		<div id="casino" style="padding-top:50px;">
+			<div class="content">
+				<h1>Use the API</h1>
 
 				<div>
 					<div id="casino1" class="slotMachine" style="margin-left: -65px;">
@@ -199,7 +300,6 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-
 		<script>
 			$(document).ready(function(){
 				var machine4 = $("#casino1").slotMachine({
@@ -244,97 +344,16 @@
 		</script>
 
 
-		<!-- Watch example -->
-		<div id="watch" class="line" style="padding-top:50px;">
-			<div class="content">
-				<h1>Use it like a slide!</h1>
-
-				<div class="small">
-					<div id="watch1">
-						<div><span class="glyphicon glyphicon-volume-up"></span></div>
-						<div><span class="glyphicon glyphicon-envelope"></span></div>
-						<div><span class="glyphicon glyphicon-off"></span></div>
-						<div><span class="glyphicon glyphicon-music"></span></div>
-						<div><span class="glyphicon glyphicon-map-marker"></span></div>
-					</div>
-				</div>
-				<div>
-					<div class="btn-group btn-group-justified btn-group-watch" role="group">
-						<div id="slotMachineButtonPrev" type="button" class="btn btn-primary btn-lg">Prev</div>
-						<div id="slotMachineButtonNext" type="button" class="btn btn-primary btn-lg">Next</div>
-					</div>
-				</div>
-
-			</div>
-			<div class="clearfix"></div>
-		</div>
-
-		<script>
-			$(document).ready(function(){
-				var watch = $("#watch1").slotMachine();
-
-				$("#slotMachineButtonPrev").click(function(){
-					watch.prev();
-				});
-
-				$("#slotMachineButtonNext").click(function(){
-					watch.next();
-				});
-			});
-		</script>
-
-
-		<div id="triky" class="line">
-			<div class="content" style="text-align: center">
-				<h1>Triky your results:</h1>
-
-				<div class="row">
-					<div class="col-xs-5 col-xs-offset-1 col-sm-2 col-sm-offset-5">
-						<div id="triky1">
-							<div>
-								<img src="img/cookie.png" />
-							</div>
-							<div>
-								<img src="img/food1.jpg" />
-							</div>
-							<div>
-								<img src="img/food2.jpg" />
-							</div>
-							<div>
-								<img src="img/food3.jpg" />
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="clearfix"></div>
-		</div>
-		<script>
-			$(document).ready(function(){
-				//Fake machine 2 - auto
-				var triky = $("#triky1").slotMachine({
-					active	: 2,
-					delay	: 500,
-					auto	: 1500,
-					randomize: function(){
-						return 0;
-					}
-				});
-			});
-		</script>
-
-
 		<footer>
 			<div class="content">
-				<div id="textMachine2" style="text-align: center">
+				<div id="textMachine" style="text-align: center">
 					<div>FORK!</div>
 					<div>SHARE!</div>
 					<div>USE IT!</div>
 				</div>
 				<script>
 					$(document).ready(function(){
-						$("#textMachine2").slotMachine({
+						$("#textMachine").slotMachine({
 							active	: 1,
 							delay	: 450,
 							auto	: 1500

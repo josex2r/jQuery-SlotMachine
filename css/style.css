@@ -106,6 +106,9 @@ p.title{
     top: 0px;
 }
 
+/*
+ * Header
+ */
 header {
     margin-top: 10px;
 	background-color: #DCD293;
@@ -125,11 +128,14 @@ header a {
     font-weight: 700;
 }
 
+/*
+ * Airlines
+ */
 #plane {
 	width: 100%;
 	position: relative;
 	padding: 70px 0px;
-    border-bottom: 10px solid #A48E4E;
+    border-bottom: 10px solid #B8312F;
     border-top: 20px dotted #66D4FF;
     height: 400px;
     background-color: rgb(0, 175, 225);
@@ -155,47 +161,56 @@ header a {
     line-height: 80px;
 }
 
+#planeMachine {
+	width:520px;
+	height: 67px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: left;
+}
+
+/*
+ * SlotMachine
+ */
 #randomize {
-    height: 380px;
-    border-bottom: 10px solid rgb(180, 75, 119);
-}
-
-#casino {
-    border-top: 20px dotted rgb(180, 75, 119);
+    height: 400px;
     border-bottom: 10px solid rgb(72, 158, 48);
-    background-color: rgb(240, 150, 150);
+    background-color: #EB6B56;
+    border-top: 20px dotted #B8312F;
 }
 
-#casino h1 {
-    margin: 0px;
+#randomize .row > div.col-xs-4 {
+    padding-left: 35px;
 }
 
-#casino .content:nth-child(1) {
-    text-align: center;
-    background: url('../img/machine.png') no-repeat 50% 80px;
-    height: 580px;
+#randomize .row > div.col-xs-4 > div {
+    padding-top: 40px;
+    padding-left: 40px;
+    width: 175px;
+    height: 175px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: auto;
 }
 
-#casino .content > div {
-    clear:both;
-    padding-top: 200px;
-    width: 300px;
+.randomizeMachine {
+    width: 100px;
+    height: 100px;
+}
+
+.btn-group-randomize {
     margin: 0 auto;
+    margin-top: 30px;
+    width: auto;
 }
 
-.btn-group-casino {
-    margin-top: 150px;
-    margin-left: -32px;
+.btn-group-randomize div {
+    width: auto !important;
 }
 
-.btn-group-casino .btn {
-    border: none;
-    background-color: rgb(209, 79, 119);
-}
-.btn-group-casino .btn:hover, .btn-group-casino .btn:focus {
-    background-color: rgb(180, 75, 119);
-}
-
+/*
+ * Watch
+ */
 #watch {
     border-top: 20px dotted rgb(72, 158, 48);
     border-bottom: 10px solid #195AC8;
@@ -209,7 +224,7 @@ header a {
 #watch .content:nth-child(1) {
     text-align: center;
     background: url('../img/watch.png') no-repeat 50% 80px;
-    height: 480px;
+    height: 500px;
 }
 
 #watch .content > div {
@@ -243,12 +258,15 @@ header a {
     background-color: rgb(72, 158, 48);
 }
 
+/*
+ * Triky
+ */
 #triky {
     text-align: center;
     background: url('../img/triky.jpg') no-repeat right 40px;
     background-color: #0F99CA;
     height: 450px;
-	border-bottom: 10px solid #A48E4E;
+	border-bottom: 10px solid rgb(180, 75, 119);
 	border-top: 20px dotted #195AC8;
 }
 
@@ -267,6 +285,70 @@ header a {
     height: 150px;
 }
 
+.btn-group-triky {
+    margin-top: 60px;
+}
+
+/*
+ * Casino
+ */
+#casino {
+    border-top: 20px dotted rgb(180, 75, 119);
+    border-bottom: 10px solid #A48E4E;
+    background-color: rgb(240, 150, 150);
+}
+
+#casino h1 {
+    margin: 0px;
+}
+
+#casino .content:nth-child(1) {
+    text-align: center;
+    background: url('../img/machine.png') no-repeat 50% 80px;
+    height: 580px;
+}
+
+#casino .content > div {
+    clear:both;
+    padding-top: 200px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.machineContainer{
+	background-color: #000;
+	padding: 5px 1px 5px 1px;
+	overflow: hidden;
+	height: 135px;
+}
+
+.slotMachine{
+	width: 32.333333%;
+	border: 5px solid #000;
+	height: 100px;
+	padding: 0px;
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
+	background-color: #ffffff;
+}
+
+.btn-group-casino {
+    margin-top: 150px;
+    margin-left: -32px;
+}
+
+.btn-group-casino .btn {
+    border: none;
+    background-color: rgb(209, 79, 119);
+}
+.btn-group-casino .btn:hover, .btn-group-casino .btn:focus {
+    background-color: rgb(180, 75, 119);
+}
+
+/*
+ * Footer
+ */
 footer{
 	width:100%;
 	background-color: #6C5726;
@@ -277,34 +359,28 @@ footer{
     color: #DCD293;
 }
 
-
-.line{
-	background-color: #DCD293;
-	padding: 50px 0px 25px 0px;
-	width:100%;
-	border-top: 20px dotted #A48E4E;
-}
-
-
-
-.machineContainer{
-	background-color: #000;
-	padding: 5px 1px 5px 1px;
-	overflow: hidden;
-	height: 135px;
-}
-.slotMachine{
-	width: 32.333333%;
-	border: 5px solid #000;
-	height: 100px;
-	padding: 0px;
+#textMachine {
+	width:520px;
+	height: 67px;
 	overflow: hidden;
 	display: inline-block;
-	text-align: center;
-	/*margin: 0px 5px;*/
-	/*border: 5px solid #000;*/
-	background-color: #ffffff;
+	text-align: left;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .machineResult{
 	color:#fff;
 	text-align:center;
@@ -342,96 +418,4 @@ footer{
 
 .slot6 {
 	background-image: url("../img/slot6.png");
-}
-
-.slotTriky {
-	background-image: url("../img/cookie.jpg");
-}
-
-.food1 {
-	background-image: url("../img/food1.jpg");
-}
-
-.food2 {
-	background-image: url("../img/food2.jpg");
-}
-
-.food3 {
-	background-image: url("../img/food3.jpg");
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#planeMachine, #textMachine2{
-	width:520px;
-	height: 67px;
-	overflow: hidden;
-	display: inline-block;
-	text-align: left;
-}
-#textMachine > *, #textMachine2 > *{
-	padding: 0px 0px;
-}
-
-
-
-
-.slotMachineButton{
-	width:100px;
-	height: 100px;
-	overflow: hidden;
-	display: inline-block;
-	text-align: center;
-}
-.slotMachineButton {
-	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-	box-shadow:inset 0px 1px 0px 0px #fce2c1;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25) );
-	background:-moz-linear-gradient( center top, #ffc477 5%, #fb9e25 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
-	background-color:#ffc477;
-	border-radius: 75px;
-	text-indent:0px;
-	border:6px solid #eeb44f;
-	display:inline-block;
-	color:#ffffff;
-	font-size:40px;
-	font-weight:bold;
-	font-style:normal;
-	height:100px;
-	line-height:90px;
-	margin-top:10px;
-	width:100px;
-	text-decoration:none;
-	text-align:center;
-	text-shadow:1px 1px 0px #cc9f52;
-	cursor:pointer;
-}
-.slotMachineButton:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
-	background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
-	background-color:#fb9e25;
-}.slotMachineButton:active {
-	position:relative;
-	top:1px;
 }
