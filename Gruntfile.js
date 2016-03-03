@@ -73,9 +73,9 @@ module.exports = function(grunt) {
     },
     babel: {
       options: {
+        comments: false,
         sourceMap: false,
-        presets: ['es2015'],
-        //plugins: ['transform-es2015-modules-amd']
+        presets: ['es2015']
       },
       dist: {
         files: {
