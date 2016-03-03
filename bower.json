@@ -48,6 +48,7 @@
     "libs",
     "samples",
     "spec",
+    "src",
     "bourbon",
     "neat",
     "packages",
@@ -65,6 +66,7 @@
     "*bower.json",
     "*jquery.json",
     "index*",
-    ".travis.yml"
+    ".travis.yml",
+    ".eslintrc"
   ]
 }
