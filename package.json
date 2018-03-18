@@ -41,6 +41,7 @@
     "mocha": "^5.0.4",
     "open": "0.0.5",
     "run-sequence": "^2.2.1",
+    "sinon": "^4.4.6",
     "testem": "^2.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
