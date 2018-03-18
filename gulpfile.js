@@ -103,21 +103,15 @@ gulp.task('default', ['build']);
 // Watch
 gulp.task('server', ['build'], () => {
   // Watch .scss files
-  gulp.watch('src/styles/**/*.scss', (event) => {
+  gulp.watch('styles/**/*.css', (event) => {
     console.log(`File ${event.path} was ${event.type}, running tasks...`);
     gulp.run('styles');
   });
 
   // Watch .js files
-  gulp.watch('src/**/*.js', (event) => {
+  gulp.watch('lib/**/*.js', (event) => {
     console.log(`File ${event.path} was ${event.type}, running tasks...`);
     gulp.run('scripts');
-  });
-
-  // Watch .js files
-  gulp.watch('docs/**/*', (event) => {
-    console.log(`File ${event.path} was ${event.type}, running tasks...`);
-    connect.reload()
   });
 
   connect.server({
