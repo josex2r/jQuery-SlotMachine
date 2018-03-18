@@ -29,4 +29,5 @@ before_script:
   - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
 
 script:
+  - gulp lint
   - npm run test
