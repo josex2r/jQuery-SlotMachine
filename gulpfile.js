@@ -51,7 +51,7 @@ gulp.task('scripts', ['lint'], () => {
     entries: './lib/index.js',
     extensions: ['.js'],
     debug: true,
-    paths: ['./src/', './node_modules']
+    paths: ['./lib/', './node_modules']
   })
     .transform(babelify, {
       presets: ['env']

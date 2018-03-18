@@ -1,5 +1,32 @@
+---
 language: node_js
+dist: trusty
 node_js:
-  - 0.10
+  - "stable"
+
+sudo: false
+
+addons:
+  chrome: stable
+
+cache:
+  directories:
+    - $HOME/.yarn-cache
+    - $HOME/.cache  # includes bowers cache
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - npm config set spin false
+  - yarn --version
+  - google-chrome --version
+
+install:
+  - yarn install
+
 before_script:
-  - npm install -g grunt-cli
+  - sudo chown root /opt/google/chrome/chrome-sandbox
+  - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
+
+script:
+  - npm run test

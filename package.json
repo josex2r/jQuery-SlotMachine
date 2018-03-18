@@ -5,7 +5,9 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "testem"
+    "acceptance": "testem ci",
+    "test": "npm run acceptance && npm run unit",
+    "unit": "mocha tests/unit/*-test.js"
   },
   "license": "MIT",
   "repository": {
