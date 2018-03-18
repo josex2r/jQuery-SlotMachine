@@ -7,6 +7,8 @@ module.exports = {
     mocha: true
   },
   rules: {
-    semi: 0
+    semi: 0,
+    'no-unused-expressions': 0,
+    'no-new': 0
   }
 }
