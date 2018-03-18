@@ -13,11 +13,23 @@ const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const babelify = require('babelify');
 const source = require('vinyl-source-stream');
+const header = require('gulp-header');
+const pkg = require('./package.json');
+
+const banner = `/*
+ * jQuery Slot Machine v${pkg.version}
+ * ${pkg.repository.url.replace(/\.git$/)}
+ *
+ * Copyright 2014 Jose Luis Represa
+ * Released under the ${pkg.license} license
+ */
+`;
 
 // Lint javascript
 gulp.task('lint', () => {
   return gulp.src([
-    'src/**/*.js'
+    'lib/**/*.js',
+    'tests/**/*.js'
   ])
     .pipe(eslint())
     .pipe(eslint.format())
@@ -34,6 +46,7 @@ gulp.task('styles', () => {
       cascade: false
     }))
     .pipe(rename({ basename: 'jquery.slotmachine' }))
+    .pipe(header(banner))
     .pipe(gulp.dest('dist'))
     .pipe(cleanCss({
       compatibility: 'ie8'
@@ -59,6 +72,7 @@ gulp.task('scripts', ['lint'], () => {
     .bundle()
     .pipe(source('jquery.slotmachine.js'))
     .pipe(buffer())
+    .pipe(header(banner))
     .pipe(gulp.dest('dist'))
     .pipe(rename({
       suffix: '.min'

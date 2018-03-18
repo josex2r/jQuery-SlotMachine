@@ -5,6 +5,7 @@ module.exports = {
     browser: true
   },
   rules: {
-    semi: 0
+    semi: 0,
+    'no-unused-expressions': 1
   }
 }
