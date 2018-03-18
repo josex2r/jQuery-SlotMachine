@@ -100,8 +100,14 @@ gulp.task('server', ['build'], () => {
     gulp.run('scripts');
   });
 
+  // Watch .js files
+  gulp.watch('docs/**/*', (event) => {
+    console.log(`File ${event.path} was ${event.type}, running tasks...`);
+    connect.reload()
+  });
+
   connect.server({
-    root: 'dist',
+    // root: 'docs',
     livereload: true
   });
 
