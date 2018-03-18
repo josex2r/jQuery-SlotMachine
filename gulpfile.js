@@ -59,12 +59,9 @@ gulp.task('styles', () => {
 });
 
 // Scripts
-gulp.task('scripts', ['lint'], () => {
-  return browserify({
-    entries: './lib/index.js',
-    extensions: ['.js'],
-    debug: true,
-    paths: ['./lib/', './node_modules']
+gulp.task('jquery-wrapper', () => {
+  return browserify('./lib/jquery.js', {
+    debug: true
   })
     .transform(babelify, {
       presets: ['env']
@@ -72,12 +69,34 @@ gulp.task('scripts', ['lint'], () => {
     .bundle()
     .pipe(source('jquery.slotmachine.js'))
     .pipe(buffer())
+    .pipe(gulp.dest('dist'))
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(uglify().on('error', console.error))
+    .pipe(connect.reload())
+    .pipe(gulp.dest('dist'));
+});
+gulp.task('scripts', ['lint', 'jquery-wrapper'], () => {
+  return browserify({
+    entries: './lib/index.js',
+    extensions: ['.js'],
+    exclude: ['jquery.js'],
+    debug: true,
+    paths: ['./lib/', './node_modules']
+  })
+    .transform(babelify, {
+      presets: ['env']
+    })
+    .bundle()
+    .pipe(source('slotmachine.js'))
+    .pipe(buffer())
     .pipe(header(banner))
     .pipe(gulp.dest('dist'))
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(uglify())
+    .pipe(uglify().on('error', console.error))
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
 });
