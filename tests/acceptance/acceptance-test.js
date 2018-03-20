@@ -130,6 +130,46 @@ describe('SlotMachine', () => {
         expect(machine.direction).to.include(testCase.result);
       });
     });
+
+    it('does not auto start', () => {
+      const shuffleSpy = sinon.spy(SlotMachine.prototype, 'shuffle');
+      const autoSpy = sinon.spy(SlotMachine.prototype, 'auto');
+      machine = render();
+
+      expect(shuffleSpy).to.not.have.been.called;
+      expect(autoSpy).to.not.have.been.called;
+
+      shuffleSpy.restore();
+      autoSpy.restore();
+    });
+
+    it('shuffles when auto is set to true', () => {
+      const shuffleSpy = sinon.spy(SlotMachine.prototype, 'shuffle');
+      const autoSpy = sinon.spy(SlotMachine.prototype, 'auto');
+      machine = render({
+        auto: true
+      });
+
+      expect(shuffleSpy).to.have.been.called;
+      expect(autoSpy).to.not.have.been.called;
+
+      shuffleSpy.restore();
+      autoSpy.restore();
+    });
+
+    it('run auto when auto is set to number', () => {
+      const shuffleSpy = sinon.spy(SlotMachine.prototype, 'shuffle');
+      const autoSpy = sinon.spy(SlotMachine.prototype, 'auto');
+      machine = render({
+        auto: 1
+      });
+
+      expect(shuffleSpy).to.not.have.been.called;
+      expect(autoSpy).to.have.been.called;
+
+      shuffleSpy.restore();
+      autoSpy.restore();
+    });
   });
 
   ['foo', 'bar', 'wow'].forEach((text, index) => {
