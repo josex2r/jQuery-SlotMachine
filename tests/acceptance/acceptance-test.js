@@ -50,6 +50,88 @@ describe('SlotMachine', () => {
     expect(element).to.exist;
   });
 
+  describe('constructor', () => {
+    it('has element', () => {
+      machine = render();
+      const element = document.getElementById(id);
+
+      expect(machine.element).to.be.equal(element);
+    });
+
+    it('element does not have overflow', () => {
+      machine = render();
+
+      expect(machine.element.style.overflow).to.be.equal('hidden');
+    });
+
+    it('has settings', () => {
+      machine = render();
+
+      expect(machine.settings).to.exist;
+    });
+
+    [
+      { active: 0, result: 0 },
+      { active: 1, result: 1 },
+      { active: 99, result: 0 },
+      { active: -99, result: 0 },
+      { active: '0', result: 0 },
+      { active: {}, result: 0 },
+      { active: null, result: 0 },
+      { active: undefined, result: 0 }
+    ].forEach((testCase) => {
+      it(`has active: ${testCase.active}`, () => {
+        machine = render({
+          active: testCase.active
+        });
+
+        expect(machine.active).to.be.equal(testCase.result);
+      });
+    });
+
+    it('wraps tiles and adds offsets', () => {
+      machine = render();
+
+      expect(machine.container.classList.contains('slotMachineContainer')).to.be.true;
+      expect(machine.container.children).to.have.lengthOf(5);
+    });
+
+    [
+      {
+        direction: 'up',
+        result: {
+          key: 'up',
+          initial: -18,
+          first: 0,
+          last: -72,
+          to: -54,
+          firstToLast: -72,
+          lastToFirst: 0
+        }
+      },
+      {
+        direction: 'down',
+        result: {
+          key: 'down',
+          initial: -18,
+          first: -72,
+          last: 0,
+          to: -18,
+          firstToLast: -72,
+          lastToFirst: 0
+        }
+      }
+    ].forEach((testCase) => {
+      it(`sets direction: ${testCase.direction}`, () => {
+        machine = render({
+          direction: testCase.direction
+        });
+
+        expect(machine.direction).to.include(testCase.result);
+      });
+    });
+  });
+
   ['foo', 'bar', 'wow'].forEach((text, index) => {
     it(`gets visibleTile: ${index}`, () => {
       machine = render({
