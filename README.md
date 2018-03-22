@@ -2,7 +2,7 @@
 
 A simple, lightweight jQuery plugin to make slot machine animation effect.
 
-[Check the example page!] (http://josex2r.github.io/jQuery-SlotMachine/)
+[Check the example page!](http://josex2r.github.io/jQuery-SlotMachine/)
 
 ## Installation
 
@@ -159,6 +159,6 @@ Animation direction ('up' || 'down')
 
 [Jose Luis Represa](https://github.com/josex2r)
 
-##License
+## License
 
 jQuery-SlotMachine is released under the [MIT License](http://opensource.org/licenses/MIT).
