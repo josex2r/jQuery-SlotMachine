@@ -85,7 +85,7 @@ machine.visible; //Returns boolean
 Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
 
 ```javascript
-machine.setRandomize(foo); //foo must be a function (should return int) or an int
+machine.randomize = foo; //foo must be a function (should return int) or an int
 ```
 
 Change spin direction, machine must not be running:

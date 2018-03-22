@@ -73,6 +73,15 @@ describe('Constructor', () => {
     });
   });
 
+  it('sets randomize', () => {
+    const randomize = () => {};
+    machine = render({
+      randomize
+    });
+
+    expect(machine._randomize).to.be.equal(randomize);
+  });
+
   it('does not auto start', () => {
     machine = render();
 
