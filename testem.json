@@ -14,7 +14,8 @@
       "--remote-debugging-port=9222",
       "--remote-debugging-address=0.0.0.0",
       "--no-sandbox",
-      "--user-data-dir=/tmp"
+      "--user-data-dir=/tmp",
+      "--window-size=1280,1696"
     ]
   }
 }

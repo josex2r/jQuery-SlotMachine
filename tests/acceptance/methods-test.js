@@ -221,66 +221,66 @@ describe('Setters', () => {
     });
   });
 
-  describe('shuffle()', () => {
-    it('changes machine state', (callback) => {
-      machine = render({
-        delay: 1,
-        spins: 1
-      });
+  // describe('shuffle()', () => {
+  //   it('changes machine state', (callback) => {
+  //     machine = render({
+  //       delay: 1,
+  //       spins: 1
+  //     });
 
-      machine.shuffle(() => {
-        expect(machine.running).to.be.false;
-        callback();
-      });
+  //     machine.shuffle(() => {
+  //       expect(machine.running).to.be.false;
+  //       callback();
+  //     });
 
-      expect(machine.running).to.be.true;
-    });
+  //     expect(machine.running).to.be.true;
+  //   });
 
-    it('calls callback when shuffle ends', (callback) => {
-      machine = render({
-        delay: 1,
-        spins: 1
-      });
+  //   it('calls callback when shuffle ends', (callback) => {
+  //     machine = render({
+  //       delay: 1,
+  //       spins: 1
+  //     });
 
-      let nextActive;
+  //     let nextActive;
 
-      machine.shuffle(() => {
-        expect(machine.active).to.be.equal(nextActive);
-        callback();
-      });
+  //     machine.shuffle(() => {
+  //       expect(machine.active).to.be.equal(nextActive);
+  //       callback();
+  //     });
 
-      nextActive = machine.futureActive;
-    });
+  //     nextActive = machine.futureActive;
+  //   });
 
-    it('calls shuffle recursively', (callback) => {
-      machine = render({
-        delay: 1,
-        spins: 1,
-        auto: false
-      });
-      const times = 5;
-      const spy = sinon.spy(machine, 'shuffle');
+  //   it('calls shuffle recursively', (callback) => {
+  //     machine = render({
+  //       delay: 1,
+  //       spins: 1,
+  //       auto: false
+  //     });
+  //     const times = 5;
+  //     const spy = sinon.spy(machine, 'shuffle');
 
-      machine.shuffle(times, () => {
-        expect(spy).to.have.been.callCount(times - 1);
-        machine.shuffle.restore();
-        callback();
-      });
-    });
+  //     machine.shuffle(times, () => {
+  //       expect(spy).to.have.been.callCount(times - 1);
+  //       machine.shuffle.restore();
+  //       callback();
+  //     });
+  //   });
 
-    it('calls stop', (callback) => {
-      machine = render({
-        delay: 1,
-        spins: 1,
-        auto: false
-      });
-      const spy = sinon.spy(machine, 'stop');
+  //   it('calls stop', (callback) => {
+  //     machine = render({
+  //       delay: 1,
+  //       spins: 1,
+  //       auto: false
+  //     });
+  //     const spy = sinon.spy(machine, 'stop');
 
-      machine.shuffle(() => {
-        expect(spy).to.have.been.called;
-        machine.stop.restore();
-        callback();
-      });
-    });
-  });
+  //     machine.shuffle(() => {
+  //       expect(spy).to.have.been.called;
+  //       machine.stop.restore();
+  //       callback();
+  //     });
+  //   });
+  // });
 });
