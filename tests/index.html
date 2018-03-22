@@ -9,8 +9,8 @@
     <link href="../dist/jquery.slotmachine.css" rel="stylesheet">
   </head>
   <body>
-    <div id="mocha"></div>
     <div id="sandbox"></div>
+    <div id="mocha"></div>
     <script src="/node_modules/mocha/mocha.js"></script>
     <script src="/node_modules/chai/chai.js"></script>
     <script src="/node_modules/jquery/dist/jquery.js"></script>
@@ -20,7 +20,10 @@
     <script src="../dist/jquery.slotmachine.js"></script>
     <script src="setup.js"></script>
     <script src="/testem.js"></script>
-    <script src="acceptance/acceptance-test.js"></script>
+    <script src="acceptance/getters-test.js"></script>
+    <script src="acceptance/setters-test.js"></script>
+    <script src="acceptance/constructor-test.js"></script>
+    <script src="acceptance/render-test.js"></script>
     <script>
       mocha.run();
     </script>
