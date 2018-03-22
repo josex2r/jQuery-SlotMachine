@@ -37,7 +37,7 @@ describe('Setters', () => {
 
         machine.direction = direction;
 
-        expect(machine.direction.key).to.be.equal(direction);
+        expect(machine.direction).to.be.equal(direction);
       });
     });
   });
