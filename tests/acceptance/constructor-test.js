@@ -73,7 +73,7 @@ describe('Constructor', () => {
       randomize
     });
 
-    expect(machine._randomize).to.be.equal(randomize);
+    expect(machine.randomize).to.be.equal(randomize);
   });
 
   it('does not auto start', () => {

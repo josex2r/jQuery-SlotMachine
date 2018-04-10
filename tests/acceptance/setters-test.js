@@ -49,16 +49,7 @@ describe('Setters', () => {
 
       machine.randomize = randomize;
 
-      expect(machine._randomize).to.be.equal(randomize);
-    });
-
-    it('wrap numbers as functions', () => {
-      const index = 1;
-      machine = render();
-
-      machine.randomize = index;
-
-      expect(machine._randomize()).to.be.equal(index);
+      expect(machine.randomize).to.be.equal(randomize);
     });
   });
 

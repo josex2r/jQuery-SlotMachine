@@ -1,6 +1,6 @@
 # jQuery-SlotMachine [![Build Status](https://travis-ci.org/josex2r/jQuery-SlotMachine.svg?branch=master)](https://travis-ci.org/josex2r/jQuery-SlotMachine) [![Dependency Status](https://david-dm.org/josex2r/jQuery-SlotMachine.svg)](https://david-dm.org/josex2r/jQuery-SlotMachine) [![devDependency Status](https://david-dm.org/josex2r/jQuery-SlotMachine/dev-status.svg)](https://david-dm.org/josex2r/jQuery-SlotMachine#info=devDependencies)
 
-> :mega: jQuery is now not neccessary. The name it's just legacy
+> :mega: jQuery is not neccessary now! The name it's just legacy.
 
 A simple, and lightweight piece of code to make slot machine animation effect.
 It also exports a js wrapper to allow the usage with jQuery.
