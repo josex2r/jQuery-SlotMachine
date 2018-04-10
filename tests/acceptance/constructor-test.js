@@ -31,12 +31,6 @@ describe('Constructor', () => {
     expect(machine.element.style.overflow).to.be.equal('hidden');
   });
 
-  it('has settings', () => {
-    machine = render();
-
-    expect(machine._settings).to.exist;
-  });
-
   [
     { active: 0, result: 0 },
     { active: 1, result: 1 },
@@ -89,13 +83,13 @@ describe('Constructor', () => {
     expect(runSpy).to.not.have.been.called;
   });
 
-  it('shuffles when auto is set to true', () => {
+  it('runs when auto is set to true', () => {
     machine = render({
       auto: true
     });
 
-    expect(shuffleSpy).to.have.been.called;
-    expect(runSpy).to.not.have.been.called;
+    expect(shuffleSpy).to.not.have.been.called;
+    expect(runSpy).to.have.been.called;
   });
 
   it('run auto when auto is set to number', () => {

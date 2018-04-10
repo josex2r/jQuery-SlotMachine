@@ -62,27 +62,6 @@ describe('Setters', () => {
     });
   });
 
-  describe('delay', () => {
-    it(`sets delay`, () => {
-      const delay = 1000;
-      machine = render();
-
-      machine.delay = delay;
-
-      expect(machine._delay).to.be.equal(delay / 1000);
-    });
-
-    it(`calls "_changeTransition" after setting the value`, () => {
-      const spy = sinon.spy();
-      machine = render();
-
-      machine._changeTransition = spy;
-      machine.delay = 1;
-
-      expect(spy).to.have.been.called;
-    });
-  });
-
   describe('transition', () => {
     it(`sets transition`, () => {
       const transition = 1000;
@@ -99,17 +78,6 @@ describe('Setters', () => {
       machine.transition = null;
 
       expect(machine._transition).to.be.equal('ease-in-out');
-    });
-
-    it(`calls "_changeTransition" after setting the value`, () => {
-      const transition = 1000;
-      const spy = sinon.spy();
-      machine = render();
-
-      machine._changeTransition = spy;
-      machine.transition = transition;
-
-      expect(spy).to.have.been.called;
     });
   });
 });
