@@ -21,6 +21,28 @@ Install the component using [Bower](http://bower.io/):
 bower install jquery-slotmachine --save
 ```
 
+## Example
+
+```html
+<div id="machine">
+  <div>Madrid</div>
+  <div>London</div>
+  <div>New York</div>
+  <div>Madrid</div>
+</div>
+
+<script>
+const el = document.querySelector('#machine');
+const machine = new SlotMachine(el, {
+  active: 1,
+  delay: 450,
+  auto: 1500
+});
+</script>
+```
+
+> Lookup the sourcecode of the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
+
 ## Usage
 
 Include the script located in *dist* folder:
