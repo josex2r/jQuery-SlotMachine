@@ -1,11 +1,116 @@
  @charset "utf-8";
 /* CSS Document */
 
-@import url(http://fonts.googleapis.com/css?family=Pathway+Gothic+One);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+/* @import url(http://fonts.googleapis.com/css?family=Pathway+Gothic+One); */
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+code {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: rgba(245, 245, 245, 0.7) !important;
+}
 
 .well {
-    background-color: rgba(245, 245, 245, 0.5);
+  padding: 25px;
+  background-color: rgba(245, 245, 245, 0.7);
+  border-radius: 5px;
 }
+
+.well p {
+  font-size:
+}
+
+/*
+ * Header
+ */
+header {
+  margin-top: 10px;
+  background-color: #DCD293;
+  border-bottom: 10px solid #66D4FF;
+  border-top: 20px dashed #A48E4E;
+  padding: 2em;
+  color:#333;
+  font-size: 25px;
+  text-align: center;
+}
+
+header a {
+  color: #6C5726;
+  font-weight: 700;
+}
+
+/*
+ * Airlines
+ */
+#plane {
+  width: 100%;
+  position: relative;
+  padding: 70px 0px;
+  border-bottom: 10px solid #B8312F;
+  border-top: 20px dotted #66D4FF;
+  background-color: rgb(0, 175, 225);
+  background-image: url('../img/plane.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+}
+
+#plane .content {
+  width: 100%;
+  float: left;
+  font-size: 50px;
+  font-weight: 300;
+  line-height: 42px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#plane .content, footer .content{
+  font-family: 'Pathway Gothic One';
+  font-size: 70px;
+  font-weight: 300;
+  line-height: 80px;
+}
+
+.badge {
+  color: white;
+  vertical-align: middle;
+}
+
+#planeMachine {
+  height: 67px;
+  overflow: hidden;
+  display: inline-block;
+  text-align: left;
+}
+
+.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .badge {
     font-size: 30px;
     background-color: rgb(0, 175, 225);
@@ -33,56 +138,12 @@ a:hover{
 .clear {
     clear: both;
 }
-html {
-    position: relative;
-    min-height: 100%;
-}
-body {
-}
-b{
-	font-weight: 600;
-}
+
 
 
 /* Titulos
 -------------------------------------------------------------------------*/
-h1{
-	width: 100%;
-	font-size: 40px;
-	margin-bottom: 25px;
-}
-h2{
-	color: #000000;
-    display: table-cell;
-    float: left;
-    font-size: 45px;
-    line-height: 40px;
-    margin: 0 0 50px;
-    text-align: center;
-    width: 100%;
-    font-weight: 300;
-}
-h2 span{
-	font-weight: 400;
-}
-h3{
-	float: left;
-	width: 100%;
-	margin: 0 0 20px 0;
-	font-size:40px;
-	font-family: 'Lato', 'sans-serif';
-	font-weight: 300;
-}
-h4{
-    display: table-cell;
-    float: left;
-    font-size: 35px;
-    line-height: 31px;
-    margin: 0 0 0;
-    text-align: center;
-    width: 100%;
-    font-weight: 400;
-}
+
 
 p.title{
 	color: #000000;
@@ -104,69 +165,6 @@ p.title{
     height: 10px;
     background-color: #A48E4E;
     top: 0px;
-}
-
-/*
- * Header
- */
-header {
-    margin-top: 10px;
-	background-color: #DCD293;
-    border-bottom: 10px solid #66D4FF;
-    border-top: 20px dotted #A48E4E;
-    padding: 25px;
-}
-
-header p {
-	color:#333;
-    font-size: 25px;
-    text-align: center;
-}
-
-header a {
-	color: #6C5726;
-    font-weight: 700;
-}
-
-/*
- * Airlines
- */
-#plane {
-	width: 100%;
-	position: relative;
-	padding: 70px 0px;
-    border-bottom: 10px solid #B8312F;
-    border-top: 20px dotted #66D4FF;
-    height: 400px;
-    background-color: rgb(0, 175, 225);
-    background-image: url('../img/plane.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-#plane .content{
-    float: left;
-    font-size: 50px;
-    font-weight: 300;
-    line-height: 42px;
-    margin-top: 30px;
-    text-align: center;
-    width: 100%;
-}
-
-#plane .content, footer .content{
-	font-family: 'Pathway Gothic One';
-    font-size: 70px;
-    font-weight: 300;
-    line-height: 80px;
-}
-
-#planeMachine {
-	width:520px;
-	height: 67px;
-	overflow: hidden;
-	display: inline-block;
-	text-align: left;
 }
 
 /*
