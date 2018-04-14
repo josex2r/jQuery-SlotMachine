@@ -99,11 +99,11 @@ $("#planeMachine").slotMachine({
 
 
     <div id="randomize">
-      <div class="content container" style="text-align: center;max-width: 900px;">
+      <div class="container">
         <h1>Randomize your stuff!</h1>
 
         <div class="row">
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine1" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -114,9 +114,10 @@ $("#planeMachine").slotMachine({
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
+            <div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
           </div>
 
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine2" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -127,9 +128,10 @@ $("#planeMachine").slotMachine({
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
+            <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
           </div>
 
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine3" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -140,65 +142,64 @@ $("#planeMachine").slotMachine({
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
-            <!--<div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
-              <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
-              <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>-->
+            <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
+          </div>
+        
+          <div class="btn-group btn-group-justified btn-group-randomize" role="group">
+            <button id="ranomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</button>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-10 offset-sm-1">
+            <pre><code>const btn = document.querySelector('#ranomizeButton');
+const results = {
+  machine1: document.querySelector('#machine1Result'),
+  machine2: document.querySelector('#machine2Result'),
+  machine3: document.querySelector('#machine3Result')
+};
+const el1 = document.querySelector('#machine1');
+const el2 = document.querySelector('#machine2');
+const el3 = document.querySelector('#machine3');
+const machine1 = new SlotMachine(el1, { active: 0 });
+const machine2 = new SlotMachine(el2, { active: 1 });
+const machine3 = new SlotMachine(el3, { active: 2 });
 
-        <div>
-          <div class="btn-group btn-group-justified btn-group-randomize" role="group">
-            <div id="ranomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</div>
+function onComplete(active){
+  results[this.element.id].innerText = `Index: ${this.active}`;
+}
+
+btn.addEventListener('click', () => {
+  machine1.shuffle(5, onComplete);
+  setTimeout(() => machine2.shuffle(5, onComplete), 500);
+  setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+});</code></pre>
           </div>
         </div>
       </div>
     </div>
     <script>
-$(document).ready(function(){
-  var machine1 = $("#machine1").slotMachine({
-  active	: 0,
-    delay	: 500
-});
+      const btn = document.querySelector('#ranomizeButton');
+      const results = {
+        machine1: document.querySelector('#machine1Result'),
+        machine2: document.querySelector('#machine2Result'),
+        machine3: document.querySelector('#machine3Result')
+      };
+      const el1 = document.querySelector('#machine1');
+      const el2 = document.querySelector('#machine2');
+      const el3 = document.querySelector('#machine3');
+      const machine1 = new SlotMachine(el1, { active: 0 });
+      const machine2 = new SlotMachine(el2, { active: 1 });
+      const machine3 = new SlotMachine(el3, { active: 2 });
 
-  var machine2 = $("#machine2").slotMachine({
-  active	: 1,
-    delay	: 500,
-    direction: 'down'
-});
+      function onComplete(active){
+        results[this.element.id].innerText = `Index: ${this.active}`;
+      }
 
-  var machine3 = $("#machine3").slotMachine({
-  active	: 2,
-    delay	: 500
-});
-
-  function onComplete(active){
-  switch(this.element.id){
-  case 'machine1':
-  $("#machine1Result").text("Index: "+this.active);
-  break;
-  case 'machine2':
-  $("#machine2Result").text("Index: "+this.active);
-  break;
-  case 'machine3':
-  $("#machine3Result").text("Index: "+this.active);
-  break;
-}
-}
-
-  $("#ranomizeButton").click(function(){
-
-  machine1.shuffle(5, onComplete);
-
-  setTimeout(function(){
-  machine2.shuffle(5, onComplete);
-}, 500);
-
-  setTimeout(function(){
-  machine3.shuffle(5, onComplete);
-}, 1000);
-
-})
-});
+      btn.addEventListener('click', () => {
+        machine1.shuffle(5, onComplete);
+        setTimeout(() => machine2.shuffle(5, onComplete), 500);
+        setTimeout(() => machine3.shuffle(5, onComplete), 1000);
+      });
     </script>
 
 

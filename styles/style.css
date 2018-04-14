@@ -12,6 +12,7 @@ code {
   border: 1px solid #eee;
   border-radius: 5px;
   background-color: rgba(245, 245, 245, 0.7) !important;
+  text-align: left;
 }
 
 .well {
@@ -51,7 +52,7 @@ header a {
   position: relative;
   padding: 70px 0px;
   border-bottom: 10px solid #B8312F;
-  border-top: 20px dotted #66D4FF;
+  border-top: 20px dashed #66D4FF;
   background-color: rgb(0, 175, 225);
   background-image: url('../img/plane.png');
   background-size: contain;
@@ -79,6 +80,8 @@ header a {
 .badge {
   color: white;
   vertical-align: middle;
+  font-size: 30px;
+  background-color: rgb(0, 175, 225);
 }
 
 #planeMachine {
@@ -86,6 +89,61 @@ header a {
   overflow: hidden;
   display: inline-block;
   text-align: left;
+}
+
+/*
+ * SlotMachine
+ */
+#randomize {
+    border-bottom: 10px solid rgb(72, 158, 48);
+    background-color: #EB6B56;
+    border-top: 20px dashed #B8312F;
+    text-align: center;
+    padding: 25px;
+}
+
+#randomize .row > div.col-sm-4 > div {
+  padding: 40px;
+  width: 180px;
+  height: 180px;
+  background: white;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}
+
+#randomize .row > div.col-xs-4 > div {
+    padding-top: 40px;
+    padding-left: 40px;
+    width: 175px;
+    height: 175px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.randomizeMachine {
+    width: 100px;
+    height: 100px;
+}
+
+.btn-group-randomize {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: auto;
+    margin-bottom: 15px;
+}
+
+.machineResult {
+  color: #fff;
+  text-align: center;
+  font-weight: 900;
+  height: 50px !important;
+  background: transparent !important;
+  font-size: 18px;
+  padding: 10px !important;
 }
 
 .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
@@ -111,10 +169,7 @@ header a {
 
 
 
-.badge {
-    font-size: 30px;
-    background-color: rgb(0, 175, 225);
-}
+
 
 
 
@@ -168,49 +223,10 @@ p.title{
 }
 
 /*
- * SlotMachine
- */
-#randomize {
-    height: 400px;
-    border-bottom: 10px solid rgb(72, 158, 48);
-    background-color: #EB6B56;
-    border-top: 20px dotted #B8312F;
-}
-
-#randomize .row > div.col-xs-4 {
-    padding-left: 35px;
-}
-
-#randomize .row > div.col-xs-4 > div {
-    padding-top: 40px;
-    padding-left: 40px;
-    width: 175px;
-    height: 175px;
-    background-color: #fff;
-    border-radius: 50%;
-    margin: auto;
-}
-
-.randomizeMachine {
-    width: 100px;
-    height: 100px;
-}
-
-.btn-group-randomize {
-    margin: 0 auto;
-    margin-top: 30px;
-    width: auto;
-}
-
-.btn-group-randomize div {
-    width: auto !important;
-}
-
-/*
  * Watch
  */
 #watch {
-    border-top: 20px dotted rgb(72, 158, 48);
+    border-top: 20px dashed rgb(72, 158, 48);
     border-bottom: 10px solid #195AC8;
     background-color: #46D265;
 }
@@ -265,7 +281,7 @@ p.title{
     background-color: #0F99CA;
     height: 450px;
 	border-bottom: 10px solid rgb(180, 75, 119);
-	border-top: 20px dotted #195AC8;
+	border-top: 20px dashed #195AC8;
 }
 
 #triky .row > div {
@@ -291,7 +307,7 @@ p.title{
  * Casino
  */
 #casino {
-    border-top: 20px dotted rgb(180, 75, 119);
+    border-top: 20px dashed rgb(180, 75, 119);
     border-bottom: 10px solid #A48E4E;
     background-color: rgb(240, 150, 150);
 }
@@ -350,7 +366,7 @@ p.title{
 footer{
 	width:100%;
 	background-color: #6C5726;
-	border-top: 20px dotted #A48E4E;
+	border-top: 20px dashed #A48E4E;
     height: 180px;
     padding-top: 40px;
     text-align: center;
