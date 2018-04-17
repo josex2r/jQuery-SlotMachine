@@ -74,14 +74,20 @@ const planeMachine = document.querySelector('#planeMachine');
 new SlotMachine(planeMachine, {
   active: 1,
   delay: 450,
-  auto: 1500
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
 
 // Using jQuery
-$('#planeMachine').slotMachine({
+$('#planeMachine2').slotMachine({
   active: 1,
   delay: 450,
-  auto: 1500
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
             </script>
           </div>
@@ -363,7 +369,10 @@ btnStop.addEventListener('click', () => {
 $("#textMachine").slotMachine({
   active: 1,
   delay: 450,
-  auto: 1500
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
         </script>
       </div>
