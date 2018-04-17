@@ -25,9 +25,71 @@ code {
   font-size:
 }
 
+.btn-group-justified {
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  padding-bottom: 25px;
+}
+
+.container {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+a{
+  color: #ccd500;
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
+  color: #a9b119;
+}
+
+.slotMachine .slot{
+  height:100px;
+  background-position-x: 55%;
+  background-repeat: no-repeat;
+}
+
+.slot1 {
+  background-image: url("../img/slot1.png");
+}
+
+.slot2 {
+  background-image: url("../img/slot2.png");
+}
+
+.slot3 {
+  background-image: url("../img/slot3.png");
+}
+
+.slot4 {
+  background-image: url("../img/slot4.png");
+}
+
+.slot5 {
+  background-image: url("../img/slot5.png");
+}
+
+.slot6 {
+  background-image: url("../img/slot6.png");
+}
+
 /*
  * Header
  */
+.header-line {
+  width: 100%;
+  position: absolute;
+  height: 10px;
+  background-color: #A48E4E;
+  top: 0px;
+}
+
 header {
   margin-top: 10px;
   background-color: #DCD293;
@@ -50,7 +112,6 @@ header a {
 #plane {
   width: 100%;
   position: relative;
-  padding: 70px 0px;
   border-bottom: 10px solid #B8312F;
   border-top: 20px dashed #66D4FF;
   background-color: rgb(0, 175, 225);
@@ -95,11 +156,9 @@ header a {
  * SlotMachine
  */
 #randomize {
-    border-bottom: 10px solid rgb(72, 158, 48);
-    background-color: #EB6B56;
-    border-top: 20px dashed #B8312F;
-    text-align: center;
-    padding: 25px;
+  border-bottom: 10px solid rgb(72, 158, 48);
+  background-color: #EB6B56;
+  border-top: 20px dashed #B8312F;
 }
 
 #randomize .row > div.col-sm-4 > div {
@@ -115,25 +174,24 @@ header a {
 }
 
 #randomize .row > div.col-xs-4 > div {
-    padding-top: 40px;
-    padding-left: 40px;
-    width: 175px;
-    height: 175px;
-    background-color: #fff;
-    border-radius: 50%;
-    margin: auto;
+  padding-top: 40px;
+  padding-left: 40px;
+  width: 175px;
+  height: 175px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: auto;
 }
 
 .randomizeMachine {
-    width: 100px;
-    height: 100px;
+  width: 100px;
+  height: 100px;
 }
 
-.btn-group-randomize {
-    margin: 0 auto;
-    margin-top: 30px;
-    width: auto;
-    margin-bottom: 15px;
+#randomize .btn-group {
+  margin-top: 30px;
+  width: auto;
+  margin-bottom: 15px;
 }
 
 .machineResult {
@@ -146,290 +204,135 @@ header a {
   padding: 10px !important;
 }
 
-.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-a{
-	color: #ccd500;
-	text-decoration: none;
-}
-a:hover{
-	text-decoration: underline;
-	color: #a9b119;
-}
-.clear {
-    clear: both;
-}
-
-
-
-/* Titulos
--------------------------------------------------------------------------*/
-
-
-p.title{
-	color: #000000;
-    display: table-cell;
-    float: left;
-    font-size: 45px;
-    line-height: 40px;
-    margin: 0 0 50px;
-    text-align: center;
-    width: 100%;
-    font-weight: 300;
-}
-
-.grey {	color:#444;}
-
-.header-line {
-    width: 100%;
-    position: absolute;
-    height: 10px;
-    background-color: #A48E4E;
-    top: 0px;
-}
-
 /*
  * Watch
  */
 #watch {
-    border-top: 20px dashed rgb(72, 158, 48);
-    border-bottom: 10px solid #195AC8;
-    background-color: #46D265;
+  border-top: 20px dashed rgb(72, 158, 48);
+  border-bottom: 10px solid #195AC8;
+  background-color: #46D265;
 }
 
 #watch h1 {
-    margin: 0px;
+  margin: 0px;
 }
 
-#watch .content:nth-child(1) {
-    text-align: center;
-    background: url('../img/watch.png') no-repeat 50% 80px;
-    height: 500px;
+#watch .small {
+  text-align: center;
+  background: url('../img/watch.png') no-repeat 50% 50%;
+  height: 300px;
 }
 
-#watch .content > div {
-    clear:both;
-    padding-top: 10px;
-    width: 300px;
-    margin: 0 auto;
+#watch1 {
+  margin-left: calc(50% - 42px);
+  transform: translateY(115px);
+  width: 80px;
+  height: 80px;
 }
 
-#watch .content > div.small {
-    padding-top: 190px;
-    width: 60px;
+#watch1 .slotMachineContainer > div {
+  color: #fff;
+  height: 80px;
+  width: 80px;
+  font-size: 64px;
 }
 
-#watch1 > div {
-    color: #fff;
-    height: 55px;
-    width: 55px;
-    font-size: 55px;
+#watch .btn-group .btn {
+  border: none;
+  background-color: rgb(72, 158, 48);
 }
 
-.btn-group-watch {
-    margin-top: 120px;
-}
-
-.btn-group-watch .btn {
-    border: none;
-    background-color: rgb(72, 158, 48);
-}
-.btn-group-watch .btn:hover, .btn-group-watch .btn:focus {
-    background-color: rgb(72, 158, 48);
+#watch .btn-group .btn:hover, .btn-group .btn:focus {
+  background-color: rgb(72, 158, 48);
 }
 
 /*
  * Triky
  */
-#triky {
-    text-align: center;
-    background: url('../img/triky.jpg') no-repeat right 40px;
-    background-color: #0F99CA;
-    height: 450px;
-	border-bottom: 10px solid rgb(180, 75, 119);
-	border-top: 20px dashed #195AC8;
-}
-
-#triky .row > div {
-    background-color: #fff;
-    width: 225px;
-    height: 225px;
-    border-radius: 50%;
-    padding-top: 40px;
-    padding-left: 35px;
-    left: -35px;
-}
+ #triky {
+   background: url(../img/triky.jpg) no-repeat right 130px;
+   background-color: #0F99CA;
+   border-bottom: 10px solid rgb(180, 75, 119);
+   border-top: 20px dashed #195AC8;
+   background-position-x: calc(100% + 40px)
+ }
 
 #triky1 {
-    width: 150px;
-    height: 150px;
-}
-
-.btn-group-triky {
-    margin-top: 60px;
+  background-color: #fff;
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+  padding-top: 4px;
 }
 
 /*
  * Casino
  */
 #casino {
-    border-top: 20px dashed rgb(180, 75, 119);
-    border-bottom: 10px solid #A48E4E;
-    background-color: rgb(240, 150, 150);
-}
-
-#casino h1 {
-    margin: 0px;
+  border-top: 20px dashed rgb(180, 75, 119);
+  border-bottom: 10px solid #A48E4E;
+  background-color: rgb(240, 150, 150);
 }
 
 #casino .content:nth-child(1) {
-    text-align: center;
-    background: url('../img/machine.png') no-repeat 50% 80px;
-    height: 580px;
+  text-align: center;
+  background: url('../img/machine.png') no-repeat 50% 80px;
+  background-position-x: calc(50% + 30px);
+  min-height: 580px;
 }
 
 #casino .content > div {
-    clear:both;
-    padding-top: 200px;
-    width: 300px;
-    margin: 0 auto;
+  padding-top: 165px;
+  width: 300px;
+  margin: 0 auto;
+  transform: translateX(30px);
 }
 
 .machineContainer{
-	background-color: #000;
-	padding: 5px 1px 5px 1px;
-	overflow: hidden;
-	height: 135px;
+  padding: 5px 1px 5px 1px;
+  height: 135px;
 }
 
 .slotMachine{
-	width: 32.333333%;
-	border: 5px solid #000;
-	height: 100px;
-	padding: 0px;
-	overflow: hidden;
-	display: inline-block;
-	text-align: center;
-	background-color: #ffffff;
+  width: 36.333333%;
+  border: 5px solid #CF5178;
+  height: 100px;
+  display: inline-block;
 }
 
-.btn-group-casino {
-    margin-top: 150px;
-    margin-left: -32px;
+#casino .btn-group {
+  margin-top: 150px;
+  transform: translateX(-25px);
 }
 
-.btn-group-casino .btn {
-    border: none;
-    background-color: rgb(209, 79, 119);
+#casino .btn-group .btn {
+  border: none;
+  background-color: rgb(209, 79, 119);
 }
-.btn-group-casino .btn:hover, .btn-group-casino .btn:focus {
-    background-color: rgb(180, 75, 119);
+
+#casino .btn-group .btn:hover, .btn-group .btn:focus {
+  background-color: rgb(180, 75, 119);
 }
 
 /*
  * Footer
  */
 footer{
-	width:100%;
-	background-color: #6C5726;
-	border-top: 20px dashed #A48E4E;
-    height: 180px;
-    padding-top: 40px;
-    text-align: center;
-    color: #DCD293;
+  width:100%;
+  background-color: #6C5726;
+  border-top: 20px dashed #A48E4E;
+  height: 180px;
+  padding-top: 40px;
+  text-align: center;
+  color: #DCD293;
 }
 
 #textMachine {
-	width:520px;
-	height: 67px;
-	overflow: hidden;
-	display: inline-block;
-	text-align: left;
+  width:520px;
+  height: 67px;
+  overflow: hidden;
+  display: inline-block;
+  text-align: left;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.machineResult{
-	color:#fff;
-	text-align:center;
-	font-weight: 900;
-}
-.noBorder{
-	border:none !important;
-	background: transparent !important;
-}
-.slotMachine .slot{
-	height:100px;
-	background-position-x: 55%;
-	background-repeat: no-repeat;
-}
-
-.slot1 {
-	background-image: url("../img/slot1.png");
-}
-
-.slot2 {
-	background-image: url("../img/slot2.png");
-}
-
-.slot3 {
-	background-image: url("../img/slot3.png");
-}
-
-.slot4 {
-	background-image: url("../img/slot4.png");
-}
-
-.slot5 {
-	background-image: url("../img/slot5.png");
-}
-
-.slot6 {
-	background-image: url("../img/slot6.png");
-}
+.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
