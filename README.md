@@ -28,7 +28,6 @@ bower install jquery-slotmachine --save
   <div>Madrid</div>
   <div>London</div>
   <div>New York</div>
-  <div>Madrid</div>
 </div>
 
 <script>
@@ -41,7 +40,7 @@ const machine = new SlotMachine(el, {
 </script>
 ```
 
-> Lookup the sourcecode of the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
+> Lookup the sourcecode in the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
 
 ## Usage
 
