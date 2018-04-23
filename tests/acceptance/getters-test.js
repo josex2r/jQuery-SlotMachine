@@ -114,7 +114,7 @@ describe('Getters', () => {
           direction: testCase.direction
         });
 
-        expect(machine.direction).to.include(testCase.result);
+        expect(machine.bounds).to.include(testCase.result);
       });
     });
   });

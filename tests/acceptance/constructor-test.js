@@ -3,16 +3,16 @@
 describe('Constructor', () => {
   let machine;
   let shuffleSpy;
-  let autoSpy;
+  let runSpy;
 
   beforeEach(() => {
     shuffleSpy = sinon.spy(SlotMachine.prototype, 'shuffle');
-    autoSpy = sinon.spy(SlotMachine.prototype, 'auto');
+    runSpy = sinon.spy(SlotMachine.prototype, 'run');
   });
 
   afterEach(() => {
     shuffleSpy.restore();
-    autoSpy.restore();
+    runSpy.restore();
     if (machine) {
       machine.element.remove();
     }
@@ -29,12 +29,6 @@ describe('Constructor', () => {
     machine = render();
 
     expect(machine.element.style.overflow).to.be.equal('hidden');
-  });
-
-  it('has settings', () => {
-    machine = render();
-
-    expect(machine.settings).to.exist;
   });
 
   [
@@ -69,7 +63,7 @@ describe('Constructor', () => {
         direction: direction
       });
 
-      expect(machine.direction.key).to.be.equal(direction);
+      expect(machine.direction).to.be.equal(direction);
     });
   });
 
@@ -79,23 +73,23 @@ describe('Constructor', () => {
       randomize
     });
 
-    expect(machine._randomize).to.be.equal(randomize);
+    expect(machine.randomize).to.be.equal(randomize);
   });
 
   it('does not auto start', () => {
     machine = render();
 
     expect(shuffleSpy).to.not.have.been.called;
-    expect(autoSpy).to.not.have.been.called;
+    expect(runSpy).to.not.have.been.called;
   });
 
-  it('shuffles when auto is set to true', () => {
+  it('runs when auto is set to true', () => {
     machine = render({
       auto: true
     });
 
-    expect(shuffleSpy).to.have.been.called;
-    expect(autoSpy).to.not.have.been.called;
+    expect(shuffleSpy).to.not.have.been.called;
+    expect(runSpy).to.have.been.called;
   });
 
   it('run auto when auto is set to number', () => {
@@ -104,6 +98,6 @@ describe('Constructor', () => {
     });
 
     expect(shuffleSpy).to.not.have.been.called;
-    expect(autoSpy).to.have.been.called;
+    expect(runSpy).to.have.been.called;
   });
 });

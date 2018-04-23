@@ -1,159 +1,167 @@
 # jQuery-SlotMachine [![Build Status](https://travis-ci.org/josex2r/jQuery-SlotMachine.svg?branch=master)](https://travis-ci.org/josex2r/jQuery-SlotMachine) [![Dependency Status](https://david-dm.org/josex2r/jQuery-SlotMachine.svg)](https://david-dm.org/josex2r/jQuery-SlotMachine) [![devDependency Status](https://david-dm.org/josex2r/jQuery-SlotMachine/dev-status.svg)](https://david-dm.org/josex2r/jQuery-SlotMachine#info=devDependencies)
 
-A simple, lightweight jQuery plugin to make slot machine animation effect.
+> :mega: jQuery is not neccessary now! The name it's just legacy.
 
-[Check the example page!](http://josex2r.github.io/jQuery-SlotMachine/)
+A simple, and lightweight piece of code to make slot machine animation effect.
+It also exports a js wrapper to allow the usage with jQuery.
+
+To preview what you can do [check the example page!](http://josex2r.github.io/jQuery-SlotMachine/)
 
 ## Installation
 
+Install the component using [npm](https://www.npmjs.com/package/jquery-slotmachine):
+
+```bash
+npm install jquery-slotmachine --save
+```
+
 Install the component using [Bower](http://bower.io/):
 
-```sh
-$ bower install jquery-slotmachine --save
+```bash
+bower install jquery-slotmachine --save
 ```
 
-Include the script located in *dist* folder *after* the jQuery library:
+## Example
 
 ```html
-<script src="/path/to/jquery.slotmachine.min.js"></script>
+<div id="machine">
+  <div>Madrid</div>
+  <div>London</div>
+  <div>New York</div>
+</div>
+
+<script>
+const el = document.querySelector('#machine');
+const machine = new SlotMachine(el, {
+  active: 1,
+  delay: 450,
+  auto: 1500
+});
+</script>
 ```
+
+> Lookup the sourcecode in the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
 
 ## Usage
 
-Creating the machine:
+Include the script located in *dist* folder:
 
-```javascript
-var machine = $(foo).slotMachine( params );
+```html
+<script src="/path/to/slotmachine.min.js"></script>
 ```
 
-Get machine instance:
+Then you can make it work calling the lib in your app:
 
 ```javascript
-var machine = $(foo).slotMachine();
+const element = document.getElementById('my-machine');
+const machine = new SlotMachine(element, { /* options */ });
 ```
 
-Shuffle:
+If you preffer jQuery style then import the wrapper *after* the jQuery library:
+
+```html
+<script src="/path/to/jquery.min.js"></script>
+<script src="/path/to/jslotmachine.min.js"></script>
+<script src="/path/to/jquery.slotmachine.min.js"></script>
+```
 
 ```javascript
-machine.shuffle( repeat, onStopCallback ); //No args to make rotate infinitely, `repeat` is optional
+$(document).ready(function(){
+  $('#my-machine').slotMachine({ /* options */ });
+});
 ```
 
-Change the selected element:
+### Settings
+
+Use the first argument of the function to pass an object with the options:
 
 ```javascript
-machine.prev(); //Previous element
-
-machine.next(); //Next element
+const machine = new SlotMachine(element, {
+  active: 2,
+  auto: true
+});
 ```
 
-Stop the machine:
+| Name           | Type       | Default       | Description                                                                         |
+|----------------|------------|---------------|-------------------------------------------------------------------------------------|
+| **active**     | `Number`   | `0`           | The initial visible element (0 means the first one)                                 |
+| **delay**      | `Number`   | `200`         | Duration (in ms) of each spin                                                       |
+| **auto**       | `Boolean`  | `false`       | Runs the carousel mode when creating the machine                                    |
+| **spins**      | `Number`   | `5`           | Number of spins after stop in carousel mode                                         |
+| **randomize**  | `Function` | `null`        | Function (returns number) that is going to be called to set the next active element |
+| **onComplete** | `Function` | `null`        | Callback after each spin in carousel mode                                           |
+| **inViewport** | `Boolean`  | `true`        | Only spin when the machine is inside the viewport                                   |
+| **direction**  | `String`   | `up`          | The spin direction (possible values are `up` and `down`)                            |
+| **transition** | `String`   | `ease-in-out` | The CSS transition                                                                  |
+
+### Properties
+
+- `machine.nextActive`: Get the next active element (only while shuffling).
+- `machine.nextIndex`: Next element index according to the current direction.
+- `machine.prevIndex`: Prev element index according to the current direction.
+- `machine.random`: Get rando index between the machine bounds.
+- `machine.running`: Check if the machine is running.
+- `machine.stopping`: Check if the machine is stopping.
+- `machine.visible`: Check if the machine is visible.
+- `machine.visibleTile`: Get the current visible element in the machine viewport.
+- `machine.active`: Alias to the `active` setting.
+- `machine.randomize`: Alias to the `randomize` setting.
+- `machine.direction`: Alias to the `direction` setting.
+- `machine.transition`: Alias to the `transition` setting.
+
+### Methods
+
+`machine.shuffle(spins, callback)`: Starts spining the machine.
+  - spins (`Number`): Optionally set the number of spins.
+  - callback(`Function`): Callback triggered when the machine stops.
 
 ```javascript
-machine.stop();
+// Do a single spin
+machine.shuffle();
+// Do a single spin and then shows an alert
+machine.shuffle(() => alert('Stop!'));
+// Do 5 spins before stop
+machine.shuffle(5);
+// Do 7 spins and then showing an alert
+machine.shuffle(7, () => alert('Stop!'));
+// "Infinite" spins
+machine.shuffle(9999999); // O_O
 ```
 
-Get selected element:
+`machine.stop(callback)`: Manually stops the machine.
+  - callback(`Function`): Callback triggered when the machine stops.
+
+For example, start spinning the machine and stop it after pressing a button:
 
 ```javascript
-machine.active; //Current element index
+machine.shuffle(99999);
+// Add the button listener
+myButton.addEventListener('click', () => {
+  // Stop spinning
+  machine.stop();
+});
 ```
 
-Get the selected element if shuffling:
+`machine.next()`/`machine.prev()`: Spin to the next/previous element.
 
 ```javascript
-machine.futureActive; //Future active element index
+// Spin to the previous element
+machine.prev();
+// Spin to the next element
+machine.next();
 ```
 
-Check if the machine is running:
+`machine.run()`: Starts the preview mode, it will spin/stop given a delay (more info in options).
 
 ```javascript
-machine.running; //Returns boolean
+machine.run();
 ```
 
-Check if the machine is stopping:
-
-```javascript
-machine.stopping; //Returns boolean
-```
-
-Check if the machine is visible:
-
-```javascript
-machine.visible; //Returns boolean
-```
-
-Change spin result, if the returned value is out of bounds, the element will be randomly choosen:
-
-```javascript
-machine.randomize = foo; //foo must be a function (should return int) or an int
-```
-
-Change spin direction, machine must not be running:
-
-```javascript
-machine.direction = direction; //direction must be a String ('up' || 'down')
-```
-
-Destroy the machine. It will be useful when you want to reuse DOM:
+`machine.run()`: Destroys the machine. It will be useful when you want to reuse DOM.
 
 ```javascript
 machine.destroy();
 ```
-
-## Params
-
-Params must be an object, optionally containing the next parammeters:
-
-#### active
-
-Set the first element
-
-    active: 0
-
-#### delay
-
-Set spin animation time
-
-    delay: 200
-
-#### auto
-
-Pass an int as miliseconds to make the machine auto rotate
-
-    auto: false
-
-#### spins
-
-The number of spins when auto is enabled
-
-    spins: false
-
-#### stopHidden
-
-Stop animation if the element is above or below the screen
-
-    stopHidden: true
-
-#### randomize
-
-Pass a function to select your own random element. This function must return an integer between 0 (first element) and max number of elements.
-
-    randomize: function(activeElementIndex){} //activeElementIndex = current selected index
-
-Example (this machine always shows first element):
-
-```javascript
-$('#foo').slotMachine({
-	randomize : function(activeElementIndex){
-		return 0;
-	}
-});
-```
-#### direction
-
-Animation direction ('up' || 'down')
-
-    direction: 'up'
 
 ## Authors
 

@@ -6,60 +6,88 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2.0">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="../styles/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="../dist/jquery.slotmachine.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="./dist/jquery.slotmachine.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" type="text/css" />
 
-    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../dist/slotmachine.js"></script>
-    <script type="text/javascript" src="../dist/jquery.slotmachine.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="./dist/slotmachine.js"></script>
+    <script src="./dist/jquery.slotmachine.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <div class="header-line"></div>
 
     <!-- Badge -->
-    <a href="https://github.com/josex2r/jQuery-SlotMachine"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+    <a href="https://github.com/josex2r/jQuery-SlotMachine"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <a href="http://github.com/josex2r/jQuery-SlotMachine" class="github-corner" aria-label="View source on GitHub">
+      <svg width="80" height="80" viewBox="0 0 250 250" style="position: absolute; top: 0px; right: 0px; border: 0px;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" fill="#151513"></path>
+        <path class="octo-arm" d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="#ffffff" style="transform-origin: 130px 106px;"></path>
+        <path class="octo-body" d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="#ffffff"></path>
+      </svg>
+    </a>
 
 
     <!-- Intro -->
     <header>
-      <p>Shuffle your 'divs', randomize your results or make an slide, <br/>
-      <a href="https://github.com/josex2r/jQuery-SlotMachine">jQuery-SlotMachine</a> is not a simple animation plugin</p>
+      <p>Shuffle your elements, randomize your results or make an slide...<br/>
+      <a href="https://github.com/josex2r/jQuery-SlotMachine">jQuery-SlotMachine</a> is not a simple animation plugin.</p>
     </header>
 
 
     <!-- Flight example -->
-    <div id="plane" class="container">
-      <div class="row content">
-        <div class="col-md-12 col-lg-8 col-lg-offset-2">
-          <div class="well">
-            <div>Spin your elements!</div>
+    <div id="plane">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
+            <pre><code id="codeBlock1"></code></pre>
+          </div>
+          <div class="col-sm-10 col-md-6 offset-sm-1 offset-md-0">
+            <div class="well content">
+              <p>Travel to...</p>
 
-            <div id="planeMachine">
-              <div class="text-center">
-                Madrid <span class="badge">46 <span class="glyphicon glyphicon-euro"></span></span>
-              </div>
-              <div class="text-center">
-                London <span class="badge">30 <span class="glyphicon glyphicon-euro"></span></span>
-              </div>
-              <div class="text-center">
-                New York <span class="badge">237 <span class="glyphicon glyphicon-euro"></span></span>
-              </div>
-              <div class="text-center">
-                Matrix <span class="badge">undefined <span class="glyphicon glyphicon-euro"></span></span>
+              <div id="planeMachine">
+                <div class="text-center">
+                  Madrid <span class="badge">46 <i class="fas fa-euro-sign"></i></span>
+                </div>
+                <div class="text-center">
+                  London <span class="badge">30 <i class="fas fa-pound-sign"></i></span>
+                </div>
+                <div class="text-center">
+                  NY <span class="badge">23 <i class="fas fa-dollar-sign"></i></span>
+                </div>
+                <div class="text-center">
+                  Matrix <span class="badge">99 <i class="fas fa-money-bill-alt"></i></span>
+                </div>
               </div>
             </div>
 
-            <script>
-$(document).ready(function(){
-  $("#planeMachine").slotMachine({
-  active	: 1,
-    delay	: 450,
-    auto	: 1500
+            <script id="codeScript1">
+const planeMachine = document.querySelector('#planeMachine');
+new SlotMachine(planeMachine, {
+  active: 1,
+  delay: 450,
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
+
+// Using jQuery
+$('#planeMachine2').slotMachine({
+  active: 1,
+  delay: 450,
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
             </script>
           </div>
@@ -69,11 +97,11 @@ $(document).ready(function(){
 
 
     <div id="randomize">
-      <div class="content container" style="text-align: center;max-width: 900px;">
+      <div class="container">
         <h1>Randomize your stuff!</h1>
 
         <div class="row">
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine1" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -84,9 +112,10 @@ $(document).ready(function(){
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
+            <div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
           </div>
 
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine2" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -97,9 +126,10 @@ $(document).ready(function(){
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
+            <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
           </div>
 
-          <div class="col-xs-4">
+          <div class="col-sm-4">
             <div>
               <div id="machine3" class="randomizeMachine">
                 <div><img src="img/slot1.png" /></div>
@@ -110,113 +140,93 @@ $(document).ready(function(){
                 <div><img src="img/slot6.png" /></div>
               </div>
             </div>
-            <!--<div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
-              <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
-              <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>-->
+            <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
+          </div>
+        
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="randomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</button>
           </div>
         </div>
-
-        <div>
-          <div class="btn-group btn-group-justified btn-group-randomize" role="group">
-            <div id="ranomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</div>
+        <div class="row">
+          <div class="col-sm-10 offset-sm-1">
+            <pre><code id="codeBlock2"></code></pre>
           </div>
         </div>
       </div>
     </div>
-    <script>
-$(document).ready(function(){
-  var machine1 = $("#machine1").slotMachine({
-  active	: 0,
-    delay	: 500
-});
+    <script id="codeScript2">
+const btn = document.querySelector('#randomizeButton');
+const results = {
+  machine1: document.querySelector('#machine1Result'),
+  machine2: document.querySelector('#machine2Result'),
+  machine3: document.querySelector('#machine3Result')
+};
+const el1 = document.querySelector('#machine1');
+const el2 = document.querySelector('#machine2');
+const el3 = document.querySelector('#machine3');
+const machine1 = new SlotMachine(el1, { active: 0 });
+const machine2 = new SlotMachine(el2, { active: 1 });
+const machine3 = new SlotMachine(el3, { active: 2 });
 
-  var machine2 = $("#machine2").slotMachine({
-  active	: 1,
-    delay	: 500,
-    direction: 'down'
-});
-
-  var machine3 = $("#machine3").slotMachine({
-  active	: 2,
-    delay	: 500
-});
-
-  function onComplete(active){
-  switch(this.element.id){
-  case 'machine1':
-  $("#machine1Result").text("Index: "+this.active);
-  break;
-  case 'machine2':
-  $("#machine2Result").text("Index: "+this.active);
-  break;
-  case 'machine3':
-  $("#machine3Result").text("Index: "+this.active);
-  break;
-}
+function onComplete(active){
+  results[this.element.id].innerText = `Index: ${this.active}`;
 }
 
-  $("#ranomizeButton").click(function(){
-
+btn.addEventListener('click', () => {
   machine1.shuffle(5, onComplete);
-
-  setTimeout(function(){
-  machine2.shuffle(5, onComplete);
-}, 500);
-
-  setTimeout(function(){
-  machine3.shuffle(5, onComplete);
-}, 1000);
-
-})
+  setTimeout(() => machine2.shuffle(5, onComplete), 500);
+  setTimeout(() => machine3.shuffle(5, onComplete), 1000);
 });
     </script>
 
 
     <!-- Watch example -->
-    <div id="watch" style="padding-top:50px;">
-      <div class="content">
+    <div id="watch">
+      <div class="container">
         <h1>Slide the items</h1>
-
-        <div class="small">
-          <div id="watch1">
-            <div><span class="glyphicon glyphicon-volume-up"></span></div>
-            <div><span class="glyphicon glyphicon-envelope"></span></div>
-            <div><span class="glyphicon glyphicon-off"></span></div>
-            <div><span class="glyphicon glyphicon-music"></span></div>
-            <div><span class="glyphicon glyphicon-map-marker"></span></div>
+        <div class="row">
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
+            <pre><code id="codeBlock3"></code></pre>
           </div>
-        </div>
 
-        <div>
-          <div class="btn-group btn-group-justified btn-group-watch" role="group">
-            <div id="slotMachineButtonPrev" type="button" class="btn btn-primary btn-lg">Prev</div>
-            <div id="slotMachineButtonNext" type="button" class="btn btn-primary btn-lg">Next</div>
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
+            <div class="small">
+              <div id="watch1">
+                <div><i class="fas fa-volume-up"></i></div>
+                <div><i class="fas fa-envelope"></i></div>
+                <div><i class="fas fa-wifi"></i></div>
+                <div><i class="fas fa-music"></i></div>
+                <div><i class="fas fa-map"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="watchBtnPrev" type="button" class="btn btn-primary btn-lg">Prev</button>
+            <button id="watchBtnNext" type="button" class="btn btn-primary btn-lg">Next</button>
           </div>
         </div>
       </div>
-      <div class="clearfix"></div>
     </div>
-    <script>
-$(document).ready(function(){
-  var watch = $("#watch1").slotMachine();
+    <script id="codeScript3">
+const btnNext = document.querySelector('#watchBtnNext');
+const btnPrev = document.querySelector('#watchBtnPrev');
+const el = document.querySelector('#watch1');
+const watch = new SlotMachine(el, {});
 
-  $("#slotMachineButtonPrev").click(function(){
-  watch.prev();
-});
-
-  $("#slotMachineButtonNext").click(function(){
-  watch.next();
-});
-});
+btnPrev.addEventListener('click', () => watch.prev());
+btnNext.addEventListener('click', () => watch.next());
     </script>
 
-
+    <!-- triky -->
     <div id="triky">
-      <div class="content" style="text-align: center">
+      <div class="container">
         <h1>Triky your results</h1>
-
         <div class="row">
-          <div style="margin: auto;">
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
+            <pre><code id="codeBlock4"></code></pre>
+          </div>
+
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
             <div id="triky1">
               <div>
                 <img src="img/cookie.png" />
@@ -231,31 +241,23 @@ $(document).ready(function(){
                 <img src="img/food3.jpg" />
               </div>
             </div>
-            <div>
-              <div class="btn-group btn-group-justified btn-group-triky" role="group">
-                <div id="trikyShuffle" type="button" class="btn btn-primary btn-lg">Gimme cookies!</div>
-              </div>
-            </div>
+          </div>
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="trikyShuffle" type="button" class="btn btn-primary btn-lg">Gimme cookies!</button>
           </div>
         </div>
       </div>
-
-      <div class="clearfix"></div>
     </div>
-    <script>
-$(document).ready(function(){
-  //Fake machine 2 - auto
-  var triky = $("#triky1").slotMachine({
-  active	: 2,
-    randomize: function(){
-  return 0;
-}
+    <script id="codeScript4">
+const btnTriky = document.querySelector('#trikyShuffle');
+const elTriky = document.querySelector('#triky1');
+const triky = new SlotMachine(elTriky, {
+  randomize() {
+    return 0;
+  }
 });
 
-  $("#trikyShuffle").click(function(){
-  triky.shuffle(3);
-});
-});
+btnTriky.addEventListener('click', () => triky.shuffle(5));
     </script>
 
 
@@ -292,55 +294,66 @@ $(document).ready(function(){
             <div class="slot slot6"></div>
           </div>
 
-          <div class="btn-group btn-group-justified btn-group-casino" role="group">
-            <div id="slotMachineButtonShuffle" type="button" class="btn btn-primary btn-lg">Shuffle!</div>
-            <div id="slotMachineButtonStop" type="button" class="btn btn-primary btn-lg">Stop!</div>
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="casinoShuffle" type="button" class="btn btn-primary btn-lg">Shuffle!</button>
+            <button id="casinoStop" type="button" class="btn btn-primary btn-lg">Stop!</button>
           </div>
         </div>
-
       </div>
-      <div class="clearfix"></div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
+            <pre><code id="codeBlock5"></code></pre>
+          </div>
+
+          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-0">
+            <pre><code id="codeBlock6"></code></pre>
+          </div>
+        </div>
+      </div>
     </div>
-    <script>
-$(document).ready(function(){
-  var machine4 = $("#casino1").slotMachine({
-  active	: 0,
-    delay	: 500
+    <script id="codeScript5">
+let count = 0;
+const btnShuffle = document.querySelector('#casinoShuffle');
+const btnStop = document.querySelector('#casinoStop');
+const casino1 = document.querySelector('#casino1');
+const casino2 = document.querySelector('#casino2');
+const casino3 = document.querySelector('#casino3');
+const mCasino1 = new SlotMachine(casino1, {
+  active: 0,
+  delay: 500
+});
+const mCasino2 = new SlotMachine(casino2, {
+  active: 1,
+  delay: 500
+});
+const mCasino3 = new SlotMachine(casino3, {
+  active: 2,
+  delay: 500
+});
+    </script>
+    <script id="codeScript6">
+btnShuffle.addEventListener('click', () => {
+  count = 3;
+  mCasino1.shuffle(9999);
+  mCasino2.shuffle(9999);
+  mCasino3.shuffle(9999);
 });
 
-  var machine5 = $("#casino2").slotMachine({
-  active	: 1,
-    delay	: 500
-});
-
-  machine6 = $("#casino3").slotMachine({
-  active	: 2,
-    delay	: 500
-});
-
-  var started = 0;
-
-  $("#slotMachineButtonShuffle").click(function(){
-  started = 3;
-  machine4.shuffle();
-  machine5.shuffle();
-  machine6.shuffle();
-});
-
-  $("#slotMachineButtonStop").click(function(){
-  switch(started){
-  case 3:
-  machine4.stop();
-  break;
-  case 2:
-  machine5.stop();
-  break;
-  case 1:
-  machine6.stop();
-  break;
-}
-  started--;
-});
+btnStop.addEventListener('click', () => {
+  switch(count) {
+    case 3:
+      mCasino1.stop();
+      break;
+    case 2:
+      mCasino2.stop();
+      break;
+    case 1:
+      mCasino3.stop();
+      break;
+  }
+  count--;
 });
     </script>
 
@@ -353,16 +366,28 @@ $(document).ready(function(){
           <div>USE IT!</div>
         </div>
         <script>
-$(document).ready(function(){
-  $("#textMachine").slotMachine({
-  active	: 1,
-    delay	: 450,
-    auto	: 1500
-});
+$("#textMachine").slotMachine({
+  active: 1,
+  delay: 450,
+  auto: 1500,
+  randomize() {
+    return this.nextIndex;
+  }
 });
         </script>
       </div>
     </footer>
+
+  <script>
+// Fill code blocks
+[1, 2, 3, 4, 5, 6].forEach((index) => {
+  const script = document.querySelector(`#codeScript${index}`);
+  const block = document.querySelector(`#codeBlock${index}`);
+
+  block.innerText = script.innerText.replace(/^\n|\n\s*$/g, '');
+});
+hljs.initHighlightingOnLoad();
+  </script>
 
   </body>
 </html>
