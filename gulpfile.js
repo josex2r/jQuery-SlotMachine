@@ -51,6 +51,7 @@ gulp.task('styles', () => {
     .pipe(cleanCss({
       compatibility: 'ie8'
     }))
+    .pipe(header(banner))
     .pipe(rename({
       suffix: '.min'
     }))
@@ -69,11 +70,13 @@ gulp.task('jquery-wrapper', () => {
     .bundle()
     .pipe(source('jquery.slotmachine.js'))
     .pipe(buffer())
+    .pipe(header(banner))
     .pipe(gulp.dest('dist'))
     .pipe(rename({
       suffix: '.min'
     }))
     .pipe(uglify().on('error', console.error))
+    .pipe(header(banner))
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
 });
@@ -97,6 +100,7 @@ gulp.task('scripts', ['lint', 'jquery-wrapper'], () => {
       suffix: '.min'
     }))
     .pipe(uglify().on('error', console.error))
+    .pipe(header(banner))
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
 });
