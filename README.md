@@ -61,7 +61,7 @@ If you preffer jQuery style then import the wrapper *after* the jQuery library:
 
 ```html
 <script src="/path/to/jquery.min.js"></script>
-<script src="/path/to/jslotmachine.min.js"></script>
+<script src="/path/to/slotmachine.min.js"></script>
 <script src="/path/to/jquery.slotmachine.min.js"></script>
 ```
 
