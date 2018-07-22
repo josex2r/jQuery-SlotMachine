@@ -7,6 +7,8 @@ It also exports a js wrapper to allow the usage with jQuery.
 
 To preview what you can do [check the example page!](http://josex2r.github.io/jQuery-SlotMachine/)
 
+![slot-machine](./img/slot-machine.gif)
+
 ## Installation
 
 Install the component using [npm](https://www.npmjs.com/package/jquery-slotmachine):
