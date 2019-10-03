@@ -159,7 +159,7 @@ machine.next();
 machine.run();
 ```
 
-`machine.run()`: Destroys the machine. It will be useful when you want to reuse DOM.
+`machine.destory()`: Destroys the machine. It will be useful when you want to reuse DOM.
 
 ```javascript
 machine.destroy();
