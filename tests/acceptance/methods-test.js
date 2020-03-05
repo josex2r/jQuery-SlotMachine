@@ -242,7 +242,6 @@ describe('Setters', () => {
         callback();
       });
     });
-    
   //   it('changes machine state', (callback) => {
   //     machine = render({
   //       delay: 1,

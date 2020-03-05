@@ -7,7 +7,7 @@ const eslint = require('gulp-eslint');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const clean = require('gulp-clean');
-const runSequence = require('run-sequence');
+const runSequence = require('gulp4-run-sequence');
 const open = require('open');
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
@@ -30,7 +30,9 @@ gulp.task('lint', () => {
   return gulp.src([
     'lib/**/*.js',
     'tests/**/*.js'
-  ])
+  ], {
+    allowEmpty: true
+  })
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -40,7 +42,9 @@ gulp.task('lint', () => {
 gulp.task('styles', () => {
   return gulp.src([
     'styles/index.css'
-  ])
+  ], {
+    allowEmpty: true
+  })
     .pipe(autoprefixer({
       browsers: ['last 10 versions', 'ie 8', 'ie 9'],
       cascade: false
@@ -80,7 +84,7 @@ gulp.task('jquery-wrapper', () => {
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
 });
-gulp.task('scripts', ['lint', 'jquery-wrapper'], () => {
+gulp.task('scripts', gulp.series('lint', 'jquery-wrapper', () => {
   return browserify({
     entries: './lib/index.js',
     extensions: ['.js'],
@@ -103,28 +107,31 @@ gulp.task('scripts', ['lint', 'jquery-wrapper'], () => {
     .pipe(header(banner))
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
-});
+}));
 
 // Clean
 gulp.task('clean', () => {
-  return gulp.src(['dist'], { read: false })
+  return gulp.src(['dist'], {
+    allowEmpty: true,
+    read: false
+  })
     .pipe(clean());
 });
 
 // Build App
-gulp.task('build', ['clean'], (callback) => {
+gulp.task('build', gulp.series('clean', (callback) => {
   runSequence(
     'styles',
     'scripts',
     callback
   );
-});
+}));
 
 // Default task
-gulp.task('default', ['build']);
+gulp.task('default', gulp.series('build'));
 
 // Watch
-gulp.task('server', ['build'], () => {
+gulp.task('server', gulp.series('build', () => {
   // Watch .scss files
   gulp.watch('styles/**/*.css', (event) => {
     console.log(`File ${event.path} was ${event.type}, running tasks...`);
@@ -143,4 +150,4 @@ gulp.task('server', ['build'], () => {
   });
 
   open('http://localhost:8080');
-});
+})) ;

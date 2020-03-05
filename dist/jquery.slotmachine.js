@@ -1,5 +1,5 @@
 /*
- * jQuery Slot Machine v4.0.0
+ * jQuery Slot Machine v4.0.1
  * https://github.com/josex2r/jQuery-SlotMachineundefined
  *
  * Copyright 2014 Jose Luis Represa
