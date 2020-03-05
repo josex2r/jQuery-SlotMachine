@@ -15,7 +15,7 @@
     "url": "https://github.com/josex2r/jQuery-SlotMachine.git"
   },
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -30,22 +30,22 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^3.9.3",
-    "gulp-connect": "^5.5.0",
+    "gulp-connect": "^5.7.0",
     "gulp-eslint": "^4.0.2",
-    "gulp-header": "^2.0.5",
+    "gulp-header": "^2.0.9",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "mocha": "^5.0.4",
-    "open": "0.0.5",
+    "open": "^7.0.2",
     "run-sequence": "^2.2.1",
     "sinon": "^4.4.6",
     "sinon-chai": "^3.0.0",
     "sinon-dist": "^1.15.4",
-    "testem": "^2.0.0",
+    "testem": "^3.0.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   }
