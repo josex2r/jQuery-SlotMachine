@@ -2,8 +2,17 @@
 
 describe('Setters', () => {
   let machine;
+  let changeTransformSpy;
+  let resetPositionSpy;
+
+  beforeEach(() => {
+    changeTransformSpy = sinon.spy(SlotMachine.prototype, '_changeTransform');
+    resetPositionSpy = sinon.spy(SlotMachine.prototype, '_resetPosition');
+  });
 
   afterEach(() => {
+    changeTransformSpy.restore();
+    resetPositionSpy.restore();
     if (machine) {
       machine.element.remove();
     }
@@ -221,7 +230,18 @@ describe('Setters', () => {
     });
   });
 
-  // describe('shuffle()', () => {
+  describe('shuffle()', () => {
+    it('does not reset', () => {
+      machine = render({
+        resetOnShuffle: false
+      });
+
+      machine.shuffle(() => {
+        expect(changeTransformSpy).to.not.have.been.called;
+        expect(resetPositionSpy).to.not.have.been.called;
+        callback();
+      });
+    });
   //   it('changes machine state', (callback) => {
   //     machine = render({
   //       delay: 1,
@@ -282,5 +302,5 @@ describe('Setters', () => {
   //       callback();
   //     });
   //   });
-  // });
+  });
 });
