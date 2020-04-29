@@ -15,7 +15,7 @@
     "url": "https://github.com/josex2r/jQuery-SlotMachine.git"
   },
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": ">=3.5"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
