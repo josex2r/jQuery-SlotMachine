@@ -350,7 +350,7 @@ var SlotMachine = function () {
 
       this._fakeFirstTile.remove();
       this._fakeLastTile.remove();
-      this.$tiles.unwrap();
+      //this.$tiles.unwrap();
 
       // Unwrap tiles
       this.tiles.forEach(function (tile) {
