@@ -6,8 +6,11 @@
   },
   "scripts": {
     "acceptance": "testem ci",
+    "prepare": "husky install",
     "test": "npm run acceptance && npm run unit",
-    "unit": "mocha tests/unit/*-test.js"
+    "unit": "mocha tests/unit/*-test.js",
+    "lint": "eslint .",
+    "prettier": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,ts,json,md,yaml,yml}\""
   },
   "license": "MIT",
   "repository": {
@@ -18,6 +21,8 @@
     "jquery": ">=1.7"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
@@ -39,14 +44,14 @@
     "gulp-header": "^2.0.5",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
+    "husky": "^8.0.0",
     "mocha": "^5.0.4",
     "open": "0.0.5",
+    "prettier": "^2.7.1",
     "run-sequence": "^2.2.1",
     "sinon": "^4.4.6",
     "sinon-chai": "^3.0.0",
     "sinon-dist": "^1.15.4",
-    "testem": "^2.0.0",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "testem": "^2.0.0"
   }
 }
