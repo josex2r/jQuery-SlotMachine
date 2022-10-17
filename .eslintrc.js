@@ -25,10 +25,17 @@ module.exports = {
       },
     },
   },
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+  },
   overrides: [
     {
       files: ['tests/**/*.ts'],
+      parserOptions: {
+        sourceType: 'module',
+        project: './tsconfig.test.json',
+      },
       env: {
         browser: true,
         node: true,

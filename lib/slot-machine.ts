@@ -109,7 +109,7 @@ export default class SlotMachine implements Options {
   changeSettings(options: Options) {
     Object.keys(options).forEach((key) => {
       // Trigger setters
-      this[key] = options[key];
+      this[key] = options[key]; /* @ts-ignore */
     });
   }
 

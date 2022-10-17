@@ -4,3 +4,6 @@ commitlint.config.js
 gulpfile.js
 .eslintrc.js
 tests
+webpack.config.js
+jest.config.js
+coverage
