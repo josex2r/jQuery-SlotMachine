@@ -10,7 +10,7 @@ describe('Setters', () => {
   });
 
   describe('getTileOffset()', () => {
-    [-18, -36, -54, -72].forEach((offset, index) => {
+    [-20, -40, -60, -80].forEach((offset, index) => {
       it(`getTileOffset(): ${index}`, () => {
         machine = render();
 
@@ -45,78 +45,83 @@ describe('Setters', () => {
       expect(machine.stop).to.have.been.called;
     });
 
-    it('shows next element: first to second, direction "up"', () => {
-      machine = render({
-        direction: 'up'
+    describe('direction "up"', () => {
+      it('last to first', () => {
+        machine = render({
+          direction: 'up',
+          active: 2
+        });
+
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
+
+        machine.next();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(0);
+        expect(machine.active).to.be.equal(0);
+        expect(tile.innerText).to.be.equal('foo');
       });
 
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
+      it('second to last', () => {
+        machine = render({
+          direction: 'up',
+          active: 1,
+        });
 
-      machine.next();
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(1);
+        expect(machine.active).to.be.equal(1);
+        expect(tile.innerText).to.be.equal('bar');
 
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(2);
-      expect(machine.active).to.be.equal(2);
-      expect(tile.innerText).to.be.equal('wow');
+        machine.next();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
+      });
     });
 
-    it('shows next element: last to first, direction "up"', () => {
-      machine = render({
-        active: 2,
-        direction: 'up'
+    describe('direction "bottom"', () => {
+      it('last to first', () => {
+        machine = render({
+          direction: 'bottom',
+          active: 2,
+        });
+
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
+
+        machine.next();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(0);
+        expect(machine.active).to.be.equal(0);
+        expect(tile.innerText).to.be.equal('foo');
       });
 
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(2);
-      expect(machine.active).to.be.equal(2);
-      expect(tile.innerText).to.be.equal('wow');
+      it('first to second', () => {
+        machine = render({
+          direction: 'bottom',
+        });
 
-      machine.next();
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(0);
+        expect(machine.active).to.be.equal(0);
+        expect(tile.innerText).to.be.equal('foo');
 
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(1);
-      expect(machine.active).to.be.equal(1);
-      expect(tile.innerText).to.be.equal('bar');
-    });
+        machine.next();
 
-    it('shows next element: first to second, direction "down"', () => {
-      machine = render({
-        direction: 'down'
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(1);
+        expect(machine.active).to.be.equal(1);
+        expect(tile.innerText).to.be.equal('bar');
       });
-
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
-
-      machine.next();
-
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(1);
-      expect(machine.active).to.be.equal(1);
-      expect(tile.innerText).to.be.equal('bar');
-    });
-
-    it('shows next element: last to first, direction "down"', () => {
-      machine = render({
-        direction: 'down',
-        active: 2
-      });
-
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(2);
-      expect(machine.active).to.be.equal(2);
-      expect(tile.innerText).to.be.equal('wow');
-
-      machine.next();
-
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
     });
   });
 
@@ -146,141 +151,82 @@ describe('Setters', () => {
       expect(machine.stop).to.have.been.called;
     });
 
-    it('shows prev element: second to first, direction "up"', () => {
-      machine = render({
-        direction: 'up',
-        active: 1
+    describe('direction "up"', () => {
+      it('first to last', () => {
+        machine = render({
+          direction: 'up',
+        });
+
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(0);
+        expect(machine.active).to.be.equal(0);
+        expect(tile.innerText).to.be.equal('foo');
+
+        machine.prev();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
       });
 
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(1);
-      expect(machine.active).to.be.equal(1);
-      expect(tile.innerText).to.be.equal('bar');
+      it('last to second', () => {
+        machine = render({
+          direction: 'up',
+          active: 2,
+        });
 
-      machine.prev();
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
 
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(2);
-      expect(machine.active).to.be.equal(2);
-      expect(tile.innerText).to.be.equal('wow');
+        machine.prev();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(1);
+        expect(machine.active).to.be.equal(1);
+        expect(tile.innerText).to.be.equal('bar');
+      });
     });
 
-    it('shows prev element: first to last, direction "up"', () => {
-      machine = render({
-        direction: 'up'
+    describe('direction "bottom"', () => {
+      it('second to first', () => {
+        machine = render({
+          direction: 'bottom',
+          active: 2,
+        });
+
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
+
+        machine.prev();
+
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(1);
+        expect(machine.active).to.be.equal(1);
+        expect(tile.innerText).to.be.equal('bar');
       });
 
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
+      it('first to last', () => {
+        machine = render({
+          direction: 'bottom',
+        });
 
-      machine.prev();
+        let tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(0);
+        expect(machine.active).to.be.equal(0);
+        expect(tile.innerText).to.be.equal('foo');
 
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(1);
-      expect(machine.active).to.be.equal(1);
-      expect(tile.innerText).to.be.equal('bar');
-    });
+        machine.prev();
 
-    it('shows prev element: second to first, direction "down"', () => {
-      machine = render({
-        direction: 'down',
-        active: 1
+        tile = getVisibleTile(machine);
+        expect(machine.visibleTile).to.be.equal(2);
+        expect(machine.active).to.be.equal(2);
+        expect(tile.innerText).to.be.equal('wow');
       });
-
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(1);
-      expect(machine.active).to.be.equal(1);
-      expect(tile.innerText).to.be.equal('bar');
-
-      machine.prev();
-
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
-    });
-
-    it('shows prev element: first to last, direction "down"', () => {
-      machine = render({
-        direction: 'down'
-      });
-
-      let tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(0);
-      expect(machine.active).to.be.equal(0);
-      expect(tile.innerText).to.be.equal('foo');
-
-      machine.prev();
-
-      tile = getVisibleTile(machine);
-      expect(machine.visibleTile).to.be.equal(2);
-      expect(machine.active).to.be.equal(2);
-      expect(tile.innerText).to.be.equal('wow');
     });
   });
-
-  // describe('shuffle()', () => {
-  //   it('changes machine state', (callback) => {
-  //     machine = render({
-  //       delay: 1,
-  //       spins: 1
-  //     });
-
-  //     machine.shuffle(() => {
-  //       expect(machine.running).to.be.false;
-  //       callback();
-  //     });
-
-  //     expect(machine.running).to.be.true;
-  //   });
-
-  //   it('calls callback when shuffle ends', (callback) => {
-  //     machine = render({
-  //       delay: 1,
-  //       spins: 1
-  //     });
-
-  //     let nextActive;
-
-  //     machine.shuffle(() => {
-  //       expect(machine.active).to.be.equal(nextActive);
-  //       callback();
-  //     });
-
-  //     nextActive = machine.futureActive;
-  //   });
-
-  //   it('calls shuffle recursively', (callback) => {
-  //     machine = render({
-  //       delay: 1,
-  //       spins: 1,
-  //       auto: false
-  //     });
-  //     const times = 5;
-  //     const spy = sinon.spy(machine, 'shuffle');
-
-  //     machine.shuffle(times, () => {
-  //       expect(spy).to.have.been.callCount(times - 1);
-  //       machine.shuffle.restore();
-  //       callback();
-  //     });
-  //   });
-
-  //   it('calls stop', (callback) => {
-  //     machine = render({
-  //       delay: 1,
-  //       spins: 1,
-  //       auto: false
-  //     });
-  //     const spy = sinon.spy(machine, 'stop');
-
-  //     machine.shuffle(() => {
-  //       expect(spy).to.have.been.called;
-  //       machine.stop.restore();
-  //       callback();
-  //     });
-  //   });
-  // });
 });

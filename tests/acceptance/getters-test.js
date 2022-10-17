@@ -90,22 +90,22 @@ describe('Getters', () => {
       direction: 'up',
       result: {
         key: 'up',
-        initial: -18,
+        initial: -20,
         first: 0,
-        last: -72,
-        to: -54,
-        firstToLast: -72,
+        last: -80,
+        to: -60,
+        firstToLast: -80,
         lastToFirst: 0
       }
     }, {
       direction: 'down',
       result: {
         key: 'down',
-        initial: -18,
-        first: -72,
+        initial: -20,
+        first: -80,
         last: 0,
-        to: -18,
-        firstToLast: -72,
+        to: -20,
+        firstToLast: -80,
         lastToFirst: 0
       }
     }].forEach((testCase) => {
