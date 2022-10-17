@@ -1,30 +1,87 @@
-const Timer = require('./timer');
-const raf = require('./raf');
+import raf from './raf';
+import Timer from './timer';
 
-const defaults = {
+export type RandomizeCallback = (active: number) => number;
+export type OnCompleteCallback = (active: number) => any;
+
+export type Direction = 'up' | 'down';
+
+export type Bound = {
+  key: Direction;
+  initial: number;
+  first: number;
+  last: number;
+  to: number;
+  firstToLast: number;
+  lastToFirst: number;
+};
+
+export type Bounds = Record<Direction, Bound>;
+
+export type Options = {
+  active: number;
+  delay: number;
+  auto: boolean;
+  spins: number;
+  randomize?: RandomizeCallback;
+  onComplete?: OnCompleteCallback;
+  inViewport: boolean;
+  direction: Direction;
+  transition: string;
+};
+
+const defaults: Options = {
   active: 0, // Active element [Number]
   delay: 200, // Animation time [Number]
   auto: false, // Repeat delay [false||Number]
   spins: 5, // Number of spins when auto [Number]
-  randomize: null, // Randomize function, must return a number with the selected position
-  onComplete: null, // Callback function(result)
+  randomize: undefined, // Randomize function, must return a number with the selected position
+  onComplete: undefined, // Callback function(result)
   inViewport: true, // Stops animations if the element isn´t visible on the screen
   direction: 'up', // Animation direction ['up'||'down']
-  transition: 'ease-in-out'
+  transition: 'ease-in-out',
 };
-const FX_NO_TRANSITION = 'slotMachineNoTransition';
-const FX_FAST = 'slotMachineBlurFast';
-const FX_NORMAL = 'slotMachineBlurMedium';
-const FX_SLOW = 'slotMachineBlurSlow';
-const FX_TURTLE = 'slotMachineBlurTurtle';
-const FX_GRADIENT = 'slotMachineGradient';
-const FX_STOP = FX_GRADIENT;
 
-class SlotMachine {
-  constructor (element, options) {
+export enum FX {
+  NO_TRANSITION = 'slotMachineNoTransition',
+  FAST = 'slotMachineBlurFast',
+  NORMAL = 'slotMachineBlurMedium',
+  SLOW = 'slotMachineBlurSlow',
+  TURTLE = 'slotMachineBlurTurtle',
+  GRADIENT = 'slotMachineGradient',
+  STOP = 'slotMachineGradient',
+}
+
+export default class SlotMachine implements Options {
+  container: HTMLElement;
+  element: HTMLElement;
+  tiles: HTMLElement[];
+  running: boolean;
+  stopping: boolean;
+  nextActive?: number;
+
+  // options
+  delay: number;
+  auto: boolean;
+  spins: number;
+  randomize?: RandomizeCallback;
+  onComplete?: OnCompleteCallback;
+  inViewport: boolean;
+
+  private _active: number;
+  private _minTop: number;
+  private _maxTop: number;
+  private _fakeFirstTile: HTMLElement;
+  private _fakeLastTile: HTMLElement;
+  private _bounds: Bounds;
+  private _direction: Direction;
+  private _transition: string;
+  private _timer: Timer;
+
+  constructor(element: HTMLElement, options: Options) {
     this.element = element;
     // Slot Machine elements
-    this.tiles = [].slice.call(this.element.children);
+    this.tiles = [].slice.call(this.element.children) as HTMLElement[];
     // Machine is running?
     this.running = false;
     // Machine is stopping?
@@ -36,9 +93,9 @@ class SlotMachine {
     // Set min top offset
     this._minTop = -this._fakeFirstTile.offsetHeight;
     // Set max top offset
-    this._maxTop = -this.tiles.reduce((acc, tile) => (acc + tile.offsetHeight), 0);
+    this._maxTop = -this.tiles.reduce((acc, tile) => acc + tile.offsetHeight, 0);
     // Call setters if neccesary
-    this.changeSettings(Object.assign({}, defaults, options));
+    this.changeSettings({ ...defaults, ...options });
     // Initialize spin direction [up, down]
     this._setBounds();
     // Show active element
@@ -49,31 +106,31 @@ class SlotMachine {
     }
   }
 
-  changeSettings (settings) {
-    Object.keys(settings).forEach((key) => {
+  changeSettings(options: Options) {
+    Object.keys(options).forEach((key) => {
       // Trigger setters
-      this[key] = settings[key];
+      this[key] = options[key];
     });
   }
 
-  _wrapTiles () {
+  _wrapTiles() {
     this.container = document.createElement('div');
     this.container.classList.add('slotMachineContainer');
     this.container.style.transition = '1s ease-in-out';
     this.element.appendChild(this.container);
 
-    this._fakeFirstTile = this.tiles[this.tiles.length - 1].cloneNode(true);
+    this._fakeFirstTile = this.tiles[this.tiles.length - 1].cloneNode(true) as HTMLElement;
     this.container.appendChild(this._fakeFirstTile);
 
     this.tiles.forEach((tile) => {
       this.container.appendChild(tile);
     });
 
-    this._fakeLastTile = this.tiles[0].cloneNode(true);
+    this._fakeLastTile = this.tiles[0].cloneNode(true) as HTMLElement;
     this.container.appendChild(this._fakeLastTile);
   }
 
-  _setBounds () {
+  _setBounds() {
     const initial = this.getTileOffset(this.active);
     const first = this.getTileOffset(this.tiles.length);
     const last = this.getTileOffset(this.tiles.length);
@@ -86,7 +143,7 @@ class SlotMachine {
         last,
         to: this._maxTop,
         firstToLast: last,
-        lastToFirst: 0
+        lastToFirst: 0,
       },
       down: {
         key: 'down',
@@ -95,28 +152,48 @@ class SlotMachine {
         last: 0,
         to: this._minTop,
         firstToLast: last,
-        lastToFirst: 0
-      }
+        lastToFirst: 0,
+      },
     };
   }
 
-  get active () {
+  get active() {
     return this._active;
   }
 
-  get direction () {
+  set active(index: number) {
+    if (index < 0 || index >= this.tiles.length || isNaN(index)) {
+      index = 0;
+    }
+
+    this._active = index;
+  }
+
+  get direction() {
     return this._direction;
   }
 
-  get bounds () {
+  set direction(direction: Direction) {
+    if (this.running) {
+      return;
+    }
+
+    this._direction = direction === 'down' ? 'down' : 'up';
+  }
+
+  get bounds() {
     return this._bounds[this._direction];
   }
 
-  get transition () {
+  get transition() {
     return this._transition;
   }
 
-  get visibleTile () {
+  set transition(transition: string) {
+    this._transition = transition || 'ease-in-out';
+  }
+
+  get visibleTile() {
     const firstTileHeight = this.tiles[0].offsetHeight;
     const rawContainerMargin = this.container.style.transform || '';
     const matrixRegExp = /^matrix\(-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?(-?\d+)\)$/;
@@ -125,12 +202,12 @@ class SlotMachine {
     return Math.abs(Math.round(containerMargin / firstTileHeight)) - 1;
   }
 
-  get random () {
+  get random() {
     return Math.floor(Math.random() * this.tiles.length);
   }
 
-  get custom () {
-    let choosen;
+  get custom() {
+    let choosen = this.random;
 
     if (this.randomize) {
       let index = this.randomize(this.active);
@@ -138,97 +215,83 @@ class SlotMachine {
         index = 0;
       }
       choosen = index;
-    } else {
-      choosen = this.random;
     }
 
     return choosen;
   }
 
-  get _prevIndex () {
+  get _prevIndex() {
     const prevIndex = this.active - 1;
 
-    return prevIndex < 0 ? (this.tiles.length - 1) : prevIndex;
+    return prevIndex < 0 ? this.tiles.length - 1 : prevIndex;
   }
 
-  get _nextIndex () {
+  get _nextIndex() {
     const nextIndex = this.active + 1;
 
     return nextIndex < this.tiles.length ? nextIndex : 0;
   }
 
-  get prevIndex () {
+  get prevIndex() {
     return this.direction === 'up' ? this._nextIndex : this._prevIndex;
   }
 
-  get nextIndex () {
+  get nextIndex() {
     return this.direction === 'up' ? this._prevIndex : this._nextIndex;
   }
 
-  get visible () {
+  get visible() {
     const rect = this.element.getBoundingClientRect();
-    const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-    const windowWidth = (window.innerWidth || document.documentElement.clientWidth);
-    const vertInView = (rect.top <= windowHeight) && ((rect.top + rect.height) >= 0);
-    const horInView = (rect.left <= windowWidth) && ((rect.left + rect.width) >= 0);
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+    const vertInView = rect.top <= windowHeight && rect.top + rect.height >= 0;
+    const horInView = rect.left <= windowWidth && rect.left + rect.width >= 0;
 
     return vertInView && horInView;
   }
 
-  set active (index) {
-    index = Number(index);
-    if (index < 0 || index >= this.tiles.length || isNaN(index)) {
-      index = 0;
-    }
-    this._active = index;
-  }
-
-  set direction (direction) {
-    if (!this.running) {
-      this._direction = direction === 'down' ? 'down' : 'up';
-    }
-  }
-
-  set _animationFX (FX_SPEED) {
+  set _animationFX(effect: FX) {
     const delay = this.delay / 4;
 
     raf(() => {
       [...this.tiles, this._fakeLastTile, this._fakeFirstTile].forEach((tile) => {
-        tile.classList.remove(FX_FAST, FX_NORMAL, FX_SLOW, FX_TURTLE);
-        if (FX_SPEED !== FX_STOP) {
-          tile.classList.add(FX_SPEED);
+        tile.classList.remove(FX.FAST, FX.NORMAL, FX.SLOW, FX.TURTLE);
+        if (effect !== FX.STOP) {
+          tile.classList.add(effect);
         }
       });
 
-      if (FX_SPEED === FX_STOP) {
-        this.container.classList.remove(FX_GRADIENT);
+      if (effect === FX.STOP) {
+        this.container.classList.remove(FX.GRADIENT);
       } else {
-        this.container.classList.add(FX_GRADIENT);
+        this.container.classList.add(FX.GRADIENT);
       }
     }, delay);
   }
 
-  set transition (transition) {
-    this._transition = transition || 'ease-in-out';
-  }
-
-  _changeTransition (delay = this.delay, transition = this.transition) {
+  _changeTransition(delay = this.delay, transition = this.transition) {
     this.container.style.transition = `${delay / 1000}s ${transition}`;
   }
 
-  _changeTransform (margin) {
+  _changeTransform(margin: number) {
     this.container.style.transform = `matrix(1, 0, 0, 1, 0, ${margin})`;
   }
 
-  _isGoingBackward () {
-    return this.nextActive > this.active && this.active === 0 && this.nextActive === this.tiles.length - 1;
+  _isGoingBackward() {
+    return !!(
+      this.active === 0 &&
+      this.nextActive === this.tiles.length - 1
+    );
   }
 
-  _isGoingForward () {
-    return this.nextActive <= this.active && this.active === this.tiles.length - 1 && this.nextActive === 0;
+  _isGoingForward() {
+    return !!(
+      this.active === this.tiles.length - 1 &&
+      this.nextActive === 0
+    );
   }
 
-  getTileOffset (index) {
+  getTileOffset(index: number) {
     let offset = 0;
 
     for (let i = 0; i < index; i++) {
@@ -238,23 +301,16 @@ class SlotMachine {
     return this._minTop - offset;
   }
 
-  _resetPosition (margin) {
-    this.container.classList.toggle(FX_NO_TRANSITION);
-    this._changeTransform(!isNaN(margin) ? margin : this.bounds.initial);
+  _resetPosition(margin?: number) {
+    this.container.classList.toggle(FX.NO_TRANSITION);
+    this._changeTransform(margin !== undefined ? margin : this.bounds.initial);
     // Force reflow, flushing the CSS changes
     this.container.offsetHeight;
-    this.container.classList.toggle(FX_NO_TRANSITION);
+    this.container.classList.toggle(FX.NO_TRANSITION);
   }
 
-  prev () {
-    this.nextActive = this.prevIndex;
-    this.running = true;
-    this.stop();
-
-    return this.nextActive;
-  }
-
-  next () {
+  next() {
+    this.direction = 'down';
     this.nextActive = this.nextIndex;
     this.running = true;
     this.stop();
@@ -262,7 +318,16 @@ class SlotMachine {
     return this.nextActive;
   }
 
-  _getDelayFromSpins (spins) {
+  prev() {
+    this.direction = 'up';
+    this.nextActive = this.nextIndex;
+    this.running = true;
+    this.stop();
+
+    return this.nextActive;
+  }
+
+  _getDelayFromSpins(spins: number) {
     let delay = this.delay;
     this.transition = 'linear';
 
@@ -270,29 +335,29 @@ class SlotMachine {
       case 1:
         delay /= 0.5;
         this.transition = 'ease-out';
-        this._animationFX = FX_TURTLE;
+        this._animationFX = FX.TURTLE;
         break;
       case 2:
         delay /= 0.75;
-        this._animationFX = FX_SLOW;
+        this._animationFX = FX.SLOW;
         break;
       case 3:
         delay /= 1;
-        this._animationFX = FX_NORMAL;
+        this._animationFX = FX.NORMAL;
         break;
       case 4:
         delay /= 1.25;
-        this._animationFX = FX_NORMAL;
+        this._animationFX = FX.NORMAL;
         break;
       default:
         delay /= 1.5;
-        this._animationFX = FX_FAST;
+        this._animationFX = FX.FAST;
     }
 
     return delay;
   }
 
-  shuffle (spins, onComplete) {
+  shuffle(spins: number, onComplete: OnCompleteCallback) {
     // Make spins optional
     if (typeof spins === 'function') {
       onComplete = spins;
@@ -325,7 +390,7 @@ class SlotMachine {
     return this.nextActive;
   }
 
-  stop (onStop) {
+  stop(onStop?: OnCompleteCallback) {
     if (!this.running || this.stopping) {
       return this.nextActive;
     }
@@ -346,18 +411,18 @@ class SlotMachine {
     }
 
     // Update last choosen element index
-    this.active = this.nextActive;
+    this.active = this.nextActive as number;
 
     // Perform animation
     const delay = this._getDelayFromSpins(1);
     // this.delay = delay;
     this._changeTransition(delay);
-    this._animationFX = FX_STOP;
+    this._animationFX = FX.STOP;
     this._changeTransform(this.getTileOffset(this.active));
     raf(() => {
       this.stopping = false;
       this.running = false;
-      this.nextActive = null;
+      this.nextActive = undefined;
 
       if (typeof this.onComplete === 'function') {
         this.onComplete(this.active);
@@ -371,7 +436,7 @@ class SlotMachine {
     return this.active;
   }
 
-  run () {
+  run() {
     if (this.running) {
       return;
     }
@@ -379,17 +444,17 @@ class SlotMachine {
     this._timer = new Timer(() => {
       if (!this.visible && this.inViewport === true) {
         raf(() => {
-          this._timer.reset()
+          this._timer.reset();
         }, 500);
       } else {
         this.shuffle(this.spins, () => {
-          this._timer.reset()
+          this._timer.reset();
         });
       }
-    }, this.auto);
+    }, this.delay);
   }
 
-  destroy () {
+  destroy() {
     this._fakeFirstTile.remove();
     this._fakeLastTile.remove();
     // this.$tiles.unwrap();
@@ -402,5 +467,3 @@ class SlotMachine {
     this.container.remove();
   }
 }
-
-module.exports = SlotMachine;

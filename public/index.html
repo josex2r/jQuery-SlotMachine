@@ -7,15 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2.0">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="./styles/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="./dist/jquery.slotmachine.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="./style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="./slotmachine.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" type="text/css" />
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="./dist/slotmachine.js"></script>
-    <script src="./dist/jquery.slotmachine.js"></script>
+    <script src="./slotmachine.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
@@ -80,8 +82,8 @@ new SlotMachine(planeMachine, {
   }
 });
 
-// Using jQuery
-$('#planeMachine2').slotMachine({
+const planeMachine2 = document.querySelector('#planeMachine');
+new SlotMachine(planeMachine2, {
   active: 1,
   delay: 450,
   auto: 1500,
@@ -142,7 +144,7 @@ $('#planeMachine2').slotMachine({
             </div>
             <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
           </div>
-        
+
           <div class="btn-group btn-group-justified" role="group">
             <button id="randomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</button>
           </div>
@@ -366,7 +368,8 @@ btnStop.addEventListener('click', () => {
           <div>USE IT!</div>
         </div>
         <script>
-$("#textMachine").slotMachine({
+const textMachine = document.querySelector("#textMachine");
+const textMachineSlot = new SlotMachine(textMachine, {
   active: 1,
   delay: 450,
   auto: 1500,

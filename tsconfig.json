@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "outDir": "lib",
+    "strictNullChecks": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "lib/*.ts"
+  ],
+  "exclude": [
+    "dist/**/*",
+    "node_modules/**/*"
+  ],
+  "typeRoots": [
+    "node_modules/@types"
+  ],
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
+}

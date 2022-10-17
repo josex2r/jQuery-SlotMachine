@@ -36,9 +36,7 @@ describe('Constructor', () => {
     { active: 1, result: 1 },
     { active: 99, result: 0 },
     { active: -99, result: 0 },
-    { active: '0', result: 0 },
     { active: {}, result: 0 },
-    { active: null, result: 0 },
     { active: undefined, result: 0 }
   ].forEach((testCase) => {
     it(`sets active: ${testCase.active}`, () => {

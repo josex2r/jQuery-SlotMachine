@@ -1,10 +1,17 @@
-module.exports = class Timer {
-  constructor (cb, delay) {
+import { Callback } from './types';
+
+export default class Timer {
+  cb: Callback;
+  initialDelay: number;
+  delay: number;
+  startTime: number;
+  timer: NodeJS.Timeout;
+  running: boolean;
+
+  constructor(cb: Callback, delay: number) {
     this.cb = cb;
     this.initialDelay = delay;
     this.delay = delay;
-    this.startTime = null;
-    this.timer = null;
     this.running = false;
 
     this.resume();
@@ -12,26 +19,26 @@ module.exports = class Timer {
     return this;
   }
 
-  _start () {
+  _start() {
     this.timer = setTimeout(() => {
       this.running = false;
       this.cb(this);
     }, this.delay);
   }
 
-  cancel () {
+  cancel() {
     this.running = false;
     clearTimeout(this.timer);
   }
 
-  pause () {
+  pause() {
     if (this.running) {
       this.delay -= new Date().getTime() - this.startTime;
       this.cancel();
     }
   }
 
-  resume () {
+  resume() {
     if (!this.running) {
       this.running = true;
       this.startTime = new Date().getTime();
@@ -40,15 +47,15 @@ module.exports = class Timer {
     }
   }
 
-  reset () {
+  reset() {
     this.cancel();
     this.delay = this.initialDelay;
     this._start();
   }
 
-  add (extraDelay) {
+  add(extraDelay: number) {
     this.pause();
     this.delay += extraDelay;
     this.resume();
   }
-};
+}

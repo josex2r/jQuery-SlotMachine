@@ -1,11 +1,43 @@
 module.exports = {
-  extends: 'standard',
+  root: true,
   env: {
-    jquery: true,
-    browser: true
+    browser: true,
   },
-  rules: {
-    semi: 0,
-    'no-unused-expressions': 1
-  }
-}
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    sourceType: 'module',
+    project: './tsconfig.json',
+  },
+  plugins: ['@typescript-eslint'],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: ['tsconfig.json'],
+      },
+    },
+  },
+  rules: {},
+  overrides: [
+    {
+      files: ['tests/**/*.ts'],
+      env: {
+        browser: true,
+        node: true,
+        mocha: true,
+      },
+      globals: {
+        chai: true,
+        expect: true,
+      },
+    },
+  ],
+};
