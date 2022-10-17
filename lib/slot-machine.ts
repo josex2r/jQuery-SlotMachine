@@ -19,15 +19,15 @@ export type Bound = {
 export type Bounds = Record<Direction, Bound>;
 
 export type Options = {
-  active: number;
-  delay: number;
-  auto: boolean;
-  spins: number;
+  active?: number;
+  delay?: number;
+  auto?: boolean;
+  spins?: number;
   randomize?: RandomizeCallback;
   onComplete?: OnCompleteCallback;
-  inViewport: boolean;
-  direction: Direction;
-  transition: string;
+  inViewport?: boolean;
+  direction?: Direction;
+  transition?: string;
 };
 
 const defaults: Options = {
@@ -101,7 +101,7 @@ export default class SlotMachine implements Options {
     // Show active element
     this._resetPosition();
     // Start auto animation
-    if (this.auto !== false) {
+    if (this.auto) {
       this.run();
     }
   }
