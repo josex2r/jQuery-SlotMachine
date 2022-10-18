@@ -1,5 +1,6 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   optimization: {
@@ -33,7 +34,7 @@ module.exports = {
     library: 'SlotMachine',
     libraryExport: 'default',
     umdNamedDefine: true,
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'),
   },
   devtool: 'source-map',
   devServer: {
@@ -44,4 +45,11 @@ module.exports = {
       index: 'index.html',
     },
   },
+  plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'public' }
+            ]
+        })
+    ]
 };
