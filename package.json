@@ -1,6 +1,6 @@
 {
   "name": "jquery-slotmachine",
-  "version": "4.0.2",
+  "version": "5.0.0",
   "engines": {
     "node": ">= 16"
   },
