@@ -15,12 +15,8 @@ Install the component using [npm](https://www.npmjs.com/package/jquery-slotmachi
 
 ```bash
 npm install jquery-slotmachine --save
-```
 
-Install the component using [Bower](http://bower.io/):
-
-```bash
-bower install jquery-slotmachine --save
+yarn add jquery-slotmachine
 ```
 
 ## Example
@@ -31,15 +27,16 @@ bower install jquery-slotmachine --save
   <div>London</div>
   <div>New York</div>
 </div>
+```
 
-<script>
+```javascript
 const el = document.querySelector('#machine');
+
 const machine = new SlotMachine(el, {
   active: 1,
   delay: 450,
   auto: 1500
 });
-</script>
 ```
 
 > Lookup the sourcecode in the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
@@ -52,24 +49,14 @@ Include the script located in *dist* folder:
 <script src="/path/to/slotmachine.min.js"></script>
 ```
 
+> Or build your own package using a bundled (webpack, rollup, ...)
+
 Then you can make it work calling the lib in your app:
 
 ```javascript
 const element = document.getElementById('my-machine');
-const machine = new SlotMachine(element, { /* options */ });
-```
-
-If you preffer jQuery style then import the wrapper *after* the jQuery library:
-
-```html
-<script src="/path/to/jquery.min.js"></script>
-<script src="/path/to/slotmachine.min.js"></script>
-<script src="/path/to/jquery.slotmachine.min.js"></script>
-```
-
-```javascript
-$(document).ready(function(){
-  $('#my-machine').slotMachine({ /* options */ });
+const machine = new SlotMachine(element, {
+  /* options */
 });
 ```
 
