@@ -306,7 +306,7 @@ class SlotMachine {
         this.changeSettings({ ...defaults, ...options });
         this._setBounds();
         this._resetPosition();
-        if (this.auto !== false) {
+        if (this.auto) {
             this.run();
         }
     }
