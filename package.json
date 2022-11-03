@@ -23,9 +23,6 @@
     "type": "git",
     "url": "https://github.com/josex2r/jQuery-SlotMachine.git"
   },
-  "dependencies": {
-    "raf": "^3.4.1"
-  },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",

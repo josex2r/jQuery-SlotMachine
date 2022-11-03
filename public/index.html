@@ -9,17 +9,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="./slotmachine.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" type="text/css" />
 
-    <script
-      src="https://code.jquery.com/jquery-3.6.1.min.js"
-      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-      crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="./slotmachine.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
   </head>
 
@@ -47,220 +39,28 @@
     <!-- Flight example -->
     <div id="plane">
       <div class="container">
-        <div class="row">
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <pre><code id="codeBlock1"></code></pre>
-          </div>
-          <div class="col-sm-10 col-md-6 offset-sm-1 offset-md-0">
-            <div class="well content">
-              <p>Travel to...</p>
+        <div class="flex">
+          <div class="well content">
+            <p>Travel to...</p>
 
-              <div id="planeMachine">
-                <div class="text-center">
-                  Madrid <span class="badge">46 <i class="fas fa-euro-sign"></i></span>
-                </div>
-                <div class="text-center">
-                  London <span class="badge">30 <i class="fas fa-pound-sign"></i></span>
-                </div>
-                <div class="text-center">
-                  NY <span class="badge">23 <i class="fas fa-dollar-sign"></i></span>
-                </div>
-                <div class="text-center">
-                  Matrix <span class="badge">99 <i class="fas fa-money-bill-alt"></i></span>
-                </div>
+            <div id="planeMachine">
+              <div class="text-center">
+                Madrid <span class="badge">46 <i class="fas fa-euro-sign"></i></span>
+              </div>
+              <div class="text-center">
+                London <span class="badge">30 <i class="fas fa-pound-sign"></i></span>
+              </div>
+              <div class="text-center">
+                NY <span class="badge">23 <i class="fas fa-dollar-sign"></i></span>
+              </div>
+              <div class="text-center">
+                Matrix <span class="badge">99 <i class="fas fa-money-bill-alt"></i></span>
               </div>
             </div>
-
-            <script id="codeScript1">
-const planeMachine = document.querySelector('#planeMachine');
-new SlotMachine(planeMachine, {
-  active: 1,
-  delay: 450,
-  auto: 1500,
-  randomize() {
-    return this.nextIndex;
-  }
-});
-
-const planeMachine2 = document.querySelector('#planeMachine');
-new SlotMachine(planeMachine2, {
-  active: 1,
-  delay: 450,
-  auto: 1500,
-  randomize() {
-    return this.nextIndex;
-  }
-});
-            </script>
           </div>
         </div>
       </div>
     </div>
-
-
-    <div id="randomize">
-      <div class="container">
-        <h1>Randomize your stuff!</h1>
-
-        <div class="row">
-          <div class="col-sm-4">
-            <div>
-              <div id="machine1" class="randomizeMachine">
-                <div><img src="img/slot1.png" /></div>
-                <div><img src="img/slot2.png" /></div>
-                <div><img src="img/slot3.png" /></div>
-                <div><img src="img/slot4.png" /></div>
-                <div><img src="img/slot5.png" /></div>
-                <div><img src="img/slot6.png" /></div>
-              </div>
-            </div>
-            <div id="machine1Result" class="col-xs-4 machineResult">Index: 0</div>
-          </div>
-
-          <div class="col-sm-4">
-            <div>
-              <div id="machine2" class="randomizeMachine">
-                <div><img src="img/slot1.png" /></div>
-                <div><img src="img/slot2.png" /></div>
-                <div><img src="img/slot3.png" /></div>
-                <div><img src="img/slot4.png" /></div>
-                <div><img src="img/slot5.png" /></div>
-                <div><img src="img/slot6.png" /></div>
-              </div>
-            </div>
-            <div id="machine2Result" class="col-xs-4 machineResult">Index: 1</div>
-          </div>
-
-          <div class="col-sm-4">
-            <div>
-              <div id="machine3" class="randomizeMachine">
-                <div><img src="img/slot1.png" /></div>
-                <div><img src="img/slot2.png" /></div>
-                <div><img src="img/slot3.png" /></div>
-                <div><img src="img/slot4.png" /></div>
-                <div><img src="img/slot5.png" /></div>
-                <div><img src="img/slot6.png" /></div>
-              </div>
-            </div>
-            <div id="machine3Result" class="col-xs-4 machineResult">Index: 2</div>
-          </div>
-
-          <div class="btn-group btn-group-justified" role="group">
-            <button id="randomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-10 offset-sm-1">
-            <pre><code id="codeBlock2"></code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script id="codeScript2">
-const btn = document.querySelector('#randomizeButton');
-const results = {
-  machine1: document.querySelector('#machine1Result'),
-  machine2: document.querySelector('#machine2Result'),
-  machine3: document.querySelector('#machine3Result')
-};
-const el1 = document.querySelector('#machine1');
-const el2 = document.querySelector('#machine2');
-const el3 = document.querySelector('#machine3');
-const machine1 = new SlotMachine(el1, { active: 0 });
-const machine2 = new SlotMachine(el2, { active: 1 });
-const machine3 = new SlotMachine(el3, { active: 2 });
-
-function onComplete(active){
-  results[this.element.id].innerText = `Index: ${this.active}`;
-}
-
-btn.addEventListener('click', () => {
-  machine1.shuffle(5, onComplete);
-  setTimeout(() => machine2.shuffle(5, onComplete), 500);
-  setTimeout(() => machine3.shuffle(5, onComplete), 1000);
-});
-    </script>
-
-
-    <!-- Watch example -->
-    <div id="watch">
-      <div class="container">
-        <h1>Slide the items</h1>
-        <div class="row">
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <pre><code id="codeBlock3"></code></pre>
-          </div>
-
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <div class="small">
-              <div id="watch1">
-                <div><i class="fas fa-volume-up"></i></div>
-                <div><i class="fas fa-envelope"></i></div>
-                <div><i class="fas fa-wifi"></i></div>
-                <div><i class="fas fa-music"></i></div>
-                <div><i class="fas fa-map"></i></div>
-              </div>
-            </div>
-          </div>
-          <div class="btn-group btn-group-justified" role="group">
-            <button id="watchBtnPrev" type="button" class="btn btn-primary btn-lg">Prev</button>
-            <button id="watchBtnNext" type="button" class="btn btn-primary btn-lg">Next</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script id="codeScript3">
-const btnNext = document.querySelector('#watchBtnNext');
-const btnPrev = document.querySelector('#watchBtnPrev');
-const el = document.querySelector('#watch1');
-const watch = new SlotMachine(el, {});
-
-btnPrev.addEventListener('click', () => watch.prev());
-btnNext.addEventListener('click', () => watch.next());
-    </script>
-
-    <!-- triky -->
-    <div id="triky">
-      <div class="container">
-        <h1>Triky your results</h1>
-        <div class="row">
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <pre><code id="codeBlock4"></code></pre>
-          </div>
-
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <div id="triky1">
-              <div>
-                <img src="img/cookie.png" />
-              </div>
-              <div>
-                <img src="img/food1.jpg" />
-              </div>
-              <div>
-                <img src="img/food2.jpg" />
-              </div>
-              <div>
-                <img src="img/food3.jpg" />
-              </div>
-            </div>
-          </div>
-          <div class="btn-group btn-group-justified" role="group">
-            <button id="trikyShuffle" type="button" class="btn btn-primary btn-lg">Gimme cookies!</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script id="codeScript4">
-const btnTriky = document.querySelector('#trikyShuffle');
-const elTriky = document.querySelector('#triky1');
-const triky = new SlotMachine(elTriky, {
-  randomize() {
-    return 0;
-  }
-});
-
-btnTriky.addEventListener('click', () => triky.shuffle(5));
-    </script>
 
 
     <!-- Slot machine example -->
@@ -302,95 +102,131 @@ btnTriky.addEventListener('click', () => triky.shuffle(5));
           </div>
         </div>
       </div>
+    </div>
 
+
+    <!-- Watch example -->
+    <div id="watch">
       <div class="container">
-        <div class="row">
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-1">
-            <pre><code id="codeBlock5"></code></pre>
+        <h1>Slide the items</h1>
+
+        <div class="flex">
+          <div class="small">
+            <div id="watchContainer">
+              <div><i class="fas fa-volume-up"></i></div>
+              <div><i class="fas fa-envelope"></i></div>
+              <div><i class="fas fa-wifi"></i></div>
+              <div><i class="fas fa-music"></i></div>
+              <div><i class="fas fa-map"></i></div>
+            </div>
           </div>
 
-          <div class="col-sm-10 col-md-5 offset-sm-1 offset-md-0">
-            <pre><code id="codeBlock6"></code></pre>
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="watchBtnPrev" type="button" class="btn btn-primary btn-lg">Prev</button>
+            <button id="watchBtnSwitch" type="button" class="btn btn-primary btn-lg">Switch direction</button>
+            <button id="watchBtnNext" type="button" class="btn btn-primary btn-lg">Next</button>
           </div>
         </div>
       </div>
     </div>
-    <script id="codeScript5">
-let count = 0;
-const btnShuffle = document.querySelector('#casinoShuffle');
-const btnStop = document.querySelector('#casinoStop');
-const casino1 = document.querySelector('#casino1');
-const casino2 = document.querySelector('#casino2');
-const casino3 = document.querySelector('#casino3');
-const mCasino1 = new SlotMachine(casino1, {
-  active: 0,
-  delay: 500
-});
-const mCasino2 = new SlotMachine(casino2, {
-  active: 1,
-  delay: 500
-});
-const mCasino3 = new SlotMachine(casino3, {
-  active: 2,
-  delay: 500
-});
-    </script>
-    <script id="codeScript6">
-btnShuffle.addEventListener('click', () => {
-  count = 3;
-  mCasino1.shuffle(9999);
-  mCasino2.shuffle(9999);
-  mCasino3.shuffle(9999);
-});
 
-btnStop.addEventListener('click', () => {
-  switch(count) {
-    case 3:
-      mCasino1.stop();
-      break;
-    case 2:
-      mCasino2.stop();
-      break;
-    case 1:
-      mCasino3.stop();
-      break;
-  }
-  count--;
-});
-    </script>
+    <!-- triky -->
+    <div id="triky">
+      <div class="container">
+        <h1>Triky your results</h1>
+
+        <div class="flex">
+          <div id="triky1">
+            <div>
+              <img src="./img/cookie.png" />
+            </div>
+            <div>
+              <img src="./img/food1.jpg" />
+            </div>
+            <div>
+              <img src="./img/food2.jpg" />
+            </div>
+            <div>
+              <img src="./img/food3.jpg" />
+            </div>
+          </div>
+
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="trikyShuffle" type="button" class="btn btn-primary btn-lg">Gimme cookies!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- randomize -->
+    <div id="randomize">
+      <div class="container">
+        <h1>Randomize your stuff!</h1>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="randomize__item">
+              <div id="machine0" class="randomizeMachine">
+                <div><img src="./img/slot1.png" /></div>
+                <div><img src="./img/slot2.png" /></div>
+                <div><img src="./img/slot3.png" /></div>
+                <div><img src="./img/slot4.png" /></div>
+                <div><img src="./img/slot5.png" /></div>
+                <div><img src="./img/slot6.png" /></div>
+              </div>
+            </div>
+            <div id="machine0Result" class="col-xs-4 machineResult">Index: 0</div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="randomize__item">
+              <div id="machine1" class="randomizeMachine">
+                <div><img src="./img/slot1.png" /></div>
+                <div><img src="./img/slot2.png" /></div>
+                <div><img src="./img/slot3.png" /></div>
+                <div><img src="./img/slot4.png" /></div>
+                <div><img src="./img/slot5.png" /></div>
+                <div><img src="./img/slot6.png" /></div>
+              </div>
+            </div>
+            <div id="machine1Result" class="col-xs-4 machineResult">Index: 1</div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="randomize__item">
+              <div id="machine2" class="randomizeMachine">
+                <div><img src="./img/slot1.png" /></div>
+                <div><img src="./img/slot2.png" /></div>
+                <div><img src="./img/slot3.png" /></div>
+                <div><img src="./img/slot4.png" /></div>
+                <div><img src="./img/slot5.png" /></div>
+                <div><img src="./img/slot6.png" /></div>
+              </div>
+            </div>
+            <div id="machine2Result" class="col-xs-4 machineResult">Index: 2</div>
+          </div>
+        </div>
+
+        <div class="flex">
+          <div class="btn-group btn-group-justified" role="group">
+            <button id="randomizeButton" type="button" class="btn btn-danger btn-lg">Shuffle</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <footer>
       <div class="content">
-        <div id="textMachine" style="text-align: center">
+        <div id="textMachine" class="text-center">
           <div>FORK!</div>
           <div>SHARE!</div>
           <div>USE IT!</div>
         </div>
-        <script>
-const textMachine = document.querySelector("#textMachine");
-const textMachineSlot = new SlotMachine(textMachine, {
-  active: 1,
-  delay: 450,
-  auto: 1500,
-  randomize() {
-    return this.nextIndex;
-  }
-});
-        </script>
       </div>
     </footer>
 
-  <script>
-// Fill code blocks
-[1, 2, 3, 4, 5, 6].forEach((index) => {
-  const script = document.querySelector(`#codeScript${index}`);
-  const block = document.querySelector(`#codeBlock${index}`);
-
-  block.innerText = script.innerText.replace(/^\n|\n\s*$/g, '');
-});
-hljs.initHighlightingOnLoad();
-  </script>
-
+    <script src="./index.js"></script>
   </body>
 </html>
