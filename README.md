@@ -34,9 +34,10 @@ const el = document.querySelector('#machine');
 
 const machine = new SlotMachine(el, {
   active: 1,
-  delay: 450,
-  auto: 1500
+  delay: 450
 });
+
+machine.shuffle();
 ```
 
 > Lookup the sourcecode in the [examples page](http://josex2r.github.io/jQuery-SlotMachine/) to see more examples.
@@ -71,85 +72,70 @@ const machine = new SlotMachine(element, {
 });
 ```
 
-| Name           | Type       | Default       | Description                                                                         |
-|----------------|------------|---------------|-------------------------------------------------------------------------------------|
-| **active**     | `Number`   | `0`           | The initial visible element (0 means the first one)                                 |
-| **delay**      | `Number`   | `200`         | Duration (in ms) of each spin                                                       |
-| **auto**       | `Boolean`  | `false`       | Runs the carousel mode when creating the machine                                    |
-| **spins**      | `Number`   | `5`           | Number of spins after stop in carousel mode                                         |
-| **randomize**  | `Function` | `null`        | Function (returns number) that is going to be called to set the next active element |
-| **onComplete** | `Function` | `null`        | Callback after each spin in carousel mode                                           |
-| **inViewport** | `Boolean`  | `true`        | Only spin when the machine is inside the viewport                                   |
-| **direction**  | `String`   | `up`          | The spin direction (possible values are `up` and `down`)                            |
-| **transition** | `String`   | `ease-in-out` | The CSS transition                                                                  |
+| Name           | Type       | Default        | Description                                                                              |
+|----------------|------------|----------------|------------------------------------------------------------------------------------------|
+| **active**     | `Number`   | `0`            | The initial visible element (0 means the first one)                                      |
+| **delay**      | `Number`   | `200`          | Duration (in ms) of each spin                                                            |
+| **randomize**  | `Function` | `() => number` | Function (returns number) that returns the next active element (random value as default) |
+| **direction**  | `String`   | `up`           | The spin direction (possible values are `up` and `down`)                                 |
 
 ### Properties
 
 - `machine.nextActive`: Get the next active element (only while shuffling).
 - `machine.nextIndex`: Next element index according to the current direction.
 - `machine.prevIndex`: Prev element index according to the current direction.
-- `machine.random`: Get rando index between the machine bounds.
 - `machine.running`: Check if the machine is running.
 - `machine.stopping`: Check if the machine is stopping.
-- `machine.visible`: Check if the machine is visible.
-- `machine.visibleTile`: Get the current visible element in the machine viewport.
-- `machine.active`: Alias to the `active` setting.
-- `machine.randomize`: Alias to the `randomize` setting.
-- `machine.direction`: Alias to the `direction` setting.
-- `machine.transition`: Alias to the `transition` setting.
+- `machine.active`: The current `active` element.
 
 ### Methods
 
-`machine.shuffle(spins, callback)`: Starts spining the machine.
-  - spins (`Number`): Optionally set the number of spins.
-  - callback(`Function`): Callback triggered when the machine stops.
+`machine.shuffle(spins: number): Promise<void>`: Starts spining the machine.
+
+**Arguments**:
+  - spins (`Number`): Optionally set the number of spins until stop.
 
 ```javascript
 // Do a single spin
 machine.shuffle();
-// Do a single spin and then shows an alert
-machine.shuffle(() => alert('Stop!'));
 // Do 5 spins before stop
 machine.shuffle(5);
-// Do 7 spins and then showing an alert
-machine.shuffle(7, () => alert('Stop!'));
 // "Infinite" spins
-machine.shuffle(9999999); // O_O
+machine.shuffle(Infinity);
 ```
 
-`machine.stop(callback)`: Manually stops the machine.
-  - callback(`Function`): Callback triggered when the machine stops.
+`machine.stop(spins: number): Promise<void>`: Manually stops the machine.
 
-For example, start spinning the machine and stop it after pressing a button:
+**Arguments**:
+  - spins (`Number`): Set the number of spins until stop. Use `0` to inmediate stop.
 
 ```javascript
-machine.shuffle(99999);
-// Add the button listener
-myButton.addEventListener('click', () => {
-  // Stop spinning
-  machine.stop();
-});
+// Start spinning the machine
+machine.shuffle(Infinity);
+// Do 4 spins an then stop
+machine.stop(4);
 ```
 
-`machine.next()`/`machine.prev()`: Spin to the next/previous element.
+`machine.next(): Promise<void>`/`machine.prev(): Promise<void>`: Spins to the **next/previous** element.
 
 ```javascript
 // Spin to the previous element
 machine.prev();
+
 // Spin to the next element
 machine.next();
 ```
 
-`machine.run()`: Starts the preview mode, it will spin/stop given a delay (more info in options).
+### Usefull recipes
+
+To create an inifite carousel effect (as the previous versions `run` method) use a recursive function:
 
 ```javascript
-machine.run();
-```
-
-`machine.run()`: Destroys the machine. It will be useful when you want to reuse DOM.
-
-```javascript
-machine.destroy();
+(async function run() {
+  await machine.shuffle(5)
+  await timeout(1000);
+  run();
+})();
 ```
 
 ## Authors

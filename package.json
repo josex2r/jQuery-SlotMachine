@@ -1,6 +1,6 @@
 {
   "name": "jquery-slotmachine",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "engines": {
     "node": ">= 16"
   },
@@ -22,9 +22,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/josex2r/jQuery-SlotMachine.git"
-  },
-  "dependencies": {
-    "raf": "^3.4.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

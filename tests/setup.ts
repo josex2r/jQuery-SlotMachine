@@ -1,4 +1,5 @@
-import SlotMachine, { Options } from '../lib/slot-machine';
+import SlotMachine from '../lib';
+import { Options } from '../lib/types';
 
 // "jsdom" does not support offset API >_<
 Object.defineProperties(window.HTMLElement.prototype, {
@@ -38,9 +39,10 @@ export function render(options?: Options) {
 }
 
 export function getVisibleTile(machine: SlotMachine) {
-  const rawContainerMargin = machine.container.style.transform || '';
+  const rawContainerMargin = machine.container.element.style.transform || '';
   const matrixRegExp = /^matrix\(-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?-?\d+,\s?(-?\d+)\)$/;
   const offset = parseInt(rawContainerMargin.replace(matrixRegExp, '$1'), 10);
+  const height = machine.container.tiles[0].element.offsetHeight;
 
-  return machine.tiles.find((tile) => tile.offsetTop === Math.abs(offset));
+  return machine.container.tileNodes[Math.abs(offset / height)];
 }

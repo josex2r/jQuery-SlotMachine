@@ -7,3 +7,5 @@ tests
 webpack.config.js
 jest.config.js
 coverage
+public
+docs

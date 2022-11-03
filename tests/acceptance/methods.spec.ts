@@ -1,4 +1,4 @@
-import SlotMachine, { Direction } from '../../lib/slot-machine';
+import SlotMachine from '../../lib';
 import { getVisibleTile, render } from '../setup';
 
 describe('Setters', () => {
@@ -15,7 +15,7 @@ describe('Setters', () => {
       it(`getTileOffset(): ${index}`, () => {
         machine = render();
 
-        expect(machine.getTileOffset(index)).toBe(offset);
+        expect(machine.container.getTileOffset(index)).toBe(offset);
       });
     });
   });
@@ -29,14 +29,6 @@ describe('Setters', () => {
       expect(machine.running).toBeTruthy();
     });
 
-    it('return next active element', () => {
-      machine = render();
-
-      const nextIndex = machine.next();
-
-      expect(nextIndex).toBeGreaterThanOrEqual(0);
-    });
-
     it('stops the machine', () => {
       machine = render();
       machine.stop = jest.fn();
@@ -54,16 +46,14 @@ describe('Setters', () => {
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
         expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(tile?.element?.innerHTML).toBe('wow');
 
         machine.next();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(0);
-        expect(machine.active).toBe(0);
-        expect(tile?.innerHTML).toBe('foo');
+        expect(machine.active).toBe(1);
+        expect(tile?.element?.innerHTML).toBe('bar');
       });
 
       it('second to last', () => {
@@ -73,55 +63,49 @@ describe('Setters', () => {
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(1);
         expect(machine.active).toBe(1);
-        expect(tile?.innerHTML).toBe('bar');
+        expect(tile?.element?.innerHTML).toBe('bar');
 
         machine.next();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
-        expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(machine.active).toBe(0);
+        expect(tile?.element?.innerHTML).toBe('foo');
       });
     });
 
     describe('direction "bottom"', () => {
       it('last to first', () => {
         machine = render({
-          direction: 'bottom' as Direction,
+          direction: 'down',
           active: 2,
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
         expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(tile?.element?.innerHTML).toBe('wow');
 
         machine.next();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(0);
         expect(machine.active).toBe(0);
-        expect(tile?.innerHTML).toBe('foo');
+        expect(tile?.element?.innerHTML).toBe('foo');
       });
 
       it('first to second', () => {
         machine = render({
-          direction: 'bottom' as Direction,
+          direction: 'down',
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(0);
         expect(machine.active).toBe(0);
-        expect(tile?.innerHTML).toBe('foo');
+        expect(tile?.element?.innerHTML).toBe('foo');
 
         machine.next();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(1);
         expect(machine.active).toBe(1);
-        expect(tile?.innerHTML).toBe('bar');
+        expect(tile?.element?.innerHTML).toBe('bar');
       });
     });
   });
@@ -135,14 +119,6 @@ describe('Setters', () => {
       expect(machine.running).toBeTruthy();
     });
 
-    it('return next active element', () => {
-      machine = render();
-
-      const nextIndex = machine.next();
-
-      expect(nextIndex).toBeGreaterThanOrEqual(0);
-    });
-
     it('stops the machine', () => {
       machine = render();
       machine.stop = jest.fn();
@@ -159,16 +135,14 @@ describe('Setters', () => {
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(0);
         expect(machine.active).toBe(0);
-        expect(tile?.innerHTML).toBe('foo');
+        expect(tile?.element?.innerHTML).toBe('foo');
 
         machine.prev();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
-        expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(machine.active).toBe(1);
+        expect(tile?.element?.innerHTML).toBe('bar');
       });
 
       it('last to second', () => {
@@ -178,55 +152,49 @@ describe('Setters', () => {
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
         expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(tile?.element?.innerHTML).toBe('wow');
 
         machine.prev();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(1);
-        expect(machine.active).toBe(1);
-        expect(tile?.innerHTML).toBe('bar');
+        expect(machine.active).toBe(0);
+        expect(tile?.element?.innerHTML).toBe('foo');
       });
     });
 
     describe('direction "bottom"', () => {
       it('second to first', () => {
         machine = render({
-          direction: 'bottom' as Direction,
+          direction: 'down',
           active: 2,
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
         expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(tile?.element?.innerHTML).toBe('wow');
 
         machine.prev();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(1);
         expect(machine.active).toBe(1);
-        expect(tile?.innerHTML).toBe('bar');
+        expect(tile?.element?.innerHTML).toBe('bar');
       });
 
       it('first to last', () => {
         machine = render({
-          direction: 'bottom' as Direction,
+          direction: 'down',
         });
 
         let tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(0);
         expect(machine.active).toBe(0);
-        expect(tile?.innerHTML).toBe('foo');
+        expect(tile?.element?.innerHTML).toBe('foo');
 
         machine.prev();
 
         tile = getVisibleTile(machine);
-        expect(machine.visibleTile).toBe(2);
         expect(machine.active).toBe(2);
-        expect(tile?.innerHTML).toBe('wow');
+        expect(tile?.element?.innerHTML).toBe('wow');
       });
     });
   });

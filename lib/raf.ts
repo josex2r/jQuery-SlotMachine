@@ -1,4 +1,3 @@
-import requestAnimationFrame from 'raf';
 import { Callback } from './types';
 
 export default function raf(cb: Callback, timeout = 0) {

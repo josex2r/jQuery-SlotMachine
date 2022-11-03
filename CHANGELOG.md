@@ -1,3 +1,21 @@
+# [6.0.0](https://github.com/josex2r/jQuery-SlotMachine/compare/v5.0.0...v6.0.0) (2022-11-03)
+
+
+### Features
+
+* build dist ([b164e14](https://github.com/josex2r/jQuery-SlotMachine/commit/b164e143a9b3c1dc56e6bdab2e2557dbb5bc5153))
+* partial rewrite ([5ea5a01](https://github.com/josex2r/jQuery-SlotMachine/commit/5ea5a01c6911c48ba9aae56f70ec7bf21620b179))
+
+
+### BREAKING CHANGES
+
+* Lot of things changed, mostly the public API
+- `Promise` support, most public methods returns a promise.
+- `shuffle` arguments.
+- `stop` arguments.
+- `run` has been deleted, this feature can be achieved using promises.
+- `constructor` options have been shrinked.
+
 # [5.0.0](https://github.com/josex2r/jQuery-SlotMachine/compare/v4.0.2...v5.0.0) (2022-10-18)
 
 
