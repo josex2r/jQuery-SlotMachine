@@ -1,4 +1,4 @@
- @charset "utf-8";
+@charset "utf-8";
 /* CSS Document */
 
 @import url(https://fonts.googleapis.com/css?family=Roboto);
@@ -8,25 +8,9 @@
   font-family: 'Roboto', sans-serif;
 }
 
-code {
-  border: 1px solid #eee;
-  border-radius: 5px;
-  background-color: rgba(245, 245, 245, 0.7) !important;
-  text-align: left;
-}
-
-.well {
-  padding: 25px;
-  background-color: rgba(245, 245, 245, 0.7);
-  border-radius: 5px;
-}
-
-.well p {
-  font-size:
-}
-
-.btn-group-justified {
-  margin: 0 auto;
+.container {
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 h1 {
@@ -34,49 +18,11 @@ h1 {
   padding-bottom: 25px;
 }
 
-.container {
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-a{
-  color: #ccd500;
-  text-decoration: none;
-}
-
-a:hover{
-  text-decoration: underline;
-  color: #a9b119;
-}
-
-.slotMachine .slot{
-  height:100px;
-  background-position-x: 55%;
-  background-repeat: no-repeat;
-}
-
-.slot1 {
-  background-image: url("./img/slot1.png");
-}
-
-.slot2 {
-  background-image: url("./img/slot2.png");
-}
-
-.slot3 {
-  background-image: url("./img/slot3.png");
-}
-
-.slot4 {
-  background-image: url("./img/slot4.png");
-}
-
-.slot5 {
-  background-image: url("./img/slot5.png");
-}
-
-.slot6 {
-  background-image: url("./img/slot6.png");
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 /*
@@ -86,24 +32,29 @@ a:hover{
   width: 100%;
   position: absolute;
   height: 10px;
-  background-color: #A48E4E;
+  background-color: #a48e4e;
   top: 0px;
 }
 
 header {
   margin-top: 10px;
-  background-color: #DCD293;
-  border-bottom: 10px solid #66D4FF;
-  border-top: 20px dashed #A48E4E;
+  background-color: #dcd293;
+  border-bottom: 10px solid #66d4ff;
+  border-top: 20px dashed #a48e4e;
   padding: 2em;
-  color:#333;
+  color: #333;
   font-size: 25px;
   text-align: center;
 }
 
 header a {
-  color: #6C5726;
+  color: #6c5726;
   font-weight: 700;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #a9b119;
 }
 
 /*
@@ -112,8 +63,8 @@ header a {
 #plane {
   width: 100%;
   position: relative;
-    border-bottom: 10px solid #B8312F;
-  border-top: 20px dashed #66D4FF;
+  border-bottom: 10px solid rgb(180, 75, 119);
+  border-top: 20px dashed #66d4ff;
   background-color: rgb(0, 175, 225);
   background-image: url('./img/plane.png');
   background-size: contain;
@@ -131,8 +82,8 @@ header a {
   text-align: center;
 }
 
-#plane .content, footer .content{
-  font-family: 'Pathway Gothic One';
+#plane .content,
+footer .content {
   font-size: 70px;
   font-weight: 300;
   line-height: 80px;
@@ -147,7 +98,6 @@ header a {
 
 #planeMachine {
   height: 67px;
-  overflow: hidden;
   display: inline-block;
   text-align: left;
 }
@@ -156,12 +106,12 @@ header a {
  * SlotMachine
  */
 #randomize {
-  border-bottom: 10px solid rgb(72, 158, 48);
-  background-color: #EB6B56;
-  border-top: 20px dashed #B8312F;
+  border-bottom: 10px solid #a48e4e;
+  background-color: #eb6b56;
+  border-top: 20px dashed #b8312f;
 }
 
-#randomize .row > div.col-sm-4 > div {
+#randomize .randomize__item {
   padding: 40px;
   width: 180px;
   height: 180px;
@@ -209,8 +159,8 @@ header a {
  */
 #watch {
   border-top: 20px dashed rgb(72, 158, 48);
-  border-bottom: 10px solid #195AC8;
-  background-color: #46D265;
+  border-bottom: 10px solid #195ac8;
+  background-color: #46d265;
 }
 
 #watch h1 {
@@ -221,16 +171,17 @@ header a {
   text-align: center;
   background: url('./img/watch.png') no-repeat 50% 50%;
   height: 300px;
+  width: 250px;
 }
 
-#watch1 {
+#watchContainer {
   margin-left: calc(50% - 42px);
   transform: translateY(115px);
   width: 80px;
   height: 80px;
 }
 
-#watch1 .slotMachineContainer > div {
+#watchContainer .slot-machine__container > div {
   color: #fff;
   height: 80px;
   width: 80px;
@@ -242,20 +193,21 @@ header a {
   background-color: rgb(72, 158, 48);
 }
 
-#watch .btn-group .btn:hover, .btn-group .btn:focus {
+#watch .btn-group .btn:hover,
+.btn-group .btn:focus {
   background-color: rgb(72, 158, 48);
 }
 
 /*
  * Triky
  */
- #triky {
-   background: url(./img/triky.jpg) no-repeat right 130px;
-   background-color: #0F99CA;
-   border-bottom: 10px solid rgb(180, 75, 119);
-   border-top: 20px dashed #195AC8;
-   background-position-x: calc(100% + 40px)
- }
+#triky {
+  background: url(./img/triky.jpg) no-repeat right 130px;
+  background-color: #0f99ca;
+  border-bottom: 10px solid #b8312f;
+  border-top: 20px dashed #195ac8;
+  background-position-x: calc(100% + 40px);
+}
 
 #triky1 {
   background-color: #fff;
@@ -265,12 +217,16 @@ header a {
   padding-top: 4px;
 }
 
+#triky .btn-group {
+  padding-top: 15px;
+}
+
 /*
  * Casino
  */
 #casino {
+  border-bottom: 10px solid rgb(72, 158, 48);
   border-top: 20px dashed rgb(180, 75, 119);
-  border-bottom: 10px solid #A48E4E;
   background-color: rgb(240, 150, 150);
 }
 
@@ -288,14 +244,14 @@ header a {
   transform: translateX(30px);
 }
 
-.machineContainer{
+.machineContainer {
   padding: 5px 1px 5px 1px;
   height: 135px;
 }
 
-.slotMachine{
+.slotMachine {
   width: 36.333333%;
-  border: 5px solid #CF5178;
+  border: 5px solid #cf5178;
   height: 100px;
   display: inline-block;
 }
@@ -310,29 +266,84 @@ header a {
   background-color: rgb(209, 79, 119);
 }
 
-#casino .btn-group .btn:hover, .btn-group .btn:focus {
+#casino .btn-group .btn:hover,
+.btn-group .btn:focus {
   background-color: rgb(180, 75, 119);
+}
+
+.slotMachine .slot {
+  height: 100px;
+  background-position-x: 55%;
+  background-repeat: no-repeat;
+}
+
+.slot1 {
+  background-image: url('./img/slot1.png');
+}
+
+.slot2 {
+  background-image: url('./img/slot2.png');
+}
+
+.slot3 {
+  background-image: url('./img/slot3.png');
+}
+
+.slot4 {
+  background-image: url('./img/slot4.png');
+}
+
+.slot5 {
+  background-image: url('./img/slot5.png');
+}
+
+.slot6 {
+  background-image: url('./img/slot6.png');
 }
 
 /*
  * Footer
  */
-footer{
-  width:100%;
-  background-color: #6C5726;
-  border-top: 20px dashed #A48E4E;
+footer {
+  width: 100%;
+  background-color: #6c5726;
+  border-top: 20px dashed #a48e4e;
   height: 180px;
   padding-top: 40px;
   text-align: center;
-  color: #DCD293;
+  color: #dcd293;
 }
 
 #textMachine {
-  width:520px;
+  width: 520px;
   height: 67px;
   overflow: hidden;
   display: inline-block;
   text-align: left;
 }
 
-.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
