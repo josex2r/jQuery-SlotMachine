@@ -1,4 +1,4 @@
-import SlotMachine from '../../lib/slot-machine';
+import SlotMachine from '../../lib';
 import { render } from '../setup';
 
 describe('Setters', () => {

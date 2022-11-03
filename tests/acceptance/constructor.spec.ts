@@ -1,14 +1,12 @@
-import SlotMachine, { Direction } from '../../lib/slot-machine';
+import SlotMachine from '../../lib';
 import { MACHINE_ID, render } from '../setup';
 
 describe('Constructor', () => {
   let machine: SlotMachine;
   let shuffleSpy;
-  let runSpy;
 
   beforeEach(() => {
     shuffleSpy = jest.spyOn(SlotMachine.prototype, 'shuffle');
-    runSpy = jest.spyOn(SlotMachine.prototype, 'run');
   });
 
   afterEach(() => {
@@ -49,33 +47,13 @@ describe('Constructor', () => {
   it('wraps tiles and adds offsets', () => {
     machine = render();
 
-    expect(machine.container.classList.contains('slotMachineContainer')).toBeTruthy();
-    expect(machine.container.children.length).toBe(5);
-  });
-
-  (['up', 'down'] as Direction[]).forEach((direction) => {
-    it(`sets direction: ${direction}`, () => {
-      machine = render({
-        direction: direction,
-      });
-
-      expect(machine.direction).toBe(direction);
-    });
-  });
-
-  it('sets randomize', () => {
-    const randomize = () => 1;
-    machine = render({
-      randomize,
-    });
-
-    expect(machine.randomize).toBe(randomize);
+    expect(machine.container.element.classList.contains('slot-machine__container')).toBeTruthy();
+    expect(machine.container.element.children.length).toBe(5);
   });
 
   it('does not auto start', () => {
     machine = render();
 
     expect(shuffleSpy).not.toHaveBeenCalled();
-    expect(runSpy).not.toHaveBeenCalled();
   });
 });
